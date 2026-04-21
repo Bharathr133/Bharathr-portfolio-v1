@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   function resetInactivityTimer() {
     clearTimeout(inactivityTimer);
-    inactivityTimer = setTimeout(showInactivityToast, 5000); // 5 seconds
+    inactivityTimer = setTimeout(showInactivityToast, 10000); // 10 seconds
   }
 
   function showInactivityToast() {

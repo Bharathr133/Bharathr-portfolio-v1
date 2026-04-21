@@ -3,16 +3,16 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Bharath R - Portfolio</title>
-  <meta name="description" content="Bharath R - Full Stack Developer & Machine Learning Enthusiast. 5+ projects, 8 certifications, Java Spring Boot, React.js, Python">
-  <meta name="keywords" content="Full Stack Developer, Java Developer, React Developer, Python, Machine Learning, Bangalore, Spring Boot, Web Developer">
+  <title>Bharath R </title>
+  <meta name="description" content="Bharath R - Java Full Stack Developer & Machine Learning Enthusiast. 5+ projects, 8 certifications, Java Spring Boot, React.js, Python">
+  <meta name="keywords" content="Java Full Stack Developer In Banglore, Java Developer, React Developer, Python, Machine Learning, Bangalore, Spring Boot, Web Developer">
   <meta name="author" content="Bharath R">
   <meta name="robots" content="index, follow">
 
-  <meta property="og:title" content="Bharath R - Full Stack Developer Portfolio">
+  <meta property="og:title" content="Bharath R - Java Full Stack Developer Portfolio">
   <meta property="og:description" content="Computer Science Engineer specializing in modern web applications and machine learning solutions">
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://yourportfolio.com">
+  <meta property="og:url" content="https://bharathr-portfolio.netlify.app/">
   <link rel="icon" type="image/x-icon" href="image copy.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -25,7 +25,7 @@
   <div id="loading-screen">
     <div class="loading-content">
       <img src="zenistuCoder.jpg" alt="Loading" class="loading-image">
-      <p class="loading-text">Hold tight — greatness loading…</p>
+      <p class="loading-text">One moment — preparing your view.</p>
     </div>
   </div>
 
@@ -65,13 +65,13 @@
       <div class="hero-content">
         <h1>Hi, I'm <span class="motion-text">Bharath R</span></h1>
         <div class="typewriter" id="typewriter"></div>
-        <p>Computer Science Engineer | Full Stack Developer | Machine Learning Enthusiast</p>
+        <p>Java Full Stack Developer | Computer Science Engineer | Machine Learning Enthusiast</p>
         <div class="socials">
-          <a href="https://www.instagram.com/bharathr_13" target="_blank" class="float"><i class="fab fa-instagram"></i></a>
+          <!-- <a href="https://www.instagram.com/" target="_blank" class="float"><i class="fab fa-instagram"></i></a> -->
           <a href="https://github.com/bharathr133" target="_blank" class="float"><i class="fab fa-github"></i></a>
           <a href="https://www.linkedin.com/in/bharathr13" target="_blank" class="float"><i class="fab fa-linkedin-in"></i></a>
           <a href="mailto:12345bharathr.com@gmail.com" class="float"><i class="fas fa-envelope"></i></a>
-          <a href="https://wa.me/917892771468" target="_blank" class="float"><i class="fab fa-whatsapp"></i></a>
+          <!-- <a href="https://wa.me/" target="_blank" class="float"><i class="fab fa-whatsapp"></i></a> -->
         </div>
         <div class="hero-buttons">
           <a href="#contact" class="btn float-btn">Get In Touch</a>
@@ -87,6 +87,7 @@
     <div class="hero-shape"></div>
   </section>
   </section>
+  
 <!-- Stats Section  -->
 <section class="stats">
   <div class="container">
@@ -119,28 +120,125 @@
       <h2>About Me</h2>
     </div>
     <div class="about-content">
-      <div class="about-img">
+      <!-- <div class="about-img">
         <div class="flip-container" id="flip-container">
           <div class="flipper">
-            <div class="front">
+            <!-- <div class="front">
               <img src="HeadShot.jpg" alt="Bharath R Professional Headshot" class="flip-image">
-            </div>
-            <div class="back">
+            </div> -->
+            <!-- <div class="back">
               <img src="bharathr.jpg" alt="Bharath R Casual Photo" class="flip-image">
-            </div>
+            </div> -->
           </div>
           <div class="flip-overlay">
             <i class="fas fa-sync-alt"></i>
             <span>Click to flip</span>
           </div>
-        </div>
+        </div> 
       </div>
-      <div class="about-text">
-        <h3>Who am I?</h3>
-        <p>I'm Bharath R, a passionate Computer Science Engineering student from Bangalore, India. I specialize in building modern web applications and implementing machine learning solutions to solve real-world problems.</p>
-        <p>With a strong foundation in computer science principles and hands-on experience in full-stack development, I create efficient, scalable, and user-friendly applications. I'm constantly learning new technologies and frameworks to stay at the forefront of the industry.</p>
-        <p>When I'm not coding, you can find me exploring new tech trends, contributing to open-source projects.</p>
-      </div>
+     <style>
+  .about-card {
+    max-width: 900px;
+    width: 100%;
+    background: #ffffff;
+    border-radius: 2rem;
+    box-shadow: 0 25px 45px -12px rgba(0, 0, 0, 0.25), 0 4px 12px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    margin: 2rem auto;
+  }
+
+  .about-text {
+    padding: 2.5rem;
+  }
+
+  .about-text h3 {
+    font-size: 1.9rem;
+    font-weight: 600;
+    color: #1e2a3e;
+    margin-bottom: 1.2rem;
+    border-left: 5px solid #2563eb;
+    padding-left: 1rem;
+  }
+
+  .about-text p {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #2c3e4e;
+    margin-bottom: 1.2rem;
+  }
+
+  .read-more-btn {
+    background: none;
+    border: none;
+    color: #2563eb;
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    padding: 0.5rem 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: inherit;
+  }
+
+  .read-more-btn:hover {
+    color: #1d4ed8;
+    text-decoration: underline;
+  }
+
+  .about-text .extra-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease;
+  }
+
+  .about-text.expanded .extra-content {
+    max-height: 500px;
+  }
+
+  @media (max-width: 640px) {
+    .about-text {
+      padding: 1.75rem;
+    }
+    .about-text h3 {
+      font-size: 1.6rem;
+    }
+  }
+</style>
+
+<div class="about-card">
+  <div class="about-text" id="aboutTextWrapper">
+    <h3>Who am I?</h3>
+    <p>I'm <strong>Bharath R</strong>, a Computer Science Engineering professional based in Bangalore, India. Currently, I work as a Java Full Stack Developer at <strong>Swajyot Technologies</strong>, where I build and maintain end-to-end web applications used by real clients.</p>
+    <p>My core tech stack includes <strong>Java (8/11), Spring Boot, Spring MVC, and Hibernate (JPA)</strong> for backend development. On the frontend, I work with <strong>HTML5, CSS3, JavaScript, and React.js</strong> to create responsive user interfaces. I also use <strong>RESTful APIs, MySQL, PostgreSQL, and MongoDB</strong> for database integration. For version control, I'm proficient with <strong>Git, GitHub, and GitLab</strong>.</p>
+
+    <div class="extra-content">
+      <p>I have hands-on experience deploying applications using <strong>Apache Tomcat</strong> and writing unit tests with <strong>JUnit & Mockito</strong>. I follow <strong>Agile/Scrum</strong> methodologies and use tools like <strong>Postman, Swagger (OpenAPI), and Maven/Gradle</strong>. I'm also familiar with <strong>basic CI/CD pipelines (Jenkins)</strong> and <strong>Docker</strong> for containerization.</p>
+      <p>When I'm not coding, I explore new tech trends, contribute to open-source projects, and continuously improve my problem-solving skills through competitive programming.</p>
+    </div>
+
+    <button class="read-more-btn" id="readMoreBtn">Read more →</button>
+  </div>
+</div>
+
+<script>
+  (function() {
+    const wrapper = document.getElementById('aboutTextWrapper');
+    const btn = document.getElementById('readMoreBtn');
+    if (wrapper && btn) {
+      btn.addEventListener('click', () => {
+        const expanded = wrapper.classList.contains('expanded');
+        if (expanded) {
+          wrapper.classList.remove('expanded');
+          btn.innerHTML = 'Read more →';
+        } else {
+          wrapper.classList.add('expanded');
+          btn.innerHTML = 'Read less ←';
+        }
+      });
+    }
+  })();
+</script>
     </div>
   </div>
 </section>
@@ -682,7 +780,7 @@
             <span class="timeline-date">2017 - 2019</span>
             <h3>Secondary School</h3>
             <h4>Adharsha Hight School, Rayalamanadinne</h4>
-            <p>Completed 10th grade with 78% aggregate score. Developed foundational knowledge in science and mathematics.</p>
+            <p>Completed 10th grade with  aggregate score. Developed foundational knowledge in science and mathematics.</p>
           </div>
         </div>
         <div class="timeline-item floating-card">
@@ -693,7 +791,7 @@
             <span class="timeline-date">2019 - 2021</span>
             <h3>Higher Secondary</h3>
             <h4>AECS Magnolia PU College, Mulbagal</h4>
-            <p>Completed 12th grade with 70% in Science stream (PCMB). Developed interest in computer science during this period.</p>
+            <p>Completed 12th grade in Science stream (PCMB). Developed interest in computer science during this period.</p>
           </div>
         </div>
         <div class="timeline-item floating-card">
@@ -753,15 +851,15 @@
                 <a href="mailto:12345bharathr.com@gmail.com" class="contact-link">12345bharathr.com@gmail.com</a>
               </div>
             </div>
-            <div class="contact-item">
+            <!-- <div class="contact-item">
               <div class="contact-icon">
                 <i class="fas fa-phone-alt"></i>
               </div>
               <div class="contact-text">
                 <h4>Phone</h4>
-                <a href="tel:+917892771468" class="contact-link">+91 7892771468</a>
+                <a href="" class="contact-link">+91 7892771468</a>
               </div>
-            </div>
+            </div> -->
           </div>
         </div>
        <div class="contact-form floating-card">
@@ -814,11 +912,11 @@
       </div>
       
       <div class="footer-socials">
-        <a href="https://www.instagram.com/bharathr_13" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        <!-- <a href="https://www.instagram.com/" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a> -->
         <a href="https://github.com/bharathr133" target="_blank" aria-label="GitHub"><i class="fab fa-github"></i></a>
         <a href="https://www.linkedin.com/in/bharathr13" target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
         <a href="mailto:12345bharathr.com@gmail.com" aria-label="Email"><i class="fas fa-envelope"></i></a>
-        <a href="https://wa.me/917892771468" target="_blank" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+        <!-- <a href="https://wa.me/" target="_blank" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a> -->
       </div>
       
       <p class="copyright">© <span id="current-year">2025</span> Bharath R. All rights reserved.</p>
@@ -844,7 +942,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/ScrollTrigger.min.js"></script>
   <script src="script.js"></script>
     <!-- Quick Contact Buttons -->
-  <div class="quick-contact">
+  <!-- <div class="quick-contact">
     <a href="tel:+917892771468" class="quick-btn phone" title="Call Me">
       <i class="fas fa-phone"></i>
     </a>
@@ -854,7 +952,7 @@
     <a href="mailto:12345bharathr.com@gmail.com" class="quick-btn email" title="Email">
       <i class="fas fa-envelope"></i>
     </a>
-  </div>
+  </div> -->
 
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>

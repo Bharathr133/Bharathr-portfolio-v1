@@ -1,0 +1,55 @@
+/* src/app/design-tokens.css */
+:root {
+  /* Light theme */
+  --color-bg: hsl(210, 30%, 98%);
+  --color-bg-surface: hsl(210, 30%, 95%);
+  --color-primary: hsl(210, 45%, 55%);
+  --color-primary-foreground: hsl(0, 0%, 100%);
+  --color-secondary: hsl(165, 40%, 45%);
+  --color-secondary-foreground: hsl(0, 0%, 100%);
+  --color-muted: hsl(210, 15%, 85%);
+  --color-muted-foreground: hsl(210, 10%, 30%);
+  --color-accent: hsl(210, 45%, 55%);
+  --color-accent-foreground: hsl(0, 0%, 100%);
+  --color-destructive: hsl(0, 70%, 55%);
+  --color-destructive-foreground: hsl(0, 0%, 100%);
+  --color-border: hsl(210, 15%, 80%);
+  --color-input: hsl(210, 15%, 90%);
+  --color-ring: var(--color-primary);
+  --radius: 0.75rem;
+  --font-display: 'Geist', sans-serif; /* fallback */
+  --font-body: 'Inter', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+[data-theme="dark"] {
+  --color-bg: hsl(220, 30%, 12%);
+  --color-bg-surface: hsl(220, 30%, 15%);
+  --color-primary: hsl(210, 45%, 55%);
+  --color-primary-foreground: hsl(0, 0%, 100%);
+  --color-secondary: hsl(165, 40%, 45%);
+  --color-muted: hsl(210, 15%, 30%);
+  --color-muted-foreground: hsl(210, 10%, 80%);
+  --color-accent: hsl(210, 45%, 55%);
+  --color-border: hsl(210, 15%, 25%);
+  --color-input: hsl(210, 15%, 20%);
+  --color-ring: var(--color-primary);
+}
+
+/* Global smooth scroll */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom thin scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background-color: var(--color-muted);
+  border-radius: var(--radius);
+}

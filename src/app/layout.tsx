@@ -25,7 +25,22 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://bharathr.vercel.app"),
   title: "Bharath R - Java Full Stack Developer Portfolio",
   description: "Bharath R - Java Full Stack Developer & Machine Learning Enthusiast. 5+ projects, 8 certifications, Java Spring Boot, React.js, Python",
-  keywords: ["Java Full Stack Developer In Bangalore", "Java Developer", "React Developer", "Python", "Machine Learning", "Bangalore", "Spring Boot", "Web Developer"],
+  keywords: [
+    "Bharath R",
+    "bharath r",
+    "Bharath R Portfolio",
+    "bharath r portfolio",
+    "Bharath R Developer",
+    "bharath r developer",
+    "Java Full Stack Developer In Bangalore",
+    "Java Developer",
+    "React Developer",
+    "Python",
+    "Machine Learning",
+    "Bangalore",
+    "Spring Boot",
+    "Web Developer"
+  ],
   authors: [{ name: "Bharath R" }],
   robots: "index, follow",
   openGraph: {

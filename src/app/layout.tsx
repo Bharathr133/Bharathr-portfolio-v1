@@ -22,6 +22,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://bharathr.vercel.app"),
   title: "Bharath R - Java Full Stack Developer Portfolio",
   description: "Bharath R - Java Full Stack Developer & Machine Learning Enthusiast. 5+ projects, 8 certifications, Java Spring Boot, React.js, Python",
   keywords: ["Java Full Stack Developer In Bangalore", "Java Developer", "React Developer", "Python", "Machine Learning", "Bangalore", "Spring Boot", "Web Developer"],
@@ -30,9 +31,23 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Bharath R - Java Full Stack Developer Portfolio",
     description: "Computer Science Engineer specializing in modern web applications and machine learning solutions",
-    url: "https://bharathr-portfolio.netlify.app/",
+    url: "https://bharathr.vercel.app/",
     siteName: "Bharath R Portfolio",
+    images: [
+      {
+        url: "/zenistuCoder.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Bharath R - Java Full Stack Developer",
+      },
+    ],
     type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Bharath R - Java Full Stack Developer Portfolio",
+    description: "Computer Science Engineer specializing in modern web applications and machine learning solutions",
+    images: ["/zenistuCoder.jpg"],
   },
 };
 

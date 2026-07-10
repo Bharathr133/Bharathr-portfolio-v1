@@ -1,22 +1,29 @@
 'use client';
 
-import React from 'react';
-import { Mail } from 'lucide-react';
+import React, { useState } from 'react';
+import { Mail, Terminal, Copy, Check, Shield, MapPin, Globe } from 'lucide-react';
 import { GithubIcon, LinkedinIcon } from './SocialIcons';
 import { personalInfo } from '../data/portfolio';
 
 const navLinks = [
-  { id: 'home', label: 'Home' },
-  { id: 'about', label: 'About' },
-  { id: 'skills', label: 'Skills' },
-  { id: 'projects', label: 'Projects' },
-  { id: 'experience', label: 'Experience' },
-  { id: 'certifications', label: 'Certifications' },
-  { id: 'contact', label: 'Contact' },
+  { id: 'home', label: 'cd /home' },
+  { id: 'about', label: 'cd /about' },
+  { id: 'skills', label: 'cd /skills' },
+  { id: 'projects', label: 'cd /projects' },
+  { id: 'experience', label: 'cd /experience' },
+  { id: 'certifications', label: 'cd /certs' },
+  { id: 'contact', label: 'cd /contact' },
 ];
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
+  const [copied, setCopied] = useState(false);
+
+  const handleCopyEmail = () => {
+    navigator.clipboard.writeText("12345bharathr.com@gmail.com");
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
     e.preventDefault();
@@ -36,64 +43,124 @@ export default function Footer() {
   };
 
   return (
-    <footer className="bg-white dark:bg-slate-950 border-t border-slate-200/80 dark:border-slate-900 py-12 transition-colors duration-300">
-      <div className="mx-auto max-w-7xl px-6 md:px-8 flex flex-col items-center">
-        {/* Logo / Name */}
-        <a
-          href="#home"
-          onClick={(e) => handleLinkClick(e, 'home')}
-          className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors font-serif"
-        >
-          {personalInfo.name}
-        </a>
+    <footer className="relative bg-slate-900 border-t border-slate-800 py-16 transition-colors duration-300 overflow-hidden">
+      {/* Soft background grid lines */}
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff02_1px,transparent_1px),linear-gradient(to_bottom,#ffffff02_1px,transparent_1px)] bg-[size:20px_20px] pointer-events-none" />
 
-        {/* Footer links */}
-        <div className="mt-8 flex flex-wrap justify-center gap-x-8 gap-y-4 text-sm font-medium text-slate-500 dark:text-slate-400">
-          {navLinks.map((link) => (
-            <a
-              key={link.id}
-              href={`#${link.id}`}
-              onClick={(e) => handleLinkClick(e, link.id)}
-              className="hover:text-indigo-600 dark:hover:text-white transition-colors"
-            >
-              {link.label}
-            </a>
-          ))}
+      <div className="relative mx-auto max-w-5xl px-6 md:px-8 w-full z-10 flex flex-col gap-12 font-mono">
+        
+        {/* Terminal Header Bar */}
+        <div className="flex items-center justify-between border-b border-slate-800 pb-4">
+          <div className="flex items-center gap-2 text-slate-400 text-xs">
+            <Terminal className="h-4 w-4 text-indigo-500" />
+            <span>bharathr@portfolio:~# <span className="text-slate-500">cat system_status.json</span></span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+            <span className="text-[9px] text-slate-550 uppercase tracking-wider font-bold">ONLINE</span>
+          </div>
         </div>
 
-        {/* Social Icons */}
-        <div className="mt-8 flex items-center gap-6 text-slate-500 dark:text-slate-400">
-          <a
-            href={personalInfo.github}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hover:text-indigo-600 dark:hover:text-white transition-colors"
-            aria-label="GitHub"
-          >
-            <GithubIcon className="h-5 w-5" />
-          </a>
-          <a
-            href={personalInfo.linkedin}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hover:text-indigo-600 dark:hover:text-white transition-colors"
-            aria-label="LinkedIn"
-          >
-            <LinkedinIcon className="h-5 w-5" />
-          </a>
-          <a
-            href={`mailto:${personalInfo.email}`}
-            className="hover:text-indigo-600 dark:hover:text-white transition-colors"
-            aria-label="Email"
-          >
-            <Mail className="h-5 w-5" />
-          </a>
+        {/* Console Footprint Grid */}
+        <div className="grid gap-10 md:grid-cols-3">
+          
+          {/* Column 1: Navigation Directories */}
+          <div className="flex flex-col gap-4">
+            <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider select-none border-b border-slate-800 pb-1.5">
+              // Navigation Directory
+            </span>
+            <nav className="flex flex-col gap-2.5 text-xs text-slate-400">
+              {navLinks.map((link) => (
+                <a
+                  key={link.id}
+                  href={`#${link.id}`}
+                  onClick={(e) => handleLinkClick(e, link.id)}
+                  className="hover:text-indigo-400 transition-colors w-fit flex items-center gap-1"
+                >
+                  <span className="text-slate-600">&gt;</span>
+                  <span>{link.label}</span>
+                </a>
+              ))}
+            </nav>
+          </div>
+
+          {/* Column 2: Location Details */}
+          <div className="flex flex-col gap-4">
+            <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider select-none border-b border-slate-800 pb-1.5">
+              // Location
+            </span>
+            <div className="flex flex-col gap-3 text-xs text-slate-400">
+              <div className="flex items-center gap-2">
+                <MapPin className="h-3.5 w-3.5 text-slate-600 shrink-0" />
+                <span>LOCATION: Bangalore, India</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Column 3: Contact Shell & Socials */}
+          <div className="flex flex-col gap-4">
+            <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider select-none border-b border-slate-800 pb-1.5">
+              // Connection channels
+            </span>
+            
+            {/* Clipboard copy command utility */}
+            <div className="flex flex-col gap-2">
+              <span className="text-[9px] text-slate-600">execute command to copy email:</span>
+              <button 
+                onClick={handleCopyEmail}
+                className="flex items-center justify-between p-3 rounded-2xl bg-slate-950/90 border border-slate-800/80 cursor-pointer hover:border-indigo-500/30 hover:bg-slate-950 transition-all font-mono text-[10.5px] w-full text-left"
+              >
+                <div className="flex items-center gap-2 text-slate-400">
+                  <Mail className="h-3.5 w-3.5 text-indigo-500" />
+                  <span className="truncate">12345bharathr.com@gmail.com</span>
+                </div>
+                <div className="flex items-center shrink-0">
+                  {copied ? (
+                    <div className="flex items-center gap-1 text-emerald-400 font-bold text-[9px] uppercase">
+                      <Check className="h-3 w-3" />
+                      <span>COPIED</span>
+                    </div>
+                  ) : (
+                    <Copy className="h-3.5 w-3.5 text-slate-500 hover:text-slate-350 transition-colors" />
+                  )}
+                </div>
+              </button>
+            </div>
+
+            {/* Social handles */}
+            <div className="flex flex-col gap-2 mt-2">
+              <span className="text-[9px] text-slate-600">secure social sockets:</span>
+              <div className="flex items-center gap-4 text-slate-500">
+                <a
+                  href={personalInfo.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-white transition-colors p-2 rounded-lg bg-slate-950/80 border border-slate-850/80 flex items-center justify-center"
+                  aria-label="GitHub"
+                >
+                  <GithubIcon className="h-4.5 w-4.5" />
+                </a>
+                <a
+                  href={personalInfo.linkedin}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-white transition-colors p-2 rounded-lg bg-slate-950/80 border border-slate-850/80 flex items-center justify-center"
+                  aria-label="LinkedIn"
+                >
+                  <LinkedinIcon className="h-4.5 w-4.5" />
+                </a>
+              </div>
+            </div>
+          </div>
         </div>
 
-        {/* Copyright */}
-        <p className="mt-8 text-center text-xs text-slate-400 dark:text-slate-500 font-mono">
-          &copy; {currentYear} {personalInfo.name}. All rights reserved.
-        </p>
+        {/* Footer Base bar */}
+        <div className="flex flex-col sm:flex-row items-center justify-between pt-8 border-t border-slate-800/80 text-[10px] text-slate-600 gap-4">
+          <p>&copy; {currentYear} Bharath R. Compiled with production metrics.</p>
+          <div className="flex items-center gap-1 text-slate-655 font-mono text-[9px] uppercase select-none">
+            <span>Security context: SHA-256 Verified</span>
+          </div>
+        </div>
       </div>
     </footer>
   );

@@ -22,7 +22,6 @@ export default function Header() {
   // Load theme preference on mount
   useEffect(() => {
     const savedTheme = localStorage.getItem('theme');
-    // Default is light. Only set dark if explicitly stored as dark.
     if (savedTheme === 'dark') {
       setIsDarkMode(true);
       document.documentElement.classList.add('dark');
@@ -46,10 +45,10 @@ export default function Header() {
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
+      setScrolled(window.scrollY > 20);
 
       const sections = navLinks.map(link => document.getElementById(link.id));
-      const scrollPosition = window.scrollY + 200;
+      const scrollPosition = window.scrollY + 120;
 
       for (let i = sections.length - 1; i >= 0; i--) {
         const section = sections[i];
@@ -69,7 +68,7 @@ export default function Header() {
     setIsOpen(false);
     const element = document.getElementById(id);
     if (element) {
-      const offset = 80;
+      const offset = 90;
       const bodyRect = document.body.getBoundingClientRect().top;
       const elementRect = element.getBoundingClientRect().top;
       const elementPosition = elementRect - bodyRect;
@@ -85,36 +84,37 @@ export default function Header() {
   return (
     <>
       <header
-        className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
+        className={`fixed top-4 left-4 right-4 md:top-6 z-40 max-w-4xl mx-auto w-[calc(100%-2rem)] md:w-full transition-all duration-500 rounded-full border border-slate-200/50 dark:border-slate-800/80 backdrop-blur-xl ${
           scrolled
-            ? 'bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800/80 py-4 shadow-md shadow-slate-100/50 dark:shadow-slate-950/20'
-            : 'bg-transparent py-6'
+            ? 'bg-white/80 dark:bg-slate-950/75 py-2 px-6 shadow-[0_20px_50px_rgba(0,0,0,0.06)]'
+            : 'bg-white/50 dark:bg-slate-900/40 py-3.5 px-7 shadow-[0_10px_30px_rgba(0,0,0,0.02)]'
         }`}
       >
-        <div className="mx-auto max-w-7xl px-6 md:px-8 flex items-center justify-between">
+        <div className="flex items-center justify-between">
           {/* Logo */}
           <a
             href="#home"
             onClick={(e) => handleLinkClick(e, 'home')}
-            className="flex items-center gap-2 text-xl font-bold tracking-tight text-slate-900 dark:text-white hover:text-indigo-650 dark:hover:text-indigo-400 transition-colors font-serif"
+            className="flex items-center gap-2 text-base font-extrabold tracking-tight text-slate-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors font-serif"
           >
-            <Code className="h-6 w-6 text-indigo-600 dark:text-indigo-500" />
-            <span>Bharath R</span>
+            <Code className="h-4.5 w-4.5 text-indigo-600 dark:text-indigo-500" />
+            <span className="hidden sm:inline">Bharath R</span>
+            <span className="sm:hidden">BR</span>
           </a>
 
-          {/* Actions & Navigation */}
-          <div className="flex items-center gap-4">
+          {/* Navigation & Controls */}
+          <div className="flex items-center gap-6">
             {/* Desktop Navigation */}
-            <nav className="hidden md:flex items-center gap-8 mr-4">
+            <nav className="hidden md:flex items-center gap-6 font-mono">
               {navLinks.map((link) => (
                 <a
                   key={link.id}
                   href={`#${link.id}`}
                   onClick={(e) => handleLinkClick(e, link.id)}
-                  className={`relative py-1 text-sm font-medium transition-colors hover:text-indigo-600 dark:hover:text-indigo-400 ${
+                  className={`text-[11px] font-bold uppercase tracking-wider transition-all hover:text-indigo-650 dark:hover:text-indigo-400 py-1 relative ${
                     activeSection === link.id
-                      ? 'text-indigo-600 dark:text-indigo-400 font-semibold'
-                      : 'text-slate-600 dark:text-slate-350'
+                      ? 'text-indigo-600 dark:text-indigo-400'
+                      : 'text-slate-500 dark:text-slate-400'
                   }`}
                 >
                   {link.label}
@@ -125,68 +125,59 @@ export default function Header() {
               ))}
             </nav>
 
-            {/* Theme Toggle Button */}
-            <button
-              onClick={toggleTheme}
-              className="p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-slate-700 dark:text-slate-300 hover:text-indigo-650 dark:hover:text-indigo-400 hover:border-indigo-500/30 transition-all duration-300 shadow-sm"
-              aria-label="Toggle light/dark theme"
-            >
-              {isDarkMode ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-            </button>
+            {/* Controls */}
+            <div className="flex items-center gap-2 border-l border-slate-200/50 dark:border-slate-800/80 pl-4">
+              {/* Theme Toggle */}
+              <button
+                onClick={toggleTheme}
+                className="p-2 rounded-full text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-450 hover:bg-slate-50 dark:hover:bg-slate-900/60 transition-all duration-300"
+                aria-label="Toggle light/dark theme"
+              >
+                {isDarkMode ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+              </button>
 
-            {/* Mobile Menu Toggle */}
-            <button
-              onClick={() => setIsOpen(!isOpen)}
-              className="md:hidden text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white focus:outline-none"
-              aria-label="Toggle menu"
-            >
-              {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-            </button>
+              {/* Mobile Menu Toggle */}
+              <button
+                onClick={() => setIsOpen(!isOpen)}
+                className="md:hidden p-2 rounded-full text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-white"
+                aria-label="Toggle menu"
+              >
+                {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+              </button>
+            </div>
           </div>
         </div>
       </header>
 
-      {/* Mobile Drawer Overlay */}
+      {/* Mobile Drawer Dropdown Overlay */}
       {isOpen && (
         <div
-          className="fixed inset-0 z-35 bg-slate-950/20 dark:bg-slate-950/60 backdrop-blur-sm md:hidden"
+          className="fixed inset-0 z-35 bg-slate-950/10 dark:bg-slate-950/40 backdrop-blur-xs md:hidden"
           onClick={() => setIsOpen(false)}
         />
       )}
 
-      {/* Mobile Drawer Menu */}
-      <div
-        className={`fixed top-0 right-0 z-50 h-full w-64 bg-white dark:bg-slate-900 border-l border-slate-200 dark:border-slate-800 p-6 shadow-2xl transition-transform duration-300 md:hidden ${
-          isOpen ? 'translate-x-0' : 'translate-x-full'
-        }`}
-      >
-        <div className="flex items-center justify-between mb-8">
-          <span className="font-bold text-slate-900 dark:text-white font-serif">Menu</span>
-          <button
-            onClick={() => setIsOpen(false)}
-            className="text-slate-500 dark:text-slate-400 hover:text-slate-950 dark:hover:text-white"
-          >
-            <X className="h-6 w-6" />
-          </button>
+      {/* Mobile capsule dropdown */}
+      {isOpen && (
+        <div className="fixed top-20 left-4 right-4 z-40 md:hidden p-4 rounded-3xl bg-white/95 dark:bg-slate-950/95 backdrop-blur-xl border border-slate-200/50 dark:border-slate-800/80 shadow-[0_20px_50px_rgba(0,0,0,0.15)] animate-in fade-in slide-in-from-top-4 duration-300 font-mono">
+          <nav className="flex flex-col gap-3">
+            {navLinks.map((link) => (
+              <a
+                key={link.id}
+                href={`#${link.id}`}
+                onClick={(e) => handleLinkClick(e, link.id)}
+                className={`py-2.5 px-4 rounded-xl text-[11px] font-bold uppercase tracking-wider transition-all ${
+                  activeSection === link.id
+                    ? 'text-indigo-600 dark:text-indigo-400 bg-indigo-50/50 dark:bg-indigo-950/30 font-bold'
+                    : 'text-slate-600 dark:text-slate-450 hover:bg-slate-50 dark:hover:bg-slate-900'
+                }`}
+              >
+                {link.label}
+              </a>
+            ))}
+          </nav>
         </div>
-
-        <nav className="flex flex-col gap-6">
-          {navLinks.map((link) => (
-            <a
-              key={link.id}
-              href={`#${link.id}`}
-              onClick={(e) => handleLinkClick(e, link.id)}
-              className={`text-base font-medium transition-colors hover:text-indigo-600 dark:hover:text-indigo-400 ${
-                activeSection === link.id
-                  ? 'text-indigo-600 dark:text-indigo-400 font-semibold'
-                  : 'text-slate-600 dark:text-slate-300'
-              }`}
-            >
-              {link.label}
-            </a>
-          ))}
-        </nav>
-      </div>
+      )}
     </>
   );
 }

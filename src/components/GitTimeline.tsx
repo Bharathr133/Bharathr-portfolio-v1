@@ -3,6 +3,7 @@
 import React from 'react';
 import { internships, educations } from '../data/portfolio';
 import { GitBranch, GitCommit, Calendar, Tag, GitPullRequest } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 interface GitLogItem {
   id: string;
@@ -20,26 +21,6 @@ interface GitLogItem {
 export default function GitTimeline() {
   // Combine and structure the data chronologically / logically
   const gitLogs: GitLogItem[] = [
-    {
-      id: 'edu-sec',
-      hash: 'a7c93e1',
-      type: 'education' as const,
-      branchName: 'feat/education' as const,
-      title: educations[0].degree, // Secondary School
-      subtitle: educations[0].school,
-      date: educations[0].date,
-      description: educations[0].description,
-    },
-    {
-      id: 'edu-hsec',
-      hash: 'b4d83f0',
-      type: 'education' as const,
-      branchName: 'feat/education' as const,
-      title: educations[1].degree, // Higher Secondary
-      subtitle: educations[1].school,
-      date: educations[1].date,
-      description: educations[1].description,
-    },
     {
       id: 'intern-parvam',
       hash: 'c7d92ae',
@@ -67,7 +48,7 @@ export default function GitTimeline() {
       hash: 'e5e81bd',
       type: 'internship' as const,
       branchName: 'feat/internship' as const,
-      title: internships[1].title, // KodNest
+      title: internships[1].title, // KodNest Training
       subtitle: internships[1].company,
       date: internships[1].date,
       description: internships[1].description,
@@ -117,8 +98,15 @@ export default function GitTimeline() {
 
           {/* Git Log List */}
           <div className="space-y-12">
-            {gitLogs.map((log) => (
-              <div key={log.id} className="relative group flex flex-col md:flex-row gap-6 md:gap-8 items-start">
+            {gitLogs.map((log, logIdx) => (
+              <motion.div 
+                key={log.id} 
+                initial={{ opacity: 0, x: -30 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true, margin: "-80px" }}
+                transition={{ duration: 0.5, delay: logIdx * 0.1 }}
+                className="relative group flex flex-col md:flex-row gap-6 md:gap-8 items-start"
+              >
                 
                 {/* Visual commit node marker */}
                 <div className="absolute -left-[27px] sm:-left-[43px] top-1.5 h-6 w-6 rounded-full bg-white dark:bg-slate-900 border-4 border-slate-200 dark:border-slate-800 flex items-center justify-center group-hover:border-indigo-600 dark:group-hover:border-indigo-500 group-hover:scale-110 transition-all duration-300 z-10 shadow-sm">
@@ -132,7 +120,7 @@ export default function GitTimeline() {
                     <span>{log.hash}</span>
                   </span>
                   
-                  <span className="font-mono text-[10px] text-slate-500 dark:text-slate-400 font-semibold flex items-center gap-1">
+                  <span className="font-mono text-[10px] text-slate-550 dark:text-slate-400 font-semibold flex items-center gap-1">
                     <GitBranch className="h-3 w-3 text-indigo-500/60" />
                     <span>{log.branchName}</span>
                   </span>
@@ -146,7 +134,7 @@ export default function GitTimeline() {
                   {/* Header info */}
                   <div className="flex flex-wrap items-start justify-between gap-4 mb-4">
                     <div>
-                      <h3 className="text-xl font-bold text-slate-900 dark:text-white group-hover:text-indigo-650 dark:group-hover:text-indigo-400 transition-colors">
+                      <h3 className="text-xl font-bold text-slate-900 dark:text-white group-hover:text-indigo-655 dark:group-hover:text-indigo-400 transition-colors">
                         {log.title}
                       </h3>
                       <p className="text-sm font-semibold text-slate-500 dark:text-slate-400 mt-1">
@@ -171,7 +159,7 @@ export default function GitTimeline() {
                       <ul className="space-y-1.5">
                         {log.highlights.map((highlight, hIdx) => (
                           <li key={hIdx} className="flex items-start gap-2 text-xs text-slate-600 dark:text-slate-400">
-                            <span className="text-indigo-600 dark:text-indigo-500 font-bold shrink-0 mt-0.5">&gt;</span>
+                            <span className="text-indigo-650 dark:text-indigo-500 font-bold shrink-0 mt-0.5">&gt;</span>
                             <span>{highlight}</span>
                           </li>
                         ))}
@@ -179,15 +167,14 @@ export default function GitTimeline() {
                     </div>
                   )}
 
-                  {/* Skills/Tags list */}
+                  {/* Skills tags */}
                   {log.skills && log.skills.length > 0 && (
-                    <div className="pt-4 border-t border-slate-100 dark:border-slate-900/60 mt-4">
-                      <div className="flex flex-wrap gap-1.5 items-center">
-                        <Tag className="h-3 w-3 text-slate-400 shrink-0" />
+                    <div className="border-t border-slate-100 dark:border-slate-850/80 pt-4 mt-4">
+                      <div className="flex flex-wrap gap-2">
                         {log.skills.map((skill, sIdx) => (
                           <span
                             key={sIdx}
-                            className="text-[10px] font-bold px-2.5 py-0.5 rounded bg-slate-50 dark:bg-slate-950 text-slate-600 dark:text-slate-350 border border-slate-200 dark:border-slate-800 uppercase tracking-wide font-mono"
+                            className="text-[10px] font-bold px-2.5 py-0.5 rounded bg-slate-50/50 dark:bg-slate-950 text-slate-600 dark:text-slate-350 border border-slate-200 dark:border-slate-800 uppercase tracking-wide font-mono"
                           >
                             {skill}
                           </span>
@@ -197,9 +184,31 @@ export default function GitTimeline() {
                   )}
                 </div>
 
-              </div>
+              </motion.div>
             ))}
           </div>
+
+          {/* Academic Footnotes Footer */}
+          <div className="mt-20 pt-10 border-t border-slate-200 dark:border-slate-800">
+            <h4 className="text-xs font-bold uppercase tracking-wider font-mono text-slate-400 dark:text-slate-500 mb-6">
+              Secondary Academic Milestones
+            </h4>
+            <div className="grid gap-8 sm:grid-cols-2 text-slate-500 dark:text-slate-400 leading-relaxed">
+              <div className="p-5 rounded-2xl bg-white dark:bg-slate-900/30 border border-slate-200/40 dark:border-slate-850">
+                <span className="text-[10px] font-bold text-indigo-650 dark:text-indigo-400 font-mono block mb-1">PU COLLEGE DIPLOMA &bull; 2019 - 2021</span>
+                <strong className="text-slate-900 dark:text-slate-200 text-xs block font-serif">Higher Secondary Education (PCMB)</strong>
+                <span className="text-[11px] text-slate-500 block font-medium mt-0.5">AECS Magnolia PU College, Mulbagal</span>
+                <p className="mt-2 text-[11px]">Completed pre-university science stream with a focus on mathematics and logic, laying the foundation for computer engineering.</p>
+              </div>
+              <div className="p-5 rounded-2xl bg-white dark:bg-slate-900/30 border border-slate-200/40 dark:border-slate-850">
+                <span className="text-[10px] font-bold text-indigo-650 dark:text-indigo-400 font-mono block mb-1">HIGH SCHOOL CERTIFICATE &bull; 2017 - 2019</span>
+                <strong className="text-slate-900 dark:text-slate-200 text-xs block font-serif">Secondary Schooling (SSC)</strong>
+                <span className="text-[11px] text-slate-500 block font-medium mt-0.5">Adharsha High School, Rayalapad</span>
+                <p className="mt-2 text-[11px]">Finished secondary grade curriculum with core science and mathematical excellence, developing early logic skills.</p>
+              </div>
+            </div>
+          </div>
+
         </div>
       </div>
     </section>

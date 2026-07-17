@@ -145,7 +145,7 @@ export default function About() {
                 <div className="absolute inset-0 w-full h-full rounded-[24px_8px_32px_12px] overflow-hidden border border-slate-200 dark:border-slate-800 shadow-[0_15px_30px_rgba(0,0,0,0.04)] dark:shadow-[0_20px_45px_rgba(0,0,0,0.4)] [backface-visibility:hidden]">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
-                    src="/zenistuCoder.jpg"
+                    src="/headshot.jpg"
                     alt="Bharath R Avatar"
                     className="w-full h-full object-cover select-none"
                     draggable={false}

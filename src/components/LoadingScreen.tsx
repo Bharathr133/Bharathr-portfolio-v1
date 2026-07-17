@@ -31,7 +31,7 @@ export default function LoadingScreen() {
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src="/zenistuCoder.jpg"
+                src="/headshot.jpg"
                 alt="Loading Avatar"
                 className="h-full w-full object-cover"
               />

@@ -240,7 +240,7 @@ export default function Contact() {
           {/* Right: Code Editor style Contact Form */}
           <div className="lg:col-span-7">
             <TiltCard className="w-full h-full">
-              <div className="flex flex-col bg-slate-900 border border-slate-950 dark:border-slate-800 rounded-[20px_10px_32px_12px] shadow-[0_20px_50px_rgba(0,0,0,0.18)] dark:shadow-[0_25px_60px_rgba(0,0,0,0.65)] overflow-hidden font-mono text-xs text-slate-350 select-none h-full">
+              <div className="flex flex-col bg-slate-900 border border-slate-950 dark:border-slate-800 rounded-[20px_10px_32px_12px] shadow-[0_20px_50px_rgba(0,0,0,0.18)] dark:shadow-[0_25px_60px_rgba(0,0,0,0.65)] overflow-hidden font-mono text-xs text-slate-300 select-none h-full">
                 
                 {/* Editor Header Tab */}
                 <div className="flex items-center justify-between px-4 py-3 bg-slate-950/80 border-b border-slate-950">
@@ -282,7 +282,7 @@ export default function Contact() {
                         value={formData.from_name}
                         onChange={handleChange}
                         required
-                        className="bg-slate-950 border border-slate-800 rounded px-2.5 py-1 text-emerald-450 placeholder-slate-500 focus:outline-none focus:border-indigo-500 caret-emerald-400 min-w-[150px] text-xs font-mono"
+                        className="bg-slate-950 border border-slate-800 rounded px-2.5 py-1 text-emerald-400 placeholder-slate-500 focus:outline-none focus:border-indigo-500 caret-emerald-400 min-w-[150px] text-xs font-mono"
                         placeholder="Type your full name here"
                       />
                       <span className="text-orange-300">&quot;</span>,
@@ -299,7 +299,7 @@ export default function Contact() {
                         value={formData.from_email}
                         onChange={handleChange}
                         required
-                        className="bg-slate-950 border border-slate-800 rounded px-2.5 py-1 text-emerald-450 placeholder-slate-500 focus:outline-none focus:border-indigo-500 caret-emerald-400 min-w-[180px] text-xs font-mono"
+                        className="bg-slate-950 border border-slate-800 rounded px-2.5 py-1 text-emerald-400 placeholder-slate-500 focus:outline-none focus:border-indigo-500 caret-emerald-400 min-w-[180px] text-xs font-mono"
                         placeholder="Type your email address"
                       />
                       <span className="text-orange-300">&quot;</span>,
@@ -315,7 +315,7 @@ export default function Contact() {
                         name="phone"
                         value={formData.phone}
                         onChange={handleChange}
-                        className="bg-slate-950 border border-slate-800 rounded px-2.5 py-1 text-emerald-450 placeholder-slate-500 focus:outline-none focus:border-indigo-500 caret-emerald-400 min-w-[150px] text-xs font-mono"
+                        className="bg-slate-950 border border-slate-800 rounded px-2.5 py-1 text-emerald-400 placeholder-slate-500 focus:outline-none focus:border-indigo-500 caret-emerald-400 min-w-[150px] text-xs font-mono"
                         placeholder="Optional phone number"
                       />
                       <span className="text-orange-300">&quot;</span>,
@@ -332,7 +332,7 @@ export default function Contact() {
                         onChange={handleChange}
                         required
                         rows={3}
-                        className="bg-slate-950 border border-slate-800 rounded px-2.5 py-1 text-emerald-455 placeholder-slate-500 focus:outline-none focus:border-indigo-500 caret-emerald-400 flex-1 min-w-[200px] resize-none text-xs font-mono"
+                        className="bg-slate-950 border border-slate-800 rounded px-2.5 py-1 text-emerald-400 placeholder-slate-500 focus:outline-none focus:border-indigo-500 caret-emerald-400 flex-1 min-w-[200px] resize-none text-xs font-mono"
                         placeholder="Write details of your message or hiring requests..."
                       />
                       <span className="text-orange-300">`</span>
@@ -391,7 +391,7 @@ export default function Contact() {
             <div className="absolute -inset-[1px] bg-gradient-to-r from-indigo-500/20 to-purple-500/20 rounded-2xl blur-sm pointer-events-none" />
             
             <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2 font-serif">Bharath R says</h3>
-            <p className="text-sm text-slate-600 dark:text-slate-350 mb-6 leading-relaxed">
+            <p className="text-sm text-slate-600 dark:text-slate-300 mb-6 leading-relaxed">
               {alertConfig.message}
             </p>
             

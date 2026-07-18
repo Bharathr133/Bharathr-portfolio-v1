@@ -23,6 +23,9 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://bharathr.vercel.app"),
+  alternates: {
+    canonical: "/",
+  },
   title: "Bharath R | Senior Java Full Stack Developer Portfolio",
   description: "Bharath R is a Senior Java Full Stack Developer in Bangalore specializing in Java 21, Spring Boot, microservices architecture, and clean React dashboards. View projects, certifications, and technical experience.",
   keywords: [

@@ -145,7 +145,7 @@ export const projects: Project[] = [
     title: "DOX-APP – Secure Document System",
     description: "A secure, enterprise-level document management and compliance platform. Features multi-step document creation wizards, role-based workflows, audit readiness, and file watermarking.",
     tags: ["React.js", "Spring Boot", "Java 21", "PostgreSQL", "Jackrabbit Oak", "OpenPDF", "Flyway"],
-    link: "https://github.com/Bharathr133/",
+    link: "https://github.com/Bharathr133",
     image: "https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1374&q=80",
     theme: "cyberpunk",
     caseStudy: {
@@ -166,7 +166,7 @@ export const projects: Project[] = [
     title: "Smart Factory Execution System (MES)",
     description: "A full-stack manufacturing execution and monitoring system built as a microservices backend with a React frontend, modeling machine states, production orders, and quality checks.",
     tags: ["React 19", "Spring Boot 3.x", "Spring Cloud", "PostgreSQL", "Eureka", "Resilience4j", "Docker"],
-    link: "https://github.com/Bharathr133/",
+    link: "https://github.com/Bharathr133",
     image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?ixlib=rb-4.0.3&auto=format&fit=crop&w=1374&q=80",
     theme: "corporate",
     caseStudy: {
@@ -187,7 +187,7 @@ export const projects: Project[] = [
     title: "Pneumonia Detection System",
     description: "A deep learning model that analyzes chest X-ray images to detect pneumonia with 94% accuracy, assisting doctors in early diagnosis.",
     tags: ["Python", "TensorFlow", "CNN", "OpenCV", "Flask"],
-    link: "https://github.com/Bharathr133/Pneumonia-Detection",
+    link: "https://github.com/Bharathr133",
     image: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80",
     theme: "emerald",
     caseStudy: {
@@ -207,7 +207,7 @@ export const projects: Project[] = [
     title: "KodBook – Social Media Web App",
     description: "Developed a responsive social networking platform where users can create profiles, post content, interact through likes/comments, and share multimedia.",
     tags: ["Spring Boot", "SQL", "React.js", "HTML/CSS"],
-    link: "https://github.com/Bharathr133/KodBook",
+    link: "https://github.com/Bharathr133",
     image: "https://images.unsplash.com/photo-1551650975-87deedd944c3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1374&q=80",
     theme: "corporate"
   },
@@ -216,7 +216,7 @@ export const projects: Project[] = [
     title: "Meal-Mate – Restaurant App",
     description: "A full-stack restaurant companion application with real-time ordering, table reservation, and food recommendations.",
     tags: ["Python", "HTML", "CSS", "JavaScript"],
-    link: "https://github.com/Bharathr133/meal-mate-app",
+    link: "https://github.com/Bharathr133",
     image: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?ixlib=rb-4.0.3&auto=format&fit=crop&w=1374&q=80",
     theme: "sunset"
   },
@@ -225,7 +225,7 @@ export const projects: Project[] = [
     title: "Blood Group Detection",
     description: "An innovative system that predicts blood groups by analyzing fingerprint patterns using machine learning with 87% accuracy.",
     tags: ["Python", "Scikit-learn", "Image Processing", "Flask"],
-    link: "https://github.com/Bharathr133/Blood-Group-Detection",
+    link: "https://github.com/Bharathr133",
     image: "https://images.unsplash.com/photo-1579684453423-f84349ef60b0?ixlib=rb-4.0.3&auto=format&fit=crop&w=1386&q=80",
     theme: "emerald"
   },
@@ -234,7 +234,7 @@ export const projects: Project[] = [
     title: "Portfolio Website – Interactive Portfolio",
     description: "A modern, responsive portfolio website with animations and interactive features to showcase work and skills.",
     tags: ["HTML5", "CSS3", "JavaScript", "GSAP"],
-    link: "https://github.com/Bharathr133/Bharathr-portfolio-v1",
+    link: "https://github.com/Bharathr133",
     image: "https://images.unsplash.com/photo-1547658719-da2b51169166?ixlib=rb-4.0.3&auto=format&fit=crop&w=1364&q=80",
     theme: "minimal"
   }

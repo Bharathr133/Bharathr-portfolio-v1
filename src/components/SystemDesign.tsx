@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Database, GitFork, Cpu, Shield, ArrowRight, AlertCircle } from 'lucide-react';
+import { GitFork, ArrowRight, AlertCircle } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export default function SystemDesign() {
@@ -142,13 +142,13 @@ export default function SystemDesign() {
           <div className="space-y-4">
             <div className="p-5 rounded-2xl bg-slate-50/50 dark:bg-slate-900/40 border border-slate-200/40 dark:border-slate-850 text-xs leading-relaxed">
               <strong className="text-slate-900 dark:text-slate-200 block mb-1">Centralized common-security Module vs. Individual Validation</strong>
-              <p className="text-slate-550 dark:text-slate-400">
+              <p className="text-slate-500 dark:text-slate-400">
                 Developed a shared maven dependency `common-security` grouping JWT filters, token parsing utilities, and authorization roles. While this creates a library dependency between domains, it enforces a single source of truth for user access matrices and security configurations, reducing duplicate filter setups by 80%.
               </p>
             </div>
             <div className="p-5 rounded-2xl bg-slate-50/50 dark:bg-slate-900/40 border border-slate-200/40 dark:border-slate-850 text-xs leading-relaxed">
               <strong className="text-slate-900 dark:text-slate-200 block mb-1">Database Per Service Schema Separation</strong>
-              <p className="text-slate-550 dark:text-slate-400">
+              <p className="text-slate-500 dark:text-slate-400">
                 Enforced database-per-service using three independent PostgreSQL schemas (`machine-db`, `production-db`, `quality-db`). This eliminates shared table lock bottlenecks and guarantees domain isolation, meaning if the quality inspections logging database hits storage limits, the core production line queue remains online.
               </p>
             </div>
@@ -165,7 +165,7 @@ export default function SystemDesign() {
           <div className="space-y-4">
             <div className="p-5 rounded-2xl bg-slate-50/50 dark:bg-slate-900/40 border border-slate-200/40 dark:border-slate-850 text-xs leading-relaxed">
               <strong className="text-slate-900 dark:text-slate-200 block mb-1">Cascading Failures &amp; Resilience4j Fallbacks</strong>
-              <p className="text-slate-550 dark:text-slate-400">
+              <p className="text-slate-500 dark:text-slate-400">
                 During microservice cold starts, calling the load-balanced `WebClient` from `production-service` to check machine availability resulted in socket time-outs and crashed production workflows. Resolved this cascading issue by implementing `Resilience4j` circuit breakers with a cached fallback state that keeps orders submittable during service recovery windows.
               </p>
             </div>
@@ -174,7 +174,7 @@ export default function SystemDesign() {
                 <span>Future Design Shift: Asynchronous Websockets Gateway</span>
                 <ArrowRight className="h-3.5 w-3.5" />
               </strong>
-              <p className="text-slate-550 dark:text-slate-400">
+              <p className="text-slate-500 dark:text-slate-400">
                 To achieve live machine progress, the current dashboard relies on browser-side simulation loops synced periodically back to endpoints. Transitioning to a central Spring Cloud WebSocket gateway would push live machine telemetry dynamically, reducing HTTP request poll loads on Tomcat thread pools under high machine counts.
               </p>
             </div>

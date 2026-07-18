@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useState } from 'react';
-import { projects, Project, CaseStudyDetails } from '../data/portfolio';
-import { ExternalLink, Terminal, Shield, Lock, FileText, CheckCircle, AlertCircle, Play, Heart, MessageSquare, File, Database, GitFork, Cpu } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { projects, CaseStudyDetails } from '../data/portfolio';
+import { ExternalLink, Terminal, Shield, Lock, File, Database, GitFork, Cpu, ChevronRight } from 'lucide-react';
 import { GithubIcon } from './SocialIcons';
 import { motion } from 'framer-motion';
 import SystemDesign from './SystemDesign';
@@ -33,6 +33,35 @@ const projectMetrics: Record<string, MetricItem[]> = {
 
 // Mockup components using SVG and HTML elements to simulate real apps
 function DoxAppMockup() {
+  const [logs, setLogs] = useState<string[]>([
+    "JWT check: Valid. User roles: [ROLE_ADMIN]",
+    "AES-256 Envelope handshake: verified",
+    "DB pool status: 15 active connections"
+  ]);
+
+  useEffect(() => {
+    const logPool = [
+      "Doc encrypt: File path verified",
+      "PDF Watermark: text injection success",
+      "Jackrabbit Node: revision path updated",
+      "Flyway check: Schema 1.4 active",
+      "API request: 200 OK via dox-gateway",
+      "Session audit: access logging synced",
+      "File checks: MD5 checksum verified"
+    ];
+    let counter = 0;
+    const interval = setInterval(() => {
+      const timestamp = new Date().toTimeString().split(' ')[0];
+      const newLog = `[${timestamp}] ${logPool[counter % logPool.length]}`;
+      setLogs(prev => {
+        const next = [...prev.slice(1), newLog];
+        return next;
+      });
+      counter++;
+    }, 3000);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <div className="w-full h-full bg-slate-950 text-slate-300 font-mono text-[10px] p-4 flex flex-col justify-between select-none">
       {/* Top dashboard control bar */}
@@ -77,9 +106,11 @@ function DoxAppMockup() {
           <span>MIDDLEWARE SYSTEM AUDIT LOGS:</span>
         </div>
         <div className="space-y-0.5 text-[8px] leading-tight text-emerald-400">
-          <div className="truncate"><span className="text-slate-650">&gt;</span> JWT check: Valid. User roles: [ROLE_ADMIN]</div>
-          <div className="truncate"><span className="text-slate-655">&gt;</span> AES-256 Envelope handshake: verified</div>
-          <div className="truncate text-slate-400"><span className="text-slate-650">&gt;</span> DB pool status: 15 active connections</div>
+          {logs.map((log, idx) => (
+            <div key={idx} className="truncate">
+              <span className="text-slate-600">&gt;</span> {log}
+            </div>
+          ))}
         </div>
       </div>
     </div>
@@ -133,6 +164,19 @@ function PneumoniaDetectionMockup() {
 }
 
 function ManufacturingSystemMockup() {
+  const [progress, setProgress] = useState({ turning: 75, molding: 30, millingActive: false });
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setProgress(prev => ({
+        turning: Math.floor(Math.random() * 20) + 70,
+        molding: Math.floor(Math.random() * 30) + 20,
+        millingActive: !prev.millingActive
+      }));
+    }, 2500);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <div className="w-full h-full bg-slate-950 text-slate-300 font-mono text-[10px] p-4 flex flex-col justify-between select-none">
       {/* Top dashboard control bar */}
@@ -153,14 +197,23 @@ function ManufacturingSystemMockup() {
           <span className="text-slate-200">TURNING-01</span>
           <div className="flex items-center gap-2">
             <div className="w-16 bg-slate-800 rounded-full h-1 overflow-hidden">
-              <div className="bg-blue-500 h-full" style={{ width: '75%' }} />
+              <div className="bg-blue-500 h-full transition-all duration-500" style={{ width: `${progress.turning}%` }} />
             </div>
-            <span className="px-1.5 py-0.5 rounded bg-blue-950 text-blue-450 text-[7px] uppercase font-bold">RUNNING</span>
+            <span className="px-1.5 py-0.5 rounded bg-blue-950 text-blue-400 text-[7px] uppercase font-bold">RUNNING</span>
           </div>
         </div>
         <div className="flex items-center justify-between p-1.5 rounded bg-slate-900 border border-slate-800">
           <span className="text-slate-200">MILLING-02</span>
-          <span className="px-1.5 py-0.5 rounded bg-slate-950 text-slate-500 text-[7px] uppercase font-bold">IDLE</span>
+          {progress.millingActive ? (
+            <div className="flex items-center gap-2">
+              <div className="w-16 bg-slate-800 rounded-full h-1 overflow-hidden">
+                <div className="bg-blue-500 h-full transition-all duration-500" style={{ width: '45%' }} />
+              </div>
+              <span className="px-1.5 py-0.5 rounded bg-blue-950 text-blue-400 text-[7px] uppercase font-bold">RUNNING</span>
+            </div>
+          ) : (
+            <span className="px-1.5 py-0.5 rounded bg-slate-950 text-slate-500 text-[7px] uppercase font-bold">IDLE</span>
+          )}
         </div>
         <div className="flex items-center justify-between p-1.5 rounded bg-slate-900 border border-slate-800">
           <span className="text-slate-200">PRESS-03</span>
@@ -170,9 +223,9 @@ function ManufacturingSystemMockup() {
           <span className="text-slate-200">MOLDING-04</span>
           <div className="flex items-center gap-2">
             <div className="w-16 bg-slate-800 rounded-full h-1 overflow-hidden">
-              <div className="bg-blue-500 h-full" style={{ width: '30%' }} />
+              <div className="bg-blue-500 h-full transition-all duration-500" style={{ width: `${progress.molding}%` }} />
             </div>
-            <span className="px-1.5 py-0.5 rounded bg-blue-950 text-blue-450 text-[7px] uppercase font-bold">RUNNING</span>
+            <span className="px-1.5 py-0.5 rounded bg-blue-950 text-blue-400 text-[7px] uppercase font-bold">RUNNING</span>
           </div>
         </div>
       </div>
@@ -183,7 +236,7 @@ function ManufacturingSystemMockup() {
           <span>PASSED: <span className="text-emerald-400">482</span></span>
           <span>FAILED: <span className="text-red-400">12</span></span>
         </div>
-        <span>DEFECT: <span className="text-red-450 animate-pulse">2.4%</span></span>
+        <span>DEFECT: <span className="text-red-400 animate-pulse">2.4%</span></span>
       </div>
     </div>
   );
@@ -209,6 +262,12 @@ function ProjectVisualizer({ id }: { id: string }) {
 
 export default function Projects() {
   const [showSysDesign, setShowSysDesign] = useState(false);
+  const [expandedProjects, setExpandedProjects] = useState<Record<string, boolean>>({});
+
+  const toggleProjectExpand = (id: string) => {
+    setExpandedProjects(prev => ({ ...prev, [id]: !prev[id] }));
+  };
+
   // Filter out featured case study projects
   const featuredProjects = projects.filter((p) => p.caseStudy !== undefined);
   // Smaller ones go to the "Other Work" section below
@@ -231,7 +290,7 @@ export default function Projects() {
               Featured Engineering Work
             </h2>
           </div>
-          <p className="text-slate-550 dark:text-slate-400 text-sm max-w-md leading-relaxed font-medium">
+          <p className="text-slate-500 dark:text-slate-400 text-sm max-w-md leading-relaxed font-medium">
             Deep technical breakdowns showcasing core architecture problems, real engineering constraints, trade-off decisions, and measurable outcomes.
           </p>
         </div>
@@ -265,7 +324,7 @@ export default function Projects() {
                       <span className="h-2 w-2 rounded-full bg-yellow-500/80" />
                       <span className="h-2 w-2 rounded-full bg-green-500/80" />
                     </div>
-                    <span className="text-[9px] font-mono font-bold text-slate-550">
+                    <span className="text-[9px] font-mono font-bold text-slate-550 dark:text-slate-500">
                       localhost:3000/{project.id}
                     </span>
                     <Terminal className="h-3.5 w-3.5 text-slate-600" />
@@ -302,61 +361,75 @@ export default function Projects() {
                       {project.title}
                     </h3>
 
-                    {/* Problem / Constraint block */}
-                    <div className="mt-4 space-y-3.5 text-xs leading-relaxed text-slate-550 dark:text-slate-400 font-medium">
-                      <div>
-                        <strong className="text-slate-900 dark:text-slate-200 block mb-0.5 font-bold uppercase tracking-wider font-mono text-[9px] text-slate-400">Problem Context:</strong>
-                        <p>{study.problem}</p>
-                      </div>
-                      <div>
-                        <strong className="text-slate-900 dark:text-slate-200 block mb-0.5 font-bold uppercase tracking-wider font-mono text-[9px] text-slate-400">Key Constraints:</strong>
-                        <p>{study.constraints}</p>
-                      </div>
-                    </div>
+                    {/* Toggle Button for mobile screens */}
+                    <button
+                      onClick={() => toggleProjectExpand(project.id)}
+                      className="lg:hidden w-full flex items-center justify-between p-3 rounded-xl border border-slate-200/50 dark:border-slate-800 bg-slate-100/50 dark:bg-slate-900/30 font-mono text-[9px] font-bold text-indigo-650 dark:text-indigo-400 mt-3 cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-900 transition-all"
+                    >
+                      <span>{expandedProjects[project.id] ? 'COLLAPSE CASE STUDY DETAILS' : 'VIEW CASE STUDY DEEP DIVE'}</span>
+                      <ChevronRight className={`h-3.5 w-3.5 transition-transform duration-300 ${
+                        expandedProjects[project.id] ? 'rotate-90' : 'rotate-0'
+                      }`} />
+                    </button>
 
-                    {/* Decisions block */}
-                    <div className="mt-4 pt-4 border-t border-slate-200/50 dark:border-slate-900/60">
-                      <strong className="text-[9px] font-bold uppercase tracking-wider font-mono text-slate-455 dark:text-slate-400 block mb-2">Technical Execution:</strong>
-                      <ul className="space-y-1.5 text-xs text-slate-550 dark:text-slate-400 pl-4 list-disc font-medium leading-relaxed">
-                        {study.decisions.map((dec, idx) => (
-                          <li key={idx}>{dec}</li>
-                        ))}
-                      </ul>
-                    </div>
-
-                    {/* Lessons / Post-mortem block */}
-                    <div className="mt-4 p-3 bg-slate-100/50 dark:bg-slate-900/40 rounded-2xl border border-slate-200/30 dark:border-slate-855 text-xs">
-                      <span className="text-[9px] font-bold text-indigo-600 dark:text-indigo-400 block mb-1.5 flex items-center gap-1.5 uppercase font-mono">
-                        <Cpu className="h-3.5 w-3.5" />
-                        <span>Retrospective &amp; Scaling lessons</span>
-                      </span>
-                      <p className="text-slate-550 dark:text-slate-400 italic leading-relaxed font-medium">
-                        &ldquo;{study.lessons}&rdquo;
-                      </p>
-                    </div>
-
-                    {/* Outcomes Metrics Dashboard Grid */}
-                    {metrics.length > 0 && (
-                      <div className="grid grid-cols-3 gap-2 sm:gap-3 mt-4">
-                        {metrics.map((m, mIdx) => (
-                          <div 
-                            key={mIdx} 
-                            className={`p-2 sm:p-2.5 rounded-xl border flex flex-col justify-between ${
-                              m.highlighted 
-                                ? 'bg-emerald-50/50 dark:bg-emerald-950/20 border-emerald-200/40 dark:border-emerald-900/40' 
-                                : 'bg-slate-100/50 dark:bg-slate-900/40 border-slate-200/30 dark:border-slate-850'
-                            }`}
-                          >
-                            <span className="text-[7.5px] font-bold font-mono text-slate-500 uppercase tracking-wider">{m.label}</span>
-                            <span className={`text-xs font-extrabold mt-1 font-mono ${
-                              m.highlighted ? 'text-emerald-700 dark:text-emerald-400' : 'text-slate-900 dark:text-slate-200'
-                            }`}>
-                              {m.value}
-                            </span>
-                          </div>
-                        ))}
+                    {/* Collapsible Deep Dive container */}
+                    <div className={`lg:block ${expandedProjects[project.id] ? 'block' : 'hidden'}`}>
+                      {/* Problem / Constraint block */}
+                      <div className="mt-4 space-y-3.5 text-xs leading-relaxed text-slate-500 dark:text-slate-400 font-medium">
+                        <div>
+                          <strong className="text-slate-900 dark:text-slate-200 block mb-0.5 font-bold uppercase tracking-wider font-mono text-[9px] text-slate-400">Problem Context:</strong>
+                          <p>{study.problem}</p>
+                        </div>
+                        <div>
+                          <strong className="text-slate-900 dark:text-slate-200 block mb-0.5 font-bold uppercase tracking-wider font-mono text-[9px] text-slate-400">Key Constraints:</strong>
+                          <p>{study.constraints}</p>
+                        </div>
                       </div>
-                    )}
+
+                      {/* Decisions block */}
+                      <div className="mt-4 pt-4 border-t border-slate-200/50 dark:border-slate-900/60">
+                        <strong className="text-[9px] font-bold uppercase tracking-wider font-mono text-slate-455 dark:text-slate-400 block mb-2">Technical Execution:</strong>
+                        <ul className="space-y-1.5 text-xs text-slate-500 dark:text-slate-400 pl-4 list-disc font-medium leading-relaxed">
+                          {study.decisions.map((dec, idx) => (
+                            <li key={idx}>{dec}</li>
+                          ))}
+                        </ul>
+                      </div>
+
+                      {/* Lessons / Post-mortem block */}
+                      <div className="mt-4 p-3 bg-slate-100/50 dark:bg-slate-900/40 rounded-2xl border border-slate-200/30 dark:border-slate-855 text-xs">
+                        <span className="text-[9px] font-bold text-indigo-650 dark:text-indigo-400 block mb-1.5 flex items-center gap-1.5 uppercase font-mono">
+                          <Cpu className="h-3.5 w-3.5" />
+                          <span>Retrospective &amp; Scaling lessons</span>
+                        </span>
+                        <p className="text-slate-500 dark:text-slate-400 italic leading-relaxed font-medium">
+                          &ldquo;{study.lessons}&rdquo;
+                        </p>
+                      </div>
+
+                      {/* Outcomes Metrics Dashboard Grid */}
+                      {metrics.length > 0 && (
+                        <div className="grid grid-cols-3 gap-2 sm:gap-3 mt-4">
+                          {metrics.map((m, mIdx) => (
+                            <div 
+                              key={mIdx} 
+                              className={`p-2 sm:p-2.5 rounded-xl border flex flex-col justify-between ${
+                                m.highlighted 
+                                  ? 'bg-emerald-50/50 dark:bg-emerald-950/20 border-emerald-200/40 dark:border-emerald-900/40' 
+                                  : 'bg-slate-100/50 dark:bg-slate-900/40 border-slate-200/30 dark:border-slate-850'
+                              }`}
+                            >
+                              <span className="text-[7.5px] font-bold font-mono text-slate-500 uppercase tracking-wider">{m.label}</span>
+                              <span className={`text-xs font-extrabold mt-1 font-mono ${
+                                m.highlighted ? 'text-emerald-700 dark:text-emerald-400' : 'text-slate-900 dark:text-slate-200'
+                              }`}>
+                                {m.value}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
                   </div>
 
                   {/* Actions Links */}
@@ -412,7 +485,7 @@ export default function Projects() {
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs border-collapse">
                 <thead>
-                  <tr className="border-b border-slate-200 dark:border-slate-900 text-slate-450 font-mono font-bold uppercase tracking-wider text-[8.5px] pb-3 select-none">
+                  <tr className="border-b border-slate-200 dark:border-slate-900 text-slate-400 font-mono font-bold uppercase tracking-wider text-[8.5px] pb-3 select-none">
                     <th className="pb-3 pr-4">Project Title</th>
                     <th className="pb-3 pr-4 hidden md:table-cell">Technical Description</th>
                     <th className="pb-3 pr-4">Stack Tags</th>

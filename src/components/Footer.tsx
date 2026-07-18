@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Mail, Terminal, Copy, Check, Shield, MapPin, Globe } from 'lucide-react';
+import { Mail, Terminal, Copy, Check, MapPin } from 'lucide-react';
 import { GithubIcon, LinkedinIcon } from './SocialIcons';
 import { personalInfo } from '../data/portfolio';
 
@@ -57,19 +57,19 @@ export default function Footer() {
           </div>
           <div className="flex items-center gap-1.5">
             <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-            <span className="text-[9px] text-slate-550 uppercase tracking-wider font-bold">ONLINE</span>
+            <span className="text-[9px] text-slate-500 uppercase tracking-wider font-bold">ONLINE</span>
           </div>
         </div>
 
         {/* Console Footprint Grid */}
-        <div className="grid gap-10 md:grid-cols-3">
+        <div className="grid gap-8 md:grid-cols-2">
           
           {/* Column 1: Navigation Directories */}
           <div className="flex flex-col gap-4">
             <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider select-none border-b border-slate-800 pb-1.5">
-              // Navigation Directory
+              {"// Navigation Directory"}
             </span>
-            <nav className="flex flex-col gap-2.5 text-xs text-slate-400">
+            <nav className="grid grid-cols-2 gap-x-4 gap-y-2.5 text-xs text-slate-400">
               {navLinks.map((link) => (
                 <a
                   key={link.id}
@@ -77,78 +77,77 @@ export default function Footer() {
                   onClick={(e) => handleLinkClick(e, link.id)}
                   className="hover:text-indigo-400 transition-colors w-fit flex items-center gap-1"
                 >
-                  <span className="text-slate-600">&gt;</span>
+                  <span className="text-slate-650">&gt;</span>
                   <span>{link.label}</span>
                 </a>
               ))}
             </nav>
           </div>
 
-          {/* Column 2: Location Details */}
+          {/* Column 2: Connection Channels & Location */}
           <div className="flex flex-col gap-4">
             <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider select-none border-b border-slate-800 pb-1.5">
-              // Location
-            </span>
-            <div className="flex flex-col gap-3 text-xs text-slate-400">
-              <div className="flex items-center gap-2">
-                <MapPin className="h-3.5 w-3.5 text-slate-600 shrink-0" />
-                <span>LOCATION: Bangalore, India</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Column 3: Contact Shell & Socials */}
-          <div className="flex flex-col gap-4">
-            <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider select-none border-b border-slate-800 pb-1.5">
-              // Connection channels
+              {"// Connection channels & Location"}
             </span>
             
-            {/* Clipboard copy command utility */}
-            <div className="flex flex-col gap-2">
-              <span className="text-[9px] text-slate-600">execute command to copy email:</span>
-              <button 
-                onClick={handleCopyEmail}
-                className="flex items-center justify-between p-3 rounded-2xl bg-slate-950/90 border border-slate-800/80 cursor-pointer hover:border-indigo-500/30 hover:bg-slate-950 transition-all font-mono text-[10.5px] w-full text-left"
-              >
-                <div className="flex items-center gap-2 text-slate-400">
-                  <Mail className="h-3.5 w-3.5 text-indigo-500" />
-                  <span className="truncate">12345bharathr.com@gmail.com</span>
-                </div>
-                <div className="flex items-center shrink-0">
-                  {copied ? (
-                    <div className="flex items-center gap-1 text-emerald-400 font-bold text-[9px] uppercase">
-                      <Check className="h-3 w-3" />
-                      <span>COPIED</span>
-                    </div>
-                  ) : (
-                    <Copy className="h-3.5 w-3.5 text-slate-500 hover:text-slate-350 transition-colors" />
-                  )}
-                </div>
-              </button>
-            </div>
+            <div className="grid gap-6 sm:grid-cols-2 items-start">
+              {/* Clipboard copy command utility */}
+              <div className="flex flex-col gap-2">
+                <span className="text-[9px] text-slate-600">execute command to copy email:</span>
+                <button 
+                  onClick={handleCopyEmail}
+                  className="flex items-center justify-between p-3 rounded-2xl bg-slate-950/90 border border-slate-800/80 cursor-pointer hover:border-indigo-500/30 hover:bg-slate-950 transition-all font-mono text-[10.5px] w-full text-left"
+                >
+                  <div className="flex items-center gap-2 text-slate-400">
+                    <Mail className="h-3.5 w-3.5 text-indigo-500" />
+                    <span className="truncate">12345bharathr.com@gmail.com</span>
+                  </div>
+                  <div className="flex items-center shrink-0">
+                    {copied ? (
+                      <div className="flex items-center gap-1 text-emerald-400 font-bold text-[9px] uppercase">
+                        <Check className="h-3 w-3" />
+                        <span>COPIED</span>
+                      </div>
+                    ) : (
+                      <Copy className="h-3.5 w-3.5 text-slate-500 hover:text-slate-300 transition-colors" />
+                    )}
+                  </div>
+                </button>
+              </div>
 
-            {/* Social handles */}
-            <div className="flex flex-col gap-2 mt-2">
-              <span className="text-[9px] text-slate-600">secure social sockets:</span>
-              <div className="flex items-center gap-4 text-slate-500">
-                <a
-                  href={personalInfo.github}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:text-white transition-colors p-2 rounded-lg bg-slate-950/80 border border-slate-850/80 flex items-center justify-center"
-                  aria-label="GitHub"
-                >
-                  <GithubIcon className="h-4.5 w-4.5" />
-                </a>
-                <a
-                  href={personalInfo.linkedin}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:text-white transition-colors p-2 rounded-lg bg-slate-950/80 border border-slate-850/80 flex items-center justify-center"
-                  aria-label="LinkedIn"
-                >
-                  <LinkedinIcon className="h-4.5 w-4.5" />
-                </a>
+              {/* Location Details & Socials */}
+              <div className="flex flex-col gap-4">
+                <div className="flex flex-col gap-1.5">
+                  <span className="text-[9px] text-slate-600">current locator:</span>
+                  <div className="flex items-center gap-2 text-xs text-slate-400">
+                    <MapPin className="h-3.5 w-3.5 text-slate-600 shrink-0" />
+                    <span>LOCATION: Bangalore, India</span>
+                  </div>
+                </div>
+
+                <div className="flex flex-col gap-1.5">
+                  <span className="text-[9px] text-slate-600">secure social sockets:</span>
+                  <div className="flex items-center gap-3 text-slate-500">
+                    <a
+                      href={personalInfo.github}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="hover:text-white transition-colors p-2 rounded-lg bg-slate-950/80 border border-slate-850/80 flex items-center justify-center"
+                      aria-label="GitHub"
+                    >
+                      <GithubIcon className="h-4.5 w-4.5" />
+                    </a>
+                    <a
+                      href={personalInfo.linkedin}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="hover:text-white transition-colors p-2 rounded-lg bg-slate-950/80 border border-slate-850/80 flex items-center justify-center"
+                      aria-label="LinkedIn"
+                    >
+                      <LinkedinIcon className="h-4.5 w-4.5" />
+                    </a>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

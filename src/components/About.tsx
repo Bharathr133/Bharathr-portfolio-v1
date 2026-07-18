@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { personalInfo } from '../data/portfolio';
-import { Sparkles, Terminal as TerminalIcon, HelpCircle } from 'lucide-react';
+import { Terminal as TerminalIcon } from 'lucide-react';
 import TiltCard from './TiltCard';
 
 interface CommandLog {
@@ -16,6 +16,7 @@ export default function About() {
     { input: '', output: 'Welcome to Bharath\'s interactive terminal CLI! Type "help" to start.' }
   ]);
   const [inputVal, setInputVal] = useState('');
+  const [isInputFocused, setIsInputFocused] = useState(false);
   
   // Terminal commands history for arrow key navigation
   const [commandHistory, setCommandHistory] = useState<string[]>([]);
@@ -42,36 +43,61 @@ export default function About() {
     setHistoryIndex(-1); // Reset index on new submit
  
     let output = '';
-    switch (command) {
-      case 'help':
-        output = 'Available commands:\n  - bio            : Read my biography summary\n  - skills         : Read my tech matrix\n  - projects       : List my development projects\n  - experience     : View my internships & education\n  - certifications : List my verified credentials\n  - contact        : View my email & location\n  - clear          : Clear the console screen';
-        break;
-      case 'bio':
-        output = `${personalInfo.bioSummary}\n\nStack expertise: ${personalInfo.bioDetails[0]}`;
-        break;
-      case 'skills':
-        output = 'Core Skillset:\n  [Frontend] : React.js, Tailwind CSS, JavaScript, HTML5/CSS3\n  [Backend]  : Java Spring Boot, Microservices, Spring Cloud, Hibernate\n  [Tools]    : Docker, Git, CI/CD pipelines, Postman';
-        break;
-      case 'projects':
-        output = 'Development Projects:\n  - DOX-APP: Secure document management system (Spring Boot, React)\n  - Pneumonia Detection: CNN deep learning scans model (Python, TensorFlow)\n  - KodBook: Social media MVC application (Spring Boot, SQL)\n  - Meal-Mate: Restaurant ordering dashboard (Python, JavaScript)\n  - Blood Group: Fingerprint pattern predictor (Python, Scikit-Learn)\n  - Portfolio: Next.js + Framer Motion interactive site (Next.js, Tailwind v4)';
-        break;
-      case 'experience':
-        output = 'Experience & Milestones:\n\n[1] Java Full Stack Developer Intern\n    Company : Swajyot Technologies Pvt. Ltd.\n    Period  : March 2026 – Present\n    Overview: Contributing to enterprise full-stack solutions using Java, Spring Boot, React, and PostgreSQL.\n    Tasks   :\n      * Develop and maintain enterprise web applications using Spring Boot & React.js\n      * Design PostgreSQL database schemas and build optimized query structures\n      * Containerize microservices with Docker and deploy to Railway/Vercel platforms\n      * Integrate secure JWT authentication, document gates, and automated PDF builders\n    Skills  : Java, Spring Boot, React.js, PostgreSQL, Microservices, Docker, DevOps, REST APIs, Tailwind CSS, Git\n\n[2] Full Stack Development Training\n    Company : KodNest (6 Months)\n    Tasks   : Mastered Java Spring Boot and Microservices basics for backend development.\n    Skills  : Java, Python, Spring Boot, SQL, React.js, HTML/CSS, JavaScript\n\n[3] Internship 2.0 Program\n    Company : ParvaM ConsulTech Pvt. Ltd. (Oct 2023 – Nov 2023)\n    Tasks   : Designed and presented the sustainability-focused business idea "Bio Gas Plantation".\n    Skills  : Business Strategy, Team Collaboration, Project Planning\n\n[4] Academic Education\n    * Bachelor of Engineering in CSE (2021-2025) - DSMSCE Bangalore | CGPA: 8.01\n    * Higher Secondary in Science (2019-2021) - AECS Magnolia PU College\n    * Secondary School (2017-2019) - Adharsha High School';
-        break;
-      case 'certifications':
-        output = 'Verified Credentials:\n  - KodNest Full Stack Certification (2025)\n  - AWS Summit Attendee (2025)\n  - IBM Professional Certificate (2025)\n  - HackerRank Java/Problem Solving (2025)\n  - TCS iON Career Edge (2025)\n  - Skilected Certified Professional (2025)\n  - Besant Technologies Certification (2025)\n  - Udemy Full Stack Course completion (2025)\n  - Coddy Tech algorithms certificate (2024)';
-        break;
-      case 'contact':
-        output = `Location: ${personalInfo.location}\nEmail: ${personalInfo.email}\nGitHub: ${personalInfo.github}\nLinkedIn: ${personalInfo.linkedin}`;
-        break;
-      case 'clear':
-        setTerminalHistory([]);
-        setInputVal('');
-        return;
-      default:
-        output = `Command not found: "${command}". Type "help" for a list of valid commands.`;
+    const cleanCmd = command.toLowerCase().trim();
+    
+    // Custom keywords matched with GenZ funny response styles with full respect
+    if (cleanCmd.includes('gf') || cleanCmd.includes('girlfriend') || cleanCmd.includes('crush') || cleanCmd.includes('marry')) {
+      output = "Error 404: Girlfriend not found. 💀 Currently in a committed relationship with clean code and Spring Boot compilation. No cap, we out here grinding on systems! ⚡";
+    } else if (cleanCmd.includes('salary') || cleanCmd.includes('money') || cleanCmd.includes('pay') || cleanCmd.includes('hired')) {
+      output = "Bro is asking for the bag! 💰 Let's sync up on email to discuss the numbers. Strictly premium execution, zero fluff. Let's get this bread together! 🚀";
+    } else if (cleanCmd.includes('zenitsu') || cleanCmd.includes('anime') || cleanCmd.includes('demon slayer')) {
+      output = "Zenitsu is valid fr! ⚡ Thunder breathing, first form: Thunderclap and Flash! But currently, I'm focusing on Java breathing, first form: Spring Boot compilation! 💥";
+    } else if (cleanCmd.includes('hobby') || cleanCmd.includes('hobbies') || cleanCmd.includes('game') || cleanCmd.includes('gaming')) {
+      output = "Coding is the main hobby, no cap. But when I'm AFK, I'm probably listening to music, reviewing system designs, or sipping coffee. ☕ Keeping it chill.";
+    } else if (cleanCmd.includes('who') || cleanCmd.includes('about') || cleanCmd.includes('bharath')) {
+      output = "I'm Bharath R, a Java Full-Stack Engineer out here building backend APIs that don't crash. Real engineering, zero fluff. Let's build something epic! 🚀";
+    } else {
+      switch (cleanCmd) {
+        case 'help':
+          output = 'Available commands:\n  - bio            : Read my biography summary\n  - skills         : Read my tech matrix\n  - projects       : List my development projects\n  - experience     : View my internships & education\n  - certifications : List my verified credentials\n  - contact        : View my email & location\n  - clear          : Clear the console screen';
+          break;
+        case 'bio':
+          output = `${personalInfo.bioSummary}\n\nStack expertise: ${personalInfo.bioDetails[0]}`;
+          break;
+        case 'skills':
+          output = 'Core Skillset:\n  [Frontend] : React.js, Tailwind CSS, JavaScript, HTML5/CSS3\n  [Backend]  : Java Spring Boot, Microservices, Spring Cloud, Hibernate\n  [Tools]    : Docker, Git, CI/CD pipelines, Postman';
+          break;
+        case 'projects':
+          output = 'Development Projects:\n  - DOX-APP: Secure document management system (Spring Boot, React)\n  - Pneumonia Detection: CNN deep learning scans model (Python, TensorFlow)\n  - KodBook: Social media MVC application (Spring Boot, SQL)\n  - Meal-Mate: Restaurant ordering dashboard (Python, JavaScript)\n  - Blood Group: Fingerprint pattern predictor (Python, Scikit-Learn)\n  - Portfolio: Next.js + Framer Motion interactive site (Next.js, Tailwind v4)';
+          break;
+        case 'experience':
+          output = 'Experience & Milestones:\n\n[1] Java Full Stack Developer Intern\n    Company : Swajyot Technologies Pvt. Ltd.\n    Period  : March 2026 – Present\n    Overview: Contributing to enterprise full-stack solutions using Java, Spring Boot, React, and PostgreSQL.\n    Tasks   :\n      * Develop and maintain enterprise web applications using Spring Boot & React.js\n      * Design PostgreSQL database schemas and build optimized query structures\n      * Containerize microservices with Docker and deploy to Railway/Vercel platforms\n      * Integrate secure JWT authentication, document gates, and automated PDF builders\n    Skills  : Java, Spring Boot, React.js, PostgreSQL, Microservices, Docker, DevOps, REST APIs, Tailwind CSS, Git\n\n[2] Full Stack Development Training\n    Company : KodNest (6 Months)\n    Tasks   : Mastered Java Spring Boot and Microservices basics for backend development.\n    Skills  : Java, Python, Spring Boot, SQL, React.js, HTML/CSS, JavaScript\n\n[3] Internship 2.0 Program\n    Company : ParvaM ConsulTech Pvt. Ltd. (Oct 2023 – Nov 2023)\n    Tasks   : Designed and presented the sustainability-focused business idea "Bio Gas Plantation".\n    Skills  : Business Strategy, Team Collaboration, Project Planning\n\n[4] Academic Education\n    * Bachelor of Engineering in CSE (2021-2025) - DSMSCE Bangalore | CGPA: 8.01\n    * Higher Secondary in Science (2019-2021) - AECS Magnolia PU College\n    * Secondary School (2017-2019) - Adharsha High School';
+          break;
+        case 'certifications':
+          output = 'Verified Credentials:\n  - KodNest Full Stack Certification (2025)\n  - AWS Summit Attendee (2025)\n  - IBM Professional Certificate (2025)\n  - HackerRank Java/Problem Solving (2025)\n  - TCS iON Career Edge (2025)\n  - Skilected Certified Professional (2025)\n  - Besant Technologies Certification (2025)\n  - Udemy Full Stack Course completion (2025)\n  - Coddy Tech algorithms certificate (2024)';
+          break;
+        case 'contact':
+          output = `Location: ${personalInfo.location}\nEmail: ${personalInfo.email}\nGitHub: ${personalInfo.github}\nLinkedIn: ${personalInfo.linkedin}`;
+          break;
+        case 'clear':
+          setTerminalHistory([]);
+          setInputVal('');
+          return;
+        default: {
+          // Check if input looks like keyboard-mashing (length > 5 with very few vowels, or multiple words)
+          const vowels = command.match(/[aeiouy]/gi);
+          const vowelCount = vowels ? vowels.length : 0;
+          const isGibberish = command.length > 5 && (vowelCount === 0 || vowelCount / command.length < 0.15 || command.split(' ').length > 2);
+          
+          if (isGibberish) {
+            output = `Command not recognized. (Bro is out here mashing keys ⌨️💀). Please type "help" for a list of valid commands so we can show you the real deal! 🚀`;
+          } else {
+            output = `Command not recognized: "${command}". (That command is not giving, fr 💀). Type "help" to see the list of valid commands so we can get to business! 🚀`;
+          }
+        }
+      }
     }
-
+ 
     setTerminalHistory((prev) => [...prev, { input: cmdText, output }]);
   };
 
@@ -146,13 +172,12 @@ export default function About() {
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src="/headshot.jpg"
-                    alt="Bharath R Avatar"
+                    alt="Bharath R - Senior Java Full Stack Developer Bangalore"
                     className="w-full h-full object-cover select-none"
                     draggable={false}
                   />
                   <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-slate-950/80 to-transparent p-4 flex justify-between items-center text-white font-mono">
                     <span className="text-xs font-bold tracking-wide">Bharath R // Full Stack</span>
-                    <Sparkles className="h-4 w-4 text-indigo-400" />
                   </div>
                 </div>
 
@@ -188,7 +213,7 @@ export default function About() {
                     <span className="h-3 w-3 rounded-full bg-yellow-500/80" />
                     <span className="h-3 w-3 rounded-full bg-green-500/80" />
                   </div>
-                  <span className="text-[9px] text-slate-550 font-bold uppercase tracking-wider">
+                  <span className="text-[9px] text-slate-500 font-bold uppercase tracking-wider">
                     bharathr@portfolio: ~/workspace
                   </span>
                   <TerminalIcon className="h-4 w-4 text-slate-600 shrink-0" />
@@ -206,7 +231,7 @@ export default function About() {
                           <span className="text-emerald-450">{log.input}</span>
                         </div>
                       )}
-                      <div className="text-slate-350 text-xs whitespace-pre-wrap pl-2 leading-relaxed font-mono">
+                      <div className="text-slate-300 text-xs whitespace-pre-wrap pl-2 leading-relaxed font-mono">
                         {log.output}
                       </div>
                     </div>
@@ -242,6 +267,8 @@ export default function About() {
                       value={inputVal}
                       onChange={(e) => setInputVal(e.target.value)}
                       onKeyDown={handleKeyDown}
+                      onFocus={() => setIsInputFocused(true)}
+                      onBlur={() => setIsInputFocused(false)}
                       className="absolute inset-0 w-full h-full opacity-0 z-10 cursor-text focus:outline-none select-text"
                       autoComplete="off"
                       autoCapitalize="off"
@@ -251,7 +278,7 @@ export default function About() {
                     {/* Styled rendering on top of the ghost input */}
                     <div className="absolute inset-y-0 left-0 flex items-center pointer-events-none w-full min-w-0">
                       <span className="text-emerald-400 whitespace-pre truncate">{inputVal}</span>
-                      <span className="w-1.5 h-3.5 bg-emerald-400 ml-0.5 shrink-0 custom-terminal-cursor" />
+                      <span className={`w-1.5 h-3.5 bg-emerald-400 ml-0.5 shrink-0 ${isInputFocused ? 'custom-terminal-cursor' : 'opacity-70'}`} />
                       {!inputVal && (
                         <span className="absolute left-0 text-slate-500 text-xs font-mono pointer-events-none select-none truncate pr-4">
                           use Up/Down arrow for history or type command...

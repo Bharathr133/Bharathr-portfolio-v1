@@ -1,10 +1,9 @@
 'use client';
 
 import React, { useState, useEffect, useRef, FormEvent } from 'react';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Terminal, AlertTriangle, ArrowRight, Home, Cpu, Code, User, Mail, RefreshCw } from 'lucide-react';
+import { Terminal, AlertTriangle, ArrowRight, Home, Cpu, Code, RefreshCw } from 'lucide-react';
 
 interface TerminalLine {
   text: string;
@@ -37,7 +36,6 @@ export default function NotFound() {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    let animationFrameId: number;
 
     const resizeCanvas = () => {
       canvas.width = window.innerWidth;
@@ -280,7 +278,7 @@ export default function NotFound() {
               <span className="w-1.5 h-3.5 bg-emerald-400 ml-0.5 shrink-0 custom-terminal-cursor" />
               {!inputVal && (
                 <span className="absolute left-0 text-slate-500 text-sm font-mono pointer-events-none select-none truncate pr-4">
-                  Type 'help' or commands...
+                  Type &quot;help&quot; or commands...
                 </span>
               )}
             </div>

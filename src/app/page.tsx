@@ -17,7 +17,7 @@ export default function Home() {
     <>
       <LoadingScreen />
       <Header />
-      <main className="flex-1">
+      <main className="flex-1 overflow-x-hidden">
         <Hero />
         <Stats />
         <About />

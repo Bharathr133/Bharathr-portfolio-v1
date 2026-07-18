@@ -22,13 +22,15 @@ export default function Header() {
   // Load theme preference on mount
   useEffect(() => {
     const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'dark') {
-      setIsDarkMode(true);
+    const isDark = savedTheme === 'dark';
+    if (isDark) {
       document.documentElement.classList.add('dark');
     } else {
-      setIsDarkMode(false);
       document.documentElement.classList.remove('dark');
     }
+    setTimeout(() => {
+      setIsDarkMode(isDark);
+    }, 0);
   }, []);
 
   const toggleTheme = () => {
@@ -84,7 +86,7 @@ export default function Header() {
   return (
     <>
       <header
-        className={`fixed top-4 left-4 right-4 md:top-6 z-40 max-w-4xl mx-auto w-[calc(100%-2rem)] md:w-full transition-all duration-500 rounded-full border border-slate-200/50 dark:border-slate-800/80 backdrop-blur-xl ${
+        className={`fixed top-4 left-1/2 -translate-x-1/2 z-40 w-[calc(100%-2rem)] max-w-4xl transition-all duration-500 rounded-full border border-slate-200/50 dark:border-slate-800/80 backdrop-blur-xl ${
           scrolled
             ? 'bg-white/80 dark:bg-slate-950/75 py-2 px-6 shadow-[0_20px_50px_rgba(0,0,0,0.06)]'
             : 'bg-white/50 dark:bg-slate-900/40 py-3.5 px-7 shadow-[0_10px_30px_rgba(0,0,0,0.02)]'

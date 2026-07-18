@@ -10,11 +10,17 @@ export default function Certifications() {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
+  const [activeCertIdx, setActiveCertIdx] = useState(0);
 
-  // Check scroll positions to show/hide indicators
-  const checkScroll = () => {
+  // Check scroll positions and active index to show indicators/dots
+  const handleCertScroll = () => {
     if (scrollContainerRef.current) {
       const { scrollLeft, scrollWidth, clientWidth } = scrollContainerRef.current;
+      if (clientWidth > 0) {
+        const cardWidth = scrollWidth / certifications.length;
+        const index = Math.min(certifications.length - 1, Math.max(0, Math.round(scrollLeft / cardWidth)));
+        setActiveCertIdx(index);
+      }
       setCanScrollLeft(scrollLeft > 5);
       setCanScrollRight(scrollLeft + clientWidth < scrollWidth - 5);
     }
@@ -23,19 +29,37 @@ export default function Certifications() {
   useEffect(() => {
     const el = scrollContainerRef.current;
     if (el) {
-      el.addEventListener('scroll', checkScroll);
+      el.addEventListener('scroll', handleCertScroll);
       // Run initial check
-      checkScroll();
+      handleCertScroll();
       // Handle resizing
-      window.addEventListener('resize', checkScroll);
+      window.addEventListener('resize', handleCertScroll);
     }
     return () => {
       if (el) {
-        el.removeEventListener('scroll', checkScroll);
+        el.removeEventListener('scroll', handleCertScroll);
       }
-      window.removeEventListener('resize', checkScroll);
+      window.removeEventListener('resize', handleCertScroll);
     };
   }, []);
+
+  // Autoplay certifications swiper every 4 seconds on mobile screen sizes
+  useEffect(() => {
+    const timer = setInterval(() => {
+      if (scrollContainerRef.current && window.innerWidth < 768) {
+        const nextIdx = (activeCertIdx + 1) % certifications.length;
+        const scrollWidth = scrollContainerRef.current.scrollWidth;
+        const cardWidth = scrollWidth / certifications.length;
+        scrollContainerRef.current.scrollTo({
+          left: nextIdx * cardWidth,
+          behavior: 'smooth'
+        });
+        setActiveCertIdx(nextIdx);
+      }
+    }, 4000);
+
+    return () => clearInterval(timer);
+  }, [activeCertIdx]);
 
   const handleScroll = (direction: 'left' | 'right') => {
     if (scrollContainerRef.current) {
@@ -77,7 +101,7 @@ export default function Certifications() {
           {canScrollLeft && (
             <button
               onClick={() => handleScroll('left')}
-              className="absolute left-4 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-350 hover:text-indigo-600 dark:hover:text-indigo-400 shadow-lg hover:border-indigo-500/30 transition-all duration-300 hidden md:block"
+              className="absolute left-4 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 shadow-lg hover:border-indigo-500/30 transition-all duration-300 hidden md:block"
               aria-label="Scroll Left"
             >
               <ChevronLeft className="h-5 w-5" />
@@ -88,7 +112,7 @@ export default function Certifications() {
           {canScrollRight && (
             <button
               onClick={() => handleScroll('right')}
-              className="absolute right-4 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-350 hover:text-indigo-600 dark:hover:text-indigo-400 shadow-lg hover:border-indigo-500/30 transition-all duration-300 hidden md:block"
+              className="absolute right-4 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 shadow-lg hover:border-indigo-500/30 transition-all duration-300 hidden md:block"
               aria-label="Scroll Right"
             >
               <ChevronRight className="h-5 w-5" />
@@ -98,11 +122,12 @@ export default function Certifications() {
           {/* Horizontal scroll box */}
           <div
             ref={scrollContainerRef}
-            className="flex gap-6 overflow-x-auto scrollbar-hide py-4 px-2 snap-x snap-mandatory scroll-smooth"
+            onScroll={handleCertScroll}
+            className="flex gap-6 overflow-x-auto scrollbar-hide py-4 -mx-6 px-6 md:-mx-8 md:px-8 snap-x snap-mandatory scroll-smooth"
             style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
           >
             {certifications.map((cert) => (
-              <div key={cert.title} className="w-[280px] sm:w-[320px] shrink-0 snap-center">
+              <div key={cert.title} className="w-[80vw] xs:w-[82vw] sm:w-[320px] shrink-0 snap-center">
                 <TiltCard className="w-full">
                   <div
                     onClick={() => setActiveCertUrl(cert.image)}
@@ -151,6 +176,30 @@ export default function Certifications() {
                   </div>
                 </TiltCard>
               </div>
+            ))}
+          </div>
+
+          {/* Mobile Swiper Indicators */}
+          <div className="flex justify-center gap-1.5 mt-6 md:hidden w-full select-none">
+            {certifications.map((_, idx) => (
+              <button
+                key={idx}
+                onClick={() => {
+                  if (scrollContainerRef.current) {
+                    const scrollWidth = scrollContainerRef.current.scrollWidth;
+                    const cardWidth = scrollWidth / certifications.length;
+                    scrollContainerRef.current.scrollTo({
+                      left: idx * cardWidth,
+                      behavior: 'smooth'
+                    });
+                    setActiveCertIdx(idx);
+                  }
+                }}
+                className={`h-1.5 rounded-full transition-all duration-300 ${
+                  idx === activeCertIdx ? 'w-4.5 bg-indigo-600 dark:bg-indigo-400' : 'w-1.5 bg-slate-300 dark:bg-slate-800'
+                }`}
+                aria-label={`Go to certification slide ${idx + 1}`}
+              />
             ))}
           </div>
 

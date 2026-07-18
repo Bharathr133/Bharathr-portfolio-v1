@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { internships, educations } from '../data/portfolio';
-import { GitBranch, GitCommit, Calendar, Tag, GitPullRequest } from 'lucide-react';
+import { GitBranch, GitCommit, Calendar, GitPullRequest } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 interface GitLogItem {
@@ -92,42 +92,106 @@ export default function GitTimeline() {
         </div>
 
         {/* Git Graph Timeline */}
-        <div className="relative max-w-4xl mx-auto pl-8 sm:pl-16">
-          {/* Main vertical line for Git log track */}
-          <div className="absolute left-[19px] sm:left-[35px] top-4 bottom-4 w-[2px] bg-slate-200 dark:bg-slate-800" />
-
+        <div className="relative max-w-4xl mx-auto">
+          
           {/* Git Log List */}
-          <div className="space-y-12">
-            {gitLogs.map((log, logIdx) => (
-              <motion.div 
-                key={log.id} 
-                initial={{ opacity: 0, x: -30 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true, margin: "-80px" }}
-                transition={{ duration: 0.5, delay: logIdx * 0.1 }}
-                className="relative group flex flex-col md:flex-row gap-6 md:gap-8 items-start"
-              >
-                
-                {/* Visual commit node marker */}
-                <div className="absolute -left-[27px] sm:-left-[43px] top-1.5 h-6 w-6 rounded-full bg-white dark:bg-slate-900 border-4 border-slate-200 dark:border-slate-800 flex items-center justify-center group-hover:border-indigo-600 dark:group-hover:border-indigo-500 group-hover:scale-110 transition-all duration-300 z-10 shadow-sm">
-                  <div className="h-1.5 w-1.5 rounded-full bg-slate-400 group-hover:bg-indigo-600 dark:group-hover:bg-indigo-500" />
-                </div>
+          <div className="space-y-4">
+            {gitLogs.map((log, logIdx) => {
+              const isEducation = log.type === 'education';
+              const branchColorClass = isEducation 
+                ? 'stroke-emerald-500 dark:stroke-emerald-400' 
+                : log.id === 'intern-swajyot'
+                  ? 'stroke-indigo-500 dark:stroke-indigo-400'
+                  : log.id === 'intern-kodnest'
+                    ? 'stroke-purple-500 dark:stroke-purple-400'
+                    : 'stroke-cyan-500 dark:stroke-cyan-400';
+              
+              const nodeColorClass = isEducation 
+                ? 'stroke-emerald-500 fill-white dark:fill-slate-900' 
+                : log.id === 'intern-swajyot'
+                  ? 'stroke-indigo-500 fill-white dark:fill-slate-900'
+                  : log.id === 'intern-kodnest'
+                    ? 'stroke-purple-500 fill-white dark:fill-slate-900'
+                    : 'stroke-cyan-500 fill-white dark:fill-slate-900';
 
-                {/* Commit ID Badge & Branch Info */}
-                <div className="flex flex-row md:flex-col items-center md:items-end gap-2 shrink-0 w-full md:w-36 pt-1">
-                  <span className="font-mono text-xs text-indigo-650 dark:text-indigo-400 font-semibold bg-indigo-50 dark:bg-indigo-500/10 px-2 py-0.5 rounded border border-indigo-100 dark:border-indigo-500/20 flex items-center gap-1">
-                    <GitCommit className="h-3 w-3" />
-                    <span>{log.hash}</span>
-                  </span>
+              const glowClass = isEducation
+                ? 'bg-emerald-500/20'
+                : log.id === 'intern-swajyot'
+                  ? 'bg-indigo-500/20'
+                  : log.id === 'intern-kodnest'
+                    ? 'bg-purple-500/20'
+                    : 'bg-cyan-500/20';
+
+              return (
+                <motion.div 
+                  key={log.id} 
+                  initial={{ opacity: 0, x: -20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true, margin: "-80px" }}
+                  transition={{ duration: 0.5, delay: logIdx * 0.1 }}
+                  className="flex gap-1.5 sm:gap-4 relative group"
+                >
                   
-                  <span className="font-mono text-[10px] text-slate-550 dark:text-slate-400 font-semibold flex items-center gap-1">
-                    <GitBranch className="h-3 w-3 text-indigo-500/60" />
-                    <span>{log.branchName}</span>
-                  </span>
-                </div>
+                  {/* Left Column: Git Graph SVG Lane */}
+                  <div className="w-10 sm:w-16 flex flex-col items-center justify-between shrink-0 relative">
+                    {/* Top segments of Main line */}
+                    <div className={`w-[2px] flex-1 bg-slate-200 dark:bg-slate-800 ${logIdx === 0 ? 'opacity-0' : 'opacity-100'}`} />
+                    
+                    {/* Branch Graph SVG */}
+                    <div className="h-16 w-full shrink-0 flex items-center justify-center relative">
+                      <svg className="w-full h-full" viewBox="0 0 50 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        {/* Main Branch Line */}
+                        <line x1="16" y1="0" x2="16" y2="60" className="stroke-slate-200 dark:stroke-slate-800" strokeWidth="2.5" />
+                        
+                        {/* Branch Split */}
+                        <path d="M 16 10 C 16 20, 36 20, 36 30" className={branchColorClass} strokeWidth="2.5" fill="none" />
+                        
+                        {/* Branch Merge back (if not the top-most item) */}
+                        {logIdx !== 0 && (
+                          <path d="M 36 30 C 36 40, 16 40, 16 50" className={branchColorClass} strokeWidth="2.5" fill="none" />
+                        )}
+                        
+                        {/* Commit Node Dot */}
+                        <circle 
+                          cx="36" 
+                          cy="30" 
+                          r="5.5" 
+                          className={`${nodeColorClass} group-hover:scale-125 transition-transform duration-300`} 
+                          strokeWidth="3.5" 
+                        />
+                      </svg>
+                      
+                      {/* Pulse active marker for Swajyot (current active) */}
+                      {log.id === 'intern-swajyot' && (
+                        <span className="absolute right-1.5 sm:right-4 top-1/2 -translate-y-1/2 flex h-3.5 w-3.5 items-center justify-center">
+                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
+                          <span className="relative inline-flex rounded-full h-2 w-2 bg-indigo-500"></span>
+                        </span>
+                      )}
+                    </div>
 
-                {/* Commit content Card */}
-                <div className="w-full p-6 md:p-8 bg-white dark:bg-slate-900/40 border border-slate-200/80 dark:border-slate-800 rounded-[24px_8px_32px_12px] shadow-[0_15px_30px_-15px_rgba(0,0,0,0.06)] dark:shadow-[0_20px_45px_-15px_rgba(0,0,0,0.5)] hover:border-slate-350 dark:hover:border-slate-700 transition-all duration-300 relative overflow-hidden flex-1">
+                    {/* Bottom segments of Main line */}
+                    <div className={`w-[2px] flex-1 bg-slate-200 dark:bg-slate-800 ${logIdx === gitLogs.length - 1 ? 'opacity-0' : 'opacity-100'}`} />
+                  </div>
+
+                  {/* Right Column: Content Card */}
+                  <div className="flex-1 flex flex-col md:flex-row gap-4 md:gap-6 items-start pb-12">
+                    
+                    {/* Commit ID Badge & Branch Info */}
+                    <div className="flex flex-wrap md:flex-col items-center md:items-end gap-2.5 shrink-0 w-full md:w-32 pt-1.5">
+                      <span className="font-mono text-xs text-indigo-650 dark:text-indigo-400 font-semibold bg-indigo-50 dark:bg-indigo-500/10 px-2 py-0.5 rounded border border-indigo-100 dark:border-indigo-500/20 flex items-center gap-1">
+                        <GitCommit className="h-3 w-3" />
+                        <span>{log.hash}</span>
+                      </span>
+                      
+                      <span className="font-mono text-[9px] text-slate-500 dark:text-slate-400 font-semibold flex items-center gap-1">
+                        <GitBranch className="h-3 w-3 text-indigo-500/60" />
+                        <span>{log.branchName}</span>
+                      </span>
+                    </div>
+
+                    {/* Commit content Card */}
+                    <div className="w-full p-5 md:p-8 bg-white dark:bg-slate-900/40 border border-slate-200/80 dark:border-slate-800 rounded-[24px_8px_32px_12px] shadow-[0_15px_30px_-15px_rgba(0,0,0,0.06)] dark:shadow-[0_20px_45px_-15px_rgba(0,0,0,0.5)] hover:border-slate-350 dark:hover:border-slate-700 transition-all duration-300 relative overflow-hidden flex-1">
                   {/* Ambient Light border gradient */}
                   <div className="absolute -inset-[1px] bg-gradient-to-r from-indigo-500/10 to-purple-500/10 rounded-[24px_8px_32px_12px] opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-sm pointer-events-none" />
 
@@ -174,7 +238,7 @@ export default function GitTimeline() {
                         {log.skills.map((skill, sIdx) => (
                           <span
                             key={sIdx}
-                            className="text-[10px] font-bold px-2.5 py-0.5 rounded bg-slate-50/50 dark:bg-slate-950 text-slate-600 dark:text-slate-350 border border-slate-200 dark:border-slate-800 uppercase tracking-wide font-mono"
+                            className="text-[10px] font-bold px-2.5 py-0.5 rounded bg-slate-50/50 dark:bg-slate-950 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-800 uppercase tracking-wide font-mono"
                           >
                             {skill}
                           </span>
@@ -183,10 +247,11 @@ export default function GitTimeline() {
                     </div>
                   )}
                 </div>
-
-              </motion.div>
-            ))}
-          </div>
+              </div>
+            </motion.div>
+          );
+        })}
+      </div>
 
           {/* Academic Footnotes Footer */}
           <div className="mt-20 pt-10 border-t border-slate-200 dark:border-slate-800">

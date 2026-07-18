@@ -1,8 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { Mail, FileText, Check, Copy, MapPin, ArrowRight, Briefcase, Sparkles, ExternalLink } from 'lucide-react';
-import { GithubIcon, LinkedinIcon } from './SocialIcons';
+import { Mail, FileText, Check, MapPin, ArrowRight, Briefcase } from 'lucide-react';
 import { personalInfo, stats } from '../data/portfolio';
 import TechIcon from './TechIcons';
 import { motion } from 'framer-motion';
@@ -77,6 +76,37 @@ function AnimatedStatValue({ value }: { value: string }) {
 export default function Hero() {
   const marqueeItems = [...marqueeSkills, ...marqueeSkills];
   const [copied, setCopied] = useState(false);
+  const [activeBentoIdx, setActiveBentoIdx] = useState(0);
+  const bentoScrollRef = useRef<HTMLDivElement>(null);
+
+  const handleBentoScroll = () => {
+    if (bentoScrollRef.current) {
+      const { scrollLeft, clientWidth } = bentoScrollRef.current;
+      if (clientWidth > 0) {
+        const index = Math.round(scrollLeft / clientWidth);
+        setActiveBentoIdx(index);
+      }
+    }
+  };
+
+  // Autoplay Bento Swiper every 4 seconds on mobile screen sizes
+  useEffect(() => {
+    const timer = setInterval(() => {
+      if (bentoScrollRef.current && window.innerWidth < 1024) {
+        const nextIdx = (activeBentoIdx + 1) % 4;
+        const clientWidth = bentoScrollRef.current.clientWidth;
+        if (clientWidth > 0) {
+          bentoScrollRef.current.scrollTo({
+            left: nextIdx * (clientWidth - 32),
+            behavior: 'smooth'
+          });
+          setActiveBentoIdx(nextIdx);
+        }
+      }
+    }, 4000);
+
+    return () => clearInterval(timer);
+  }, [activeBentoIdx]);
 
   const handleCopyEmail = () => {
     navigator.clipboard.writeText(personalInfo.email);
@@ -103,24 +133,24 @@ export default function Hero() {
           {/* Left Column: Heading and info (approx 5 cols) */}
           <div className="lg:col-span-5 flex flex-col gap-5 items-start text-left">
             <span className="font-mono text-xs uppercase tracking-widest text-indigo-600 dark:text-indigo-400 font-bold px-3 py-1 rounded-full bg-indigo-50/50 dark:bg-indigo-950/30 border border-indigo-100/20 dark:border-indigo-900/30">
-              Senior Java Full-Stack Engineer
+              Java Backend Developer
             </span>
             
-            <h1 className="text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white sm:text-5xl font-serif leading-[1.12]">
-              Engineering resilient backend APIs and interactive web systems.
+            <h1 className="text-3xl xs:text-4xl sm:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white font-serif leading-[1.12]">
+              Building scalable backend APIs<br />and modern web applications.
             </h1>
 
-            <p className="text-sm md:text-base leading-relaxed text-slate-550 dark:text-slate-400 font-medium">
-              Java Full-Stack Developer specializing in Spring Boot, microservices architecture, and clean React dashboards. 
+            <p className="text-sm md:text-base leading-relaxed text-slate-500 dark:text-slate-400 font-medium">
+              Java Backend Developer with hands-on experience developing Spring Boot microservices, REST APIs, PostgreSQL databases, and responsive React applications. Passionate about clean architecture, performance optimization, and solving real-world engineering challenges.
             </p>
 
             {/* Active Status Indicator */}
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/5 dark:bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-xs font-mono select-none">
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/5 dark:bg-emerald-500/10 border border-emerald-500/20 text-emerald-655 dark:text-emerald-400 text-xs font-mono select-none">
               <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-              <span>Available for Full-time roles in Bangalore &amp; Remote</span>
+              <span>Open to Full-Time Java Backend Developer Opportunities</span>
             </div>
 
-            {/* Primary Action Button */}
+            {/* Action Buttons */}
             <div className="mt-2 flex flex-wrap gap-4 items-center">
               <a
                 href="/resume.pdf"
@@ -129,103 +159,142 @@ export default function Hero() {
                 className="group flex items-center justify-center gap-2 rounded-xl bg-indigo-600 px-6 py-3.5 text-xs font-bold text-white shadow-md hover:bg-indigo-500 hover:shadow-lg transition-all duration-300 hover:scale-[1.02]"
               >
                 <FileText className="h-4 w-4" />
-                <span>Download Resume / CV</span>
+                <span>Download Resume</span>
                 <ArrowRight className="h-3.5 w-3.5 group-hover:translate-x-1 transition-transform" />
               </a>
+
+              <button
+                onClick={() => {
+                  const contactSec = document.getElementById('contact');
+                  if (contactSec) {
+                    contactSec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                  }
+                }}
+                className="group flex items-center justify-center gap-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800/80 px-6 py-3.5 text-xs font-bold text-slate-800 dark:text-slate-200 shadow-sm hover:border-indigo-500/50 hover:bg-slate-50/50 dark:hover:bg-slate-950/40 transition-all duration-300 hover:scale-[1.02] cursor-pointer"
+              >
+                <Mail className="h-4 w-4 text-indigo-500" />
+                <span>Contact Me</span>
+              </button>
             </div>
           </div>
 
-          {/* Right Column: Interactive Bento Grid Dashboard (approx 7 cols) */}
-          <div className="lg:col-span-7 w-full grid grid-cols-1 sm:grid-cols-2 gap-4">
-            
-            {/* Bento Card 1: Avatar & Intro */}
-            <div className="sm:col-span-2 backdrop-blur-md bg-white/60 dark:bg-slate-900/60 border border-slate-200/40 dark:border-slate-800/40 shadow-xs rounded-2xl p-5 flex flex-col sm:flex-row items-center gap-5 hover:border-indigo-500/30 transition-all duration-300">
-              <div className="relative h-20 w-20 rounded-full border-2 border-indigo-500/60 overflow-hidden shadow-md shrink-0">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img 
-                  src="/headshot.jpg" 
-                  alt="Bharath R Avatar" 
-                  className="h-full w-full object-cover"
-                />
-                <span className="absolute bottom-1 right-1 h-3 w-3 rounded-full bg-emerald-500 border-2 border-white dark:border-slate-900 animate-pulse" />
-              </div>
-              <div className="text-center sm:text-left space-y-1">
-                <div className="flex items-center justify-center sm:justify-start gap-1.5">
-                  <h2 className="text-xl font-bold text-slate-900 dark:text-white font-serif">Bharath R</h2>
-                  <Sparkles className="h-4 w-4 text-indigo-500 animate-pulse" />
-                </div>
-                <p className="text-xs font-mono text-indigo-600 dark:text-indigo-400 font-bold uppercase tracking-wider">
-                  Senior Java Full-Stack Engineer
-                </p>
-                <div className="flex items-center justify-center sm:justify-start gap-1 text-xs text-slate-500 dark:text-slate-400 font-medium">
-                  <MapPin className="h-3.5 w-3.5 text-slate-400" />
-                  <span>Bangalore, India</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Bento Card 2: Quick Email Copy Trigger */}
-            <button
-              onClick={handleCopyEmail}
-              className="group backdrop-blur-md bg-white/60 dark:bg-slate-900/60 border border-slate-200/40 dark:border-slate-800/40 shadow-xs rounded-2xl p-5 flex flex-col justify-between items-start text-left hover:border-indigo-500/50 hover:shadow-md transition-all duration-300 cursor-pointer min-h-[140px] focus:outline-none"
+          {/* Right Column: Bento Grid on Desktop, Swiper Carousel on Mobile */}
+          <div className="lg:col-span-7 w-full flex flex-col gap-2">
+            <div 
+              ref={bentoScrollRef}
+              onScroll={handleBentoScroll}
+              className="w-full flex lg:grid lg:grid-cols-2 gap-4 overflow-x-auto lg:overflow-visible snap-x snap-mandatory scrollbar-hide -mx-6 px-6 lg:mx-0 lg:px-0 py-2"
             >
-              <div className="h-9 w-9 rounded-xl bg-indigo-50 dark:bg-indigo-950/50 flex items-center justify-center text-indigo-600 dark:text-indigo-400 transition-colors group-hover:bg-indigo-600 group-hover:text-white">
-                {copied ? <Check className="h-4.5 w-4.5" /> : <Mail className="h-4.5 w-4.5" />}
+              
+              {/* Bento Card 1: Avatar & Intro */}
+              <div className="snap-center shrink-0 w-[84vw] xs:w-[86vw] sm:w-[360px] lg:w-auto lg:shrink-1 lg:col-span-2 backdrop-blur-md bg-white/60 dark:bg-slate-900/60 border border-slate-200/40 dark:border-slate-800/40 shadow-xs rounded-2xl p-5 flex flex-col sm:flex-row items-center gap-5 hover:border-indigo-500/30 transition-all duration-300">
+                <div className="relative h-20 w-20 rounded-full border-2 border-indigo-500/60 overflow-hidden shadow-md shrink-0">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img 
+                    src="/headshot.jpg" 
+                    alt="Bharath R - Senior Java Full Stack Developer Bangalore" 
+                    className="h-full w-full object-cover"
+                  />
+                  <span className="absolute bottom-1 right-1 h-3 w-3 rounded-full bg-emerald-500 border-2 border-white dark:border-slate-900 animate-pulse" />
+                </div>
+                <div className="text-center sm:text-left space-y-1">
+                  <div className="flex items-center justify-center sm:justify-start gap-1.5">
+                    <h2 className="text-xl font-bold text-slate-900 dark:text-white font-serif">Bharath R</h2>
+                  </div>
+                  <p className="text-xs font-mono text-indigo-600 dark:text-indigo-400 font-bold uppercase tracking-wider">
+                    Java Full-Stack Engineer
+                  </p>
+                  <div className="flex items-center justify-center sm:justify-start gap-1 text-xs text-slate-550 dark:text-slate-400 font-medium">
+                    <MapPin className="h-3.5 w-3.5 text-slate-400" />
+                    <span>Bangalore, India</span>
+                  </div>
+                </div>
               </div>
-              <div>
-                <span className="text-[10px] font-bold font-mono text-slate-400 uppercase tracking-widest block mb-1">
-                  Contact Recruiter Socket
-                </span>
-                <span className="text-xs font-bold text-slate-800 dark:text-slate-250 truncate block max-w-full">
-                  {copied ? 'SUCCESS: COPIED EMAIL' : personalInfo.email}
-                </span>
-              </div>
-            </button>
 
-            {/* Bento Card 3: Core Architecture Stack circles */}
-            <div className="backdrop-blur-md bg-white/60 dark:bg-slate-900/60 border border-slate-200/40 dark:border-slate-800/40 shadow-xs rounded-2xl p-5 flex flex-col justify-between items-start min-h-[140px] hover:border-indigo-500/30 transition-all duration-300">
-              <div className="h-9 w-9 rounded-xl bg-indigo-50 dark:bg-indigo-950/50 flex items-center justify-center text-indigo-600 dark:text-indigo-400">
-                <Briefcase className="h-4.5 w-4.5" />
+              {/* Bento Card 2: Quick Email Copy Trigger */}
+              <button
+                onClick={handleCopyEmail}
+                className="snap-center shrink-0 w-[84vw] xs:w-[86vw] sm:w-[360px] lg:w-auto lg:shrink-1 group backdrop-blur-md bg-white/60 dark:bg-slate-900/60 border border-slate-200/40 dark:border-slate-800/40 shadow-xs rounded-2xl p-5 flex flex-col justify-between items-start text-left hover:border-indigo-500/50 hover:shadow-md transition-all duration-300 cursor-pointer min-h-[140px] focus:outline-none"
+              >
+                <div className="h-9 w-9 rounded-xl bg-indigo-50 dark:bg-indigo-950/50 flex items-center justify-center text-indigo-600 dark:text-indigo-400 transition-colors group-hover:bg-indigo-600 group-hover:text-white">
+                  {copied ? <Check className="h-4.5 w-4.5" /> : <Mail className="h-4.5 w-4.5" />}
+                </div>
+                <div>
+                  <span className="text-[10px] font-bold font-mono text-slate-400 uppercase tracking-widest block mb-1">
+                    Contact Recruiter Socket
+                  </span>
+                  <span className="text-xs font-bold text-slate-800 dark:text-slate-250 truncate block max-w-full">
+                    {copied ? 'SUCCESS: COPIED EMAIL' : personalInfo.email}
+                  </span>
+                </div>
+              </button>
+
+              {/* Bento Card 3: Core Architecture Stack circles */}
+              <div className="snap-center shrink-0 w-[84vw] xs:w-[86vw] sm:w-[360px] lg:w-auto lg:shrink-1 backdrop-blur-md bg-white/60 dark:bg-slate-900/60 border border-slate-200/40 dark:border-slate-800/40 shadow-xs rounded-2xl p-5 flex flex-col justify-between items-start min-h-[140px] hover:border-indigo-500/30 transition-all duration-300">
+                <div className="h-9 w-9 rounded-xl bg-indigo-50 dark:bg-indigo-950/50 flex items-center justify-center text-indigo-600 dark:text-indigo-400">
+                  <Briefcase className="h-4.5 w-4.5" />
+                </div>
+                <div className="w-full">
+                  <span className="text-[10px] font-bold font-mono text-slate-400 uppercase tracking-widest block mb-2">
+                    Primary Stack Align
+                  </span>
+                  <div className="flex items-center gap-2">
+                    {['java', 'springboot', 'react', 'postgresql', 'docker'].map((key) => (
+                      <div 
+                        key={key} 
+                        className="h-7 w-7 rounded-lg bg-slate-100 dark:bg-slate-950 border border-slate-200/50 dark:border-slate-855 p-1 flex items-center justify-center shadow-2xs hover:scale-110 transition-transform cursor-pointer"
+                        title={key.toUpperCase()}
+                      >
+                        <TechIcon iconKey={key} className="h-full w-full" />
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </div>
-              <div className="w-full">
-                <span className="text-[10px] font-bold font-mono text-slate-400 uppercase tracking-widest block mb-2">
-                  Primary Stack Align
+
+              {/* Bento Card 4: Verified Vitals stats metrics */}
+              <div className="snap-center shrink-0 w-[84vw] xs:w-[86vw] sm:w-[360px] lg:w-auto lg:shrink-1 lg:col-span-2 backdrop-blur-md bg-white/60 dark:bg-slate-900/60 border border-slate-200/40 dark:border-slate-800/40 shadow-xs rounded-2xl p-5 hover:border-indigo-500/30 transition-all duration-300">
+                <span className="text-[10px] font-bold font-mono text-slate-400 uppercase tracking-widest block mb-4">
+                  Verified Credentials &amp; Engineering Metrics
                 </span>
-                <div className="flex items-center gap-2">
-                  {['java', 'springboot', 'react', 'postgresql', 'docker'].map((key) => (
-                    <div 
-                      key={key} 
-                      className="h-7 w-7 rounded-lg bg-slate-100 dark:bg-slate-950 border border-slate-200/50 dark:border-slate-850 p-1 flex items-center justify-center shadow-2xs hover:scale-110 transition-transform cursor-pointer"
-                      title={key.toUpperCase()}
-                    >
-                      <TechIcon iconKey={key} className="h-full w-full" />
+                <div className="grid grid-cols-3 gap-2 sm:gap-4 text-center">
+                  {stats.map((stat, idx) => (
+                    <div key={idx} className="flex flex-col border-r last:border-r-0 border-slate-200/50 dark:border-slate-800/50 last:pr-0 pr-1.5 sm:pr-4">
+                      <span className="text-2xl md:text-3xl font-extrabold text-indigo-655 dark:text-indigo-400 font-mono">
+                        <AnimatedStatValue value={stat.value} />
+                      </span>
+                      <span className="text-[9px] sm:text-[10px] font-bold text-slate-550 dark:text-slate-500 uppercase tracking-wider mt-1">
+                        {stat.label}
+                      </span>
                     </div>
                   ))}
                 </div>
               </div>
+
             </div>
 
-            {/* Bento Card 4: Verified Vitals stats metrics */}
-            <div className="sm:col-span-2 backdrop-blur-md bg-white/60 dark:bg-slate-900/60 border border-slate-200/40 dark:border-slate-800/40 shadow-xs rounded-2xl p-5 hover:border-indigo-500/30 transition-all duration-300">
-              <span className="text-[10px] font-bold font-mono text-slate-400 uppercase tracking-widest block mb-4">
-                Verified Credentials &amp; Engineering Metrics
-              </span>
-              <div className="grid grid-cols-3 gap-4 text-center sm:text-left">
-                {stats.map((stat, idx) => (
-                  <div key={idx} className="flex flex-col border-r last:border-r-0 border-slate-200/50 dark:border-slate-800/50 last:pr-0 pr-4">
-                    <span className="text-2xl md:text-3xl font-extrabold text-indigo-650 dark:text-indigo-400 font-mono">
-                      <AnimatedStatValue value={stat.value} />
-                    </span>
-                    <span className="text-[10px] font-bold text-slate-500 dark:text-slate-500 uppercase tracking-wider mt-1">
-                      {stat.label}
-                    </span>
-                  </div>
-                ))}
-              </div>
+            {/* Mobile Swiper Indicators */}
+            <div className="flex justify-center gap-1.5 mt-2 lg:hidden w-full select-none">
+              {[0, 1, 2, 3].map((idx) => (
+                <button
+                  key={idx}
+                  onClick={() => {
+                    if (bentoScrollRef.current) {
+                      const clientWidth = bentoScrollRef.current.clientWidth;
+                      bentoScrollRef.current.scrollTo({
+                        left: idx * (clientWidth - 32),
+                        behavior: 'smooth'
+                      });
+                    }
+                  }}
+                  className={`h-1.5 rounded-full transition-all duration-300 ${
+                    idx === activeBentoIdx ? 'w-4.5 bg-indigo-600 dark:bg-indigo-400' : 'w-1.5 bg-slate-300 dark:bg-slate-800'
+                  }`}
+                  aria-label={`Go to slide ${idx + 1}`}
+                />
+              ))}
             </div>
-
           </div>
-
         </div>
 
         {/* Tech Marquee Container */}

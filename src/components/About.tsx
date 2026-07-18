@@ -172,7 +172,7 @@ export default function About() {
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src="/headshot.jpg"
-                    alt="Bharath R - Senior Java Full Stack Developer Bangalore"
+                    alt="Bharath R -  Java Full Stack Developer Bangalore"
                     className="w-full h-full object-cover select-none"
                     draggable={false}
                   />

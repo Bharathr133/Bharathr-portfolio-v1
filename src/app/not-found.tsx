@@ -107,7 +107,7 @@ export default function NotFound() {
       case 'about':
         newLogs.push(
           { text: 'Developer Profile: Bharath R', type: 'success' },
-          { text: 'Role: Senior Java Full Stack Developer & ML Engineer', type: 'info' },
+          { text: 'Role: Java Full Stack Developer & ML Engineer', type: 'info' },
           { text: 'Location: Bangalore, India', type: 'info' },
           { text: 'Specialties: Spring Boot, Microservices, React.js, Deep Learning', type: 'info' }
         );
@@ -118,7 +118,7 @@ export default function NotFound() {
         break;
       case 'skills':
         newLogs.push({ text: 'Redirecting to technical skills deck...', type: 'success' });
-        setTimeout(() => router.push('/#skills'), 1000);
+        setTimeout(() => router.push('/skills'), 1000);
         break;
       case 'contact':
         newLogs.push({ text: 'Opening secure contact communications protocol...', type: 'success' });

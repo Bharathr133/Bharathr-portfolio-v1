@@ -26,8 +26,8 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "/",
   },
-  title: "Bharath R | Senior Java Full Stack Developer Portfolio",
-  description: "Bharath R is a Senior Java Full Stack Developer in Bangalore specializing in Java 21, Spring Boot, microservices architecture, and clean React dashboards. View projects, certifications, and technical experience.",
+  title: "Bharath R | Java Full Stack Developer Portfolio",
+  description: "Bharath R is a Java Full Stack Developer in Bangalore specializing in Java 21, Spring Boot, microservices architecture, and clean React dashboards. View projects, certifications, and technical experience.",
   keywords: [
     "Bharath R",
     "bharath r",
@@ -44,13 +44,16 @@ export const metadata: Metadata = {
     "Web Developer Bangalore"
   ],
   authors: [{ name: "Bharath R" }],
+  verification: {
+    google: "GFokI3e5TT5oG87YzmW9RaSabnfwegfjlWDYJG5Qtzk",
+  },
   robots: {
     index: true,
     follow: true,
   },
   openGraph: {
-    title: "Bharath R | Senior Java Full Stack Developer Portfolio",
-    description: "Senior Java Full Stack Developer specializing in robust Spring Boot backends and clean React dashboards in Bangalore, India.",
+    title: "Bharath R | Java Full Stack Developer Portfolio",
+    description: "Java Full Stack Developer specializing in robust Spring Boot backends and clean React dashboards in Bangalore, India.",
     url: "https://bharathr.vercel.app/",
     siteName: "Bharath R Portfolio",
     images: [
@@ -65,12 +68,11 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Bharath R | Senior Java Full Stack Developer Portfolio",
-    description: "Senior Java Full Stack Developer specializing in robust Spring Boot backends and clean React dashboards in Bangalore, India.",
+    title: "Bharath R | Java Full Stack Developer Portfolio",
+    description: "Java Full Stack Developer specializing in robust Spring Boot backends and clean React dashboards in Bangalore, India.",
     images: ["/headshot.jpg"],
   },
 };
-
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "Person",

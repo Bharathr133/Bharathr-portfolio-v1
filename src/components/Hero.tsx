@@ -192,7 +192,7 @@ export default function Hero() {
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img 
                     src="/headshot.jpg" 
-                    alt="Bharath R - Senior Java Full Stack Developer Bangalore" 
+                    alt="Bharath R - Java Full Stack Developer Bangalore" 
                     className="h-full w-full object-cover"
                   />
                   <span className="absolute bottom-1 right-1 h-3 w-3 rounded-full bg-emerald-500 border-2 border-white dark:border-slate-900 animate-pulse" />

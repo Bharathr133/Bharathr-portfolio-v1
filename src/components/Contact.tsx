@@ -65,37 +65,33 @@ export default function Contact() {
       return false;
     }
 
-    if (formData.from_name.trim().length < 5 || /[^a-zA-Z \-']/.test(formData.from_name)) {
-      newErrors.from_name = 'Name must be 5+ letters (A-Z)';
+    if (formData.from_name.trim().length < 3 || /[^a-zA-Z \-']/.test(formData.from_name.trim())) {
+      newErrors.from_name = 'Please enter your name (at least 3 letters)';
       isValid = false;
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(formData.from_email.trim())) {
-      newErrors.from_email = 'Invalid email address';
+      newErrors.from_email = 'Please enter a valid email address';
       isValid = false;
     }
 
     const phoneRegex = /^[\d\s\-+]{10,15}$/;
     if (formData.phone.trim() && !phoneRegex.test(formData.phone.trim())) {
-      newErrors.phone = 'Must be 10-15 digits';
+      newErrors.phone = 'Phone number must be 10 to 15 digits';
       isValid = false;
     }
 
     const messageTrim = formData.message.trim();
-    const gibberishRegex = /([bcdfghjklmnpqrstvwxyzBCDFGHJKLMNPQRSTVWXYZ]{4,})/;
     const containsOffensive = offensiveWords.some(word => 
       messageTrim.toLowerCase().includes(word.toLowerCase())
     );
 
-    if (messageTrim.length < 20) {
-      newErrors.message = 'Must be 20+ characters';
-      isValid = false;
-    } else if (gibberishRegex.test(messageTrim)) {
-      newErrors.message = 'Please write a coherent message';
+    if (messageTrim.length < 5) {
+      newErrors.message = 'Please type a message (at least 5 letters)';
       isValid = false;
     } else if (containsOffensive) {
-      newErrors.message = 'Inappropriate language detected';
+      newErrors.message = 'Please use respectful language';
       isValid = false;
     }
 

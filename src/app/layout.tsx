@@ -41,8 +41,30 @@ export const metadata: Metadata = {
     "React Developer Bangalore",
     "Java Spring Boot Microservices",
     "Computer Science Engineer Bangalore",
-    "Web Developer Bangalore"
+    "Web Developer Bangalore",
+    "best software engineer",
+    "top software developer",
+    "best backend developer",
+    "senior java developer",
+    "remote java full stack developer",
+    "java developer portfolio",
+    "full stack engineer portfolio",
+    "spring boot microservices expert",
+    "react developer portfolio",
+    "hire best software developer",
+    "hire top java backend engineer",
+    "portfolio website template nextjs",
+    "resilient backend api developer",
+    "enterprise java architect"
   ],
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/icon.jpg", type: "image/jpeg", sizes: "32x32" }
+    ],
+    shortcut: "/favicon.ico",
+    apple: "/icon.jpg",
+  },
   authors: [{ name: "Bharath R" }],
   verification: {
     google: "GFokI3e5TT5oG87YzmW9RaSabnfwegfjlWDYJG5Qtzk",

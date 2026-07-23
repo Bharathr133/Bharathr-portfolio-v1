@@ -4,18 +4,21 @@ import React, { useState } from 'react';
 import { Mail, Terminal, Copy, Check, MapPin } from 'lucide-react';
 import { GithubIcon, LinkedinIcon } from './SocialIcons';
 import { personalInfo } from '../data/portfolio';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 const navLinks = [
-  { id: 'home', label: 'cd /home' },
-  { id: 'about', label: 'cd /about' },
-  { id: 'skills', label: 'cd /skills' },
-  { id: 'projects', label: 'cd /projects' },
-  { id: 'experience', label: 'cd /experience' },
-  { id: 'certifications', label: 'cd /certs' },
-  { id: 'contact', label: 'cd /contact' },
+  { id: 'home', path: '/', label: 'cd /home' },
+  { id: 'about', path: '/about', label: 'cd /about' },
+  { id: 'skills', path: '/skills', label: 'cd /skills' },
+  { id: 'projects', path: '/projects', label: 'cd /projects' },
+  { id: 'experience', path: '/experience', label: 'cd /experience' },
+  { id: 'certifications', path: '/certifications', label: 'cd /certs' },
+  { id: 'contact', path: '/contact', label: 'cd /contact' },
 ];
 
 export default function Footer() {
+  const pathname = usePathname();
   const currentYear = new Date().getFullYear();
   const [copied, setCopied] = useState(false);
 
@@ -25,20 +28,22 @@ export default function Footer() {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
-    e.preventDefault();
-    const element = document.getElementById(id);
-    if (element) {
-      const offset = 80;
-      const bodyRect = document.body.getBoundingClientRect().top;
-      const elementRect = element.getBoundingClientRect().top;
-      const elementPosition = elementRect - bodyRect;
-      const offsetPosition = elementPosition - offset;
+  const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, link: typeof navLinks[0]) => {
+    if (pathname === '/') {
+      e.preventDefault();
+      const element = document.getElementById(link.id);
+      if (element) {
+        const offset = 80;
+        const bodyRect = document.body.getBoundingClientRect().top;
+        const elementRect = element.getBoundingClientRect().top;
+        const elementPosition = elementRect - bodyRect;
+        const offsetPosition = elementPosition - offset;
 
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: 'smooth',
-      });
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: 'smooth',
+        });
+      }
     }
   };
 
@@ -71,15 +76,15 @@ export default function Footer() {
             </span>
             <nav className="grid grid-cols-2 gap-x-4 gap-y-2.5 text-xs text-slate-400">
               {navLinks.map((link) => (
-                <a
+                <Link
                   key={link.id}
-                  href={`#${link.id}`}
-                  onClick={(e) => handleLinkClick(e, link.id)}
+                  href={link.path}
+                  onClick={(e) => handleLinkClick(e, link)}
                   className="hover:text-indigo-400 transition-colors w-fit flex items-center gap-1"
                 >
                   <span className="text-slate-650">&gt;</span>
                   <span>{link.label}</span>
-                </a>
+                </Link>
               ))}
             </nav>
           </div>

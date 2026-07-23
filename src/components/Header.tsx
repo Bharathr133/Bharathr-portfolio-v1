@@ -2,18 +2,21 @@
 
 import React, { useState, useEffect } from 'react';
 import { Menu, X, Code, Sun, Moon } from 'lucide-react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 const navLinks = [
-  { id: 'home', label: 'Home' },
-  { id: 'about', label: 'About' },
-  { id: 'skills', label: 'Skills' },
-  { id: 'projects', label: 'Projects' },
-  { id: 'experience', label: 'Experience' },
-  { id: 'certifications', label: 'Certifications' },
-  { id: 'contact', label: 'Contact' },
+  { id: 'home', path: '/', label: 'Home' },
+  { id: 'about', path: '/about', label: 'About' },
+  { id: 'skills', path: '/skills', label: 'Skills' },
+  { id: 'projects', path: '/projects', label: 'Projects' },
+  { id: 'experience', path: '/experience', label: 'Experience' },
+  { id: 'certifications', path: '/certifications', label: 'Certifications' },
+  { id: 'contact', path: '/contact', label: 'Contact' },
 ];
 
 export default function Header() {
+  const pathname = usePathname();
   const [activeSection, setActiveSection] = useState('home');
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -45,7 +48,25 @@ export default function Header() {
     }
   };
 
+  // Sync active nav item with path when on subpage
   useEffect(() => {
+    if (pathname !== '/') {
+      const activeLink = navLinks.find(link => link.path === pathname);
+      if (activeLink) {
+        setActiveSection(activeLink.id);
+      }
+    } else {
+      setActiveSection('home');
+    }
+  }, [pathname]);
+
+  // Handle scroll spy (only active on homepage)
+  useEffect(() => {
+    if (pathname !== '/') {
+      setScrolled(true); // Always keep navbar clean and styled on subpages
+      return;
+    }
+
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
 
@@ -63,23 +84,25 @@ export default function Header() {
 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [pathname]);
 
-  const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
-    e.preventDefault();
+  const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, link: typeof navLinks[0]) => {
     setIsOpen(false);
-    const element = document.getElementById(id);
-    if (element) {
-      const offset = 90;
-      const bodyRect = document.body.getBoundingClientRect().top;
-      const elementRect = element.getBoundingClientRect().top;
-      const elementPosition = elementRect - bodyRect;
-      const offsetPosition = elementPosition - offset;
+    if (pathname === '/') {
+      e.preventDefault();
+      const element = document.getElementById(link.id);
+      if (element) {
+        const offset = 90;
+        const bodyRect = document.body.getBoundingClientRect().top;
+        const elementRect = element.getBoundingClientRect().top;
+        const elementPosition = elementRect - bodyRect;
+        const offsetPosition = elementPosition - offset;
 
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: 'smooth'
-      });
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: 'smooth'
+        });
+      }
     }
   };
 
@@ -94,25 +117,25 @@ export default function Header() {
       >
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <a
-            href="#home"
-            onClick={(e) => handleLinkClick(e, 'home')}
+          <Link
+            href="/"
+            onClick={(e) => handleLinkClick(e, navLinks[0])}
             className="flex items-center gap-2 text-base font-extrabold tracking-tight text-slate-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors font-serif"
           >
             <Code className="h-4.5 w-4.5 text-indigo-600 dark:text-indigo-500" />
             <span className="hidden sm:inline">Bharath R</span>
             <span className="sm:hidden">BR</span>
-          </a>
+          </Link>
 
           {/* Navigation & Controls */}
           <div className="flex items-center gap-6">
             {/* Desktop Navigation */}
             <nav className="hidden md:flex items-center gap-6 font-mono">
               {navLinks.map((link) => (
-                <a
+                <Link
                   key={link.id}
-                  href={`#${link.id}`}
-                  onClick={(e) => handleLinkClick(e, link.id)}
+                  href={link.path}
+                  onClick={(e) => handleLinkClick(e, link)}
                   className={`text-[11px] font-bold uppercase tracking-wider transition-all hover:text-indigo-650 dark:hover:text-indigo-400 py-1 relative ${
                     activeSection === link.id
                       ? 'text-indigo-600 dark:text-indigo-400'
@@ -123,7 +146,7 @@ export default function Header() {
                   {activeSection === link.id && (
                     <span className="absolute bottom-0 left-0 h-[2px] w-full bg-indigo-600 dark:bg-indigo-500 rounded-full" />
                   )}
-                </a>
+                </Link>
               ))}
             </nav>
 
@@ -164,10 +187,10 @@ export default function Header() {
         <div className="fixed top-20 left-4 right-4 z-40 md:hidden p-4 rounded-3xl bg-white/95 dark:bg-slate-950/95 backdrop-blur-xl border border-slate-200/50 dark:border-slate-800/80 shadow-[0_20px_50px_rgba(0,0,0,0.15)] animate-in fade-in slide-in-from-top-4 duration-300 font-mono">
           <nav className="flex flex-col gap-3">
             {navLinks.map((link) => (
-              <a
+              <Link
                 key={link.id}
-                href={`#${link.id}`}
-                onClick={(e) => handleLinkClick(e, link.id)}
+                href={link.path}
+                onClick={(e) => handleLinkClick(e, link)}
                 className={`py-2.5 px-4 rounded-xl text-[11px] font-bold uppercase tracking-wider transition-all ${
                   activeSection === link.id
                     ? 'text-indigo-600 dark:text-indigo-400 bg-indigo-50/50 dark:bg-indigo-950/30 font-bold'
@@ -175,7 +198,7 @@ export default function Header() {
                 }`}
               >
                 {link.label}
-              </a>
+              </Link>
             ))}
           </nav>
         </div>

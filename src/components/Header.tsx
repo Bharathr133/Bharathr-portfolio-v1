@@ -102,6 +102,7 @@ export default function Header() {
           top: offsetPosition,
           behavior: 'smooth'
         });
+        window.history.pushState(null, '', link.path);
       }
     }
   };

@@ -43,6 +43,7 @@ export default function Footer() {
           top: offsetPosition,
           behavior: 'smooth',
         });
+        window.history.pushState(null, '', link.path);
       }
     }
   };

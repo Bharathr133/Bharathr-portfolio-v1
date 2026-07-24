@@ -7,8 +7,10 @@ import { HelpCircle, X, Sparkles } from 'lucide-react';
 interface GuideStep {
   id: string;
   title: string;
-  desc: string;
-  actionHint: string;
+  descDesktop: string;
+  descMobile: string;
+  actionHintDesktop: string;
+  actionHintMobile: string;
   pictorial: () => React.JSX.Element;
 }
 
@@ -128,50 +130,62 @@ const ContactPictorial = () => (
 );
 
 // -------------------------------------------------------------
-// Guide Step Content Matrix
+// Guide Step Content Matrix (Dynamic instructions per device)
 // -------------------------------------------------------------
 
 const GUIDE_STEPS: Record<string, GuideStep> = {
   hero: {
     id: 'hero',
     title: '🌐 Interactive Workspace',
-    desc: 'Hover over the bento cards to tilt them in 3D parallax, and hover over my profile photo to ripple it like liquid water!',
-    actionHint: 'Move your cursor over grids and avatar.',
+    descDesktop: 'Hover over the bento cards to tilt them in 3D parallax, and hover over my profile photo to ripple it like liquid water!',
+    descMobile: 'Tap on my profile picture to trigger a liquid water ripple! Note: 3D card tilt is best experienced with a desktop mouse.',
+    actionHintDesktop: 'Move your cursor over grids and avatar.',
+    actionHintMobile: 'Tap the profile picture to see liquid ripples.',
     pictorial: HeroPictorial
   },
   about: {
     id: 'about',
     title: '💻 Command Line Shell CLI',
-    desc: 'A working interactive terminal console! Click the green input bar at the bottom and type "help" or type "sudo hack" for an easter egg.',
-    actionHint: 'Type commands in the console input.',
+    descDesktop: 'A working interactive terminal console! Click the green input bar at the bottom and type "help" or type "sudo hack" for an easter egg.',
+    descMobile: 'A fully working terminal console! Tap the green input bar at the bottom and type "help" or "sudo hack" on your mobile keyboard.',
+    actionHintDesktop: 'Type commands in the console input.',
+    actionHintMobile: 'Tap the input bar and type a command.',
     pictorial: AboutPictorial
   },
   skills: {
     id: 'skills',
     title: '🎮 Core Skills Sandbox',
-    desc: 'Switch tabs above to load the Gravity Sandbox! You can grab, toss, and bounce skills badges off the canvas walls.',
-    actionHint: 'Select "Gravity Sandbox" and drag badges.',
+    descDesktop: 'Switch tabs above to load the Gravity Sandbox! You can grab, toss, and bounce skills badges off the canvas walls.',
+    descMobile: 'Switch tabs above to load the Gravity Sandbox! Drag, fling, and bounce skills badges off the canvas walls with your finger.',
+    actionHintDesktop: 'Select "Gravity Sandbox" and drag badges.',
+    actionHintMobile: 'Tap "Gravity Sandbox" and drag badges with your finger.',
     pictorial: SkillsPictorial
   },
   projects: {
     id: 'projects',
     title: '📂 Project Carousel Cards',
-    desc: 'Drag the active card folder left or right to swipe through systems, or click to open the GxP-style revision control dashboard.',
-    actionHint: 'Drag cards or click to view case study.',
+    descDesktop: 'Drag the active card folder left or right to swipe through systems, or click to open the GxP-style revision control dashboard.',
+    descMobile: 'Swipe the active card left or right with your finger to cycle projects, and tap card to view the case study console.',
+    actionHintDesktop: 'Drag cards or click to view case study.',
+    actionHintMobile: 'Swipe cards or tap to open case study.',
     pictorial: ProjectsPictorial
   },
   certifications: {
     id: 'certifications',
     title: '🏆 Credentials Panel',
-    desc: 'Filter verified credentials instantly by categories. Click on any certificate card to view it in full high-res preview.',
-    actionHint: 'Tap categories or click cards.',
+    descDesktop: 'Filter verified credentials instantly by categories. Click on any certificate card to view it in full high-res preview.',
+    descMobile: 'Filter credentials instantly by categories. Tap any certificate card to view it in full screen preview.',
+    actionHintDesktop: 'Tap categories or click cards.',
+    actionHintMobile: 'Tap categories or tap cards to preview.',
     pictorial: CertsPictorial
   },
   contact: {
     id: 'contact',
     title: '🔌 Dev Context Menu Panel',
-    desc: 'Right-click anywhere on the screen to trigger the developer context shortcuts (theme switch, resume link, copy email).',
-    actionHint: 'Right-click anywhere on the webpage.',
+    descDesktop: 'Right-click anywhere on the screen to trigger the developer context shortcuts (theme switch, resume link, copy email).',
+    descMobile: 'Custom right-click shortcuts are active on desktop. Visit on desktop and right-click to trigger the developer widget!',
+    actionHintDesktop: 'Right-click anywhere on the webpage.',
+    actionHintMobile: 'Open this portfolio on a desktop to try it.',
     pictorial: ContactPictorial
   }
 };
@@ -182,16 +196,31 @@ export default function TourGuide() {
   const [isDismissed, setIsDismissed] = useState(false);
   const [isFirstVisit, setIsFirstVisit] = useState(false);
   const [isScrolling, setIsScrolling] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   const sectionsOrder = ['hero', 'about', 'skills', 'projects', 'certifications', 'contact'];
   const currentStepIndex = sectionsOrder.indexOf(activeSection);
 
   useEffect(() => {
+    // Check screen size
+    const checkDevice = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkDevice();
+    window.addEventListener('resize', checkDevice);
+
     // Check if user has visited before
     const hasVisited = localStorage.getItem('bharath-tour-completed');
+    const welcomed = localStorage.getItem('bharath-welcomed');
+    
+    let tourTimer: NodeJS.Timeout;
     if (!hasVisited) {
       setIsFirstVisit(true);
-      setIsOpen(true); // Open guide automatically for first-time visitors
+      // Wait for welcome loader to finish before opening tour guide automatically!
+      const delay = welcomed === 'true' ? 1200 : 3200;
+      tourTimer = setTimeout(() => {
+        setIsOpen(true);
+      }, delay);
     }
 
     // Scroll Observer to track active section
@@ -232,7 +261,9 @@ export default function TourGuide() {
         if (el) observer.unobserve(el);
       });
       window.removeEventListener('scroll', handleScrollState);
+      window.removeEventListener('resize', checkDevice);
       clearTimeout(scrollTimer);
+      if (tourTimer) clearTimeout(tourTimer);
     };
   }, []);
 
@@ -276,7 +307,7 @@ export default function TourGuide() {
   return (
     <>
       {/* Floating Indicator Help Toggle Button */}
-      <div className="fixed bottom-6 left-6 z-[99] select-none hidden sm:block">
+      <div className="fixed bottom-6 left-6 z-[99] select-none">
         <button
           onClick={() => {
             setIsOpen(!isOpen);
@@ -303,7 +334,7 @@ export default function TourGuide() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 35, scale: 0.9 }}
             transition={{ type: 'spring', damping: 15, stiffness: 220 }}
-            className="fixed bottom-22 left-6 z-[99] w-[calc(100vw-48px)] sm:w-[260px] rounded-2xl bg-white/95 dark:bg-slate-900/95 border border-slate-200/60 dark:border-slate-800/80 shadow-[0_20px_50px_rgba(99,102,241,0.15)] backdrop-blur-md overflow-hidden font-sans p-4.5 select-none hidden sm:block"
+            className="fixed bottom-22 left-4 sm:left-6 z-[99] w-[calc(100vw-32px)] sm:w-[260px] rounded-2xl bg-white/95 dark:bg-slate-900/95 border border-slate-200/60 dark:border-slate-800/80 shadow-[0_20px_50px_rgba(99,102,241,0.15)] backdrop-blur-md overflow-hidden font-sans p-4.5 select-none"
           >
             {/* Header */}
             <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800/60 pb-2 mb-2.5">
@@ -329,7 +360,7 @@ export default function TourGuide() {
                 {currentStep.title}
               </h4>
               <p className="text-[10px] text-slate-500 dark:text-slate-400 leading-relaxed font-medium">
-                {currentStep.desc}
+                {isMobile ? currentStep.descMobile : currentStep.descDesktop}
               </p>
 
               {/* Action Hint */}
@@ -338,7 +369,7 @@ export default function TourGuide() {
                   TRY IT
                 </span>
                 <span className="text-[9px] text-slate-600 dark:text-slate-350 font-bold leading-normal font-mono">
-                  {currentStep.actionHint}
+                  {isMobile ? currentStep.actionHintMobile : currentStep.actionHintDesktop}
                 </span>
               </div>
             </div>
@@ -370,7 +401,7 @@ export default function TourGuide() {
               <div className="flex items-center gap-2.5">
                 <button
                   onClick={handleDismiss}
-                  className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-250 cursor-pointer"
+                  className="text-slate-400 hover:text-slate-655 dark:hover:text-slate-250 cursor-pointer"
                 >
                   SKIP
                 </button>

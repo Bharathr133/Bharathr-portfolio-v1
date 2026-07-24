@@ -7,6 +7,7 @@ import { usePathname } from 'next/navigation';
 import Magnetic from './Magnetic';
 import { GithubIcon, LinkedinIcon } from './SocialIcons';
 import { motion, AnimatePresence } from 'framer-motion';
+import { projects } from '../data/portfolio';
 
 const navLinks = [
   { id: 'home', path: '/', label: 'Home' },
@@ -22,6 +23,7 @@ export default function Header() {
   const pathname = usePathname();
   const [activeSection, setActiveSection] = useState('home');
   const [isOpen, setIsOpen] = useState(false);
+  const [showMobileProjects, setShowMobileProjects] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
 
@@ -197,29 +199,75 @@ export default function Header() {
           >
             {/* Centered Navigation Links with Large Typography */}
             <nav className="flex flex-col gap-6 text-center mt-8">
-              {navLinks.map((link, idx) => (
-                <motion.div
-                  key={link.id}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: idx * 0.05 + 0.1 }}
-                >
-                  <Link
-                    href={link.path}
-                    onClick={(e) => {
-                      setIsOpen(false);
-                      handleLinkClick(e, link);
-                    }}
-                    className={`text-2xl font-black font-sans tracking-tight uppercase transition-all block ${
-                      activeSection === link.id
-                        ? 'text-indigo-600 dark:text-indigo-400 font-extrabold'
-                        : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'
-                    }`}
+              {navLinks.map((link, idx) => {
+                const isProjectsLink = link.id === 'projects';
+                return (
+                  <motion.div
+                    key={link.id}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: idx * 0.05 + 0.1 }}
+                    className="flex flex-col items-center"
                   >
-                    {link.label}
-                  </Link>
-                </motion.div>
-              ))}
+                    {isProjectsLink ? (
+                      <>
+                        <button
+                          onClick={() => setShowMobileProjects(!showMobileProjects)}
+                          className={`text-2xl font-black font-sans tracking-tight uppercase transition-all block cursor-pointer flex items-center justify-center gap-2 ${
+                            activeSection === 'projects'
+                              ? 'text-indigo-600 dark:text-indigo-400 font-extrabold'
+                              : 'text-slate-500 dark:text-slate-400 hover:text-slate-800'
+                          }`}
+                        >
+                          <span>{link.label}</span>
+                          <span className={`text-[10px] font-mono transition-transform duration-300 ${showMobileProjects ? 'rotate-90 text-indigo-500' : 'text-slate-400'}`}>▶</span>
+                        </button>
+                        
+                        {/* Mobile Projects Submenu Drawer */}
+                        <AnimatePresence>
+                          {showMobileProjects && (
+                            <motion.div
+                              initial={{ opacity: 0, height: 0 }}
+                              animate={{ opacity: 1, height: 'auto' }}
+                              exit={{ opacity: 0, height: 0 }}
+                              className="overflow-hidden flex flex-col gap-2 mt-2 bg-slate-50 dark:bg-slate-900/50 p-2.5 rounded-2xl border border-slate-200/50 dark:border-slate-850/40 w-fit max-w-[280px]"
+                            >
+                              {projects.map((proj) => (
+                                <Link
+                                  key={proj.id}
+                                  href={`/projects/${proj.id}`}
+                                  onClick={() => {
+                                    setIsOpen(false);
+                                    setShowMobileProjects(false);
+                                  }}
+                                  className="text-[10px] font-sans font-bold text-slate-500 hover:text-indigo-600 dark:text-slate-400 dark:hover:text-indigo-400 transition-colors uppercase tracking-wider block truncate max-w-full"
+                                >
+                                  📄 {proj.title.split(' – ')[0].split(' - ')[0]}
+                                </Link>
+                              ))}
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                      </>
+                    ) : (
+                      <Link
+                        href={link.path}
+                        onClick={(e) => {
+                          setIsOpen(false);
+                          handleLinkClick(e, link);
+                        }}
+                        className={`text-2xl font-black font-sans tracking-tight uppercase transition-all block ${
+                          activeSection === link.id
+                            ? 'text-indigo-600 dark:text-indigo-400 font-extrabold'
+                            : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'
+                        }`}
+                      >
+                        {link.label}
+                      </Link>
+                    )}
+                  </motion.div>
+                );
+              })}
             </nav>
 
             {/* Mobile Menu Footer Dashboard */}

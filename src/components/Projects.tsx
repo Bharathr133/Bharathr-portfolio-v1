@@ -360,7 +360,8 @@ export default function Projects() {
                   }`}
                   style={{
                     transformStyle: 'preserve-3d',
-                    boxShadow: isActive ? '0 25px 50px -12px rgba(99, 102, 241, 0.15)' : undefined
+                    boxShadow: isActive ? '0 25px 50px -12px rgba(99, 102, 241, 0.15)' : undefined,
+                    willChange: 'transform, opacity',
                   }}
                 >
                   {/* Card Gloss Header */}

@@ -276,7 +276,7 @@ export default function TourGuide() {
   return (
     <>
       {/* Floating Indicator Help Toggle Button */}
-      <div className="fixed bottom-6 left-6 z-[99] select-none">
+      <div className="fixed bottom-6 left-6 z-[99] select-none hidden sm:block">
         <button
           onClick={() => {
             setIsOpen(!isOpen);
@@ -303,7 +303,7 @@ export default function TourGuide() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 35, scale: 0.9 }}
             transition={{ type: 'spring', damping: 15, stiffness: 220 }}
-            className="fixed bottom-22 left-6 z-[99] w-[calc(100vw-48px)] sm:w-[260px] rounded-2xl bg-white/95 dark:bg-slate-900/95 border border-slate-200/60 dark:border-slate-800/80 shadow-[0_20px_50px_rgba(99,102,241,0.15)] backdrop-blur-md overflow-hidden font-sans p-4.5 select-none"
+            className="fixed bottom-22 left-6 z-[99] w-[calc(100vw-48px)] sm:w-[260px] rounded-2xl bg-white/95 dark:bg-slate-900/95 border border-slate-200/60 dark:border-slate-800/80 shadow-[0_20px_50px_rgba(99,102,241,0.15)] backdrop-blur-md overflow-hidden font-sans p-4.5 select-none hidden sm:block"
           >
             {/* Header */}
             <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800/60 pb-2 mb-2.5">

@@ -41,10 +41,20 @@ export default function LiquidAvatar({ src, alt, className = '' }: LiquidAvatarP
     return () => cancelAnimationFrame(frameId);
   }, [isHovered]);
 
+  const handleTap = () => {
+    if (typeof window !== 'undefined' && window.innerWidth < 1024) {
+      setIsHovered(true);
+      setTimeout(() => {
+        setIsHovered(false);
+      }, 1500);
+    }
+  };
+
   return (
     <div
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
+      onClick={handleTap}
       className={`relative overflow-hidden cursor-pointer select-none ${className}`}
     >
       {/* SVG Liquid Filter Definition */}

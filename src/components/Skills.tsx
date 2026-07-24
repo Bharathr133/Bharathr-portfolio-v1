@@ -9,6 +9,7 @@ import SpotlightCard from './SpotlightCard';
 import SkillsPhysics from './SkillsPhysics';
 import Skills3DSphere from './Skills3DSphere';
 import useTextScramble from '../hooks/useTextScramble';
+import AstronautDog from './AstronautDog';
 
 export default function Skills() {
   const [activeCategoryIdx, setActiveCategoryIdx] = useState(0);
@@ -54,7 +55,7 @@ export default function Skills() {
             </span>
             <h2 
               onMouseEnter={triggerScrambleTitle}
-              className="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white sm:text-4xl font-serif select-none"
+              className="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white sm:text-4xl font-mono select-none cursor-default"
             >
               {scrambleTitle}
             </h2>
@@ -84,12 +85,13 @@ export default function Skills() {
                   <button
                     key={idx}
                     onClick={() => setActiveCategoryIdx(idx)}
-                    className={`group shrink-0 flex items-center gap-2 sm:gap-3.5 p-2.5 sm:p-3 rounded-xl border text-left transition-all duration-300 cursor-pointer ${
+                    className={`group relative overflow-visible shrink-0 flex items-center gap-2 sm:gap-3.5 p-2.5 sm:p-3 rounded-xl border text-left transition-all duration-300 cursor-pointer ${
                       isActive 
                         ? 'bg-indigo-600 border-indigo-600 text-white shadow-xs' 
                         : 'bg-white/40 dark:bg-slate-950/20 border-slate-200/50 dark:border-slate-900/50 text-slate-700 dark:text-slate-400 hover:bg-white dark:hover:bg-slate-900'
                     }`}
                   >
+                    <AstronautDog />
                     <div className={`p-1.5 rounded-lg transition-colors ${
                       isActive ? 'bg-white/20 text-white' : 'bg-slate-100 dark:bg-slate-900 text-slate-500'
                     }`}>
@@ -140,36 +142,39 @@ export default function Skills() {
             
             {/* View Selector Tabs */}
             <div className="flex items-center gap-1.5 bg-slate-100 dark:bg-slate-900/60 p-1.5 rounded-2xl border border-slate-200/50 dark:border-slate-800/40 w-fit select-none font-mono text-[9px] self-start md:self-end">
-              <button
+               <button
                 onClick={() => setSkillsView('grid')}
-                className={`px-3 py-1.5 rounded-xl cursor-pointer transition-all border ${
+                className={`group relative overflow-visible px-3 py-1.5 rounded-xl cursor-pointer transition-all border ${
                   skillsView === 'grid'
                     ? 'bg-white dark:bg-slate-950 text-indigo-650 dark:text-indigo-400 font-bold shadow-2xs border-slate-200 dark:border-slate-850'
                     : 'bg-transparent text-slate-500 border-transparent hover:text-slate-800 hover:bg-slate-200/40'
                 }`}
               >
+                <AstronautDog />
                 MODULE MATRIX
               </button>
               <button
                 onClick={() => setSkillsView('orbit')}
-                className={`px-3 py-1.5 rounded-xl cursor-pointer transition-all border ${
+                className={`group relative overflow-visible px-3 py-1.5 rounded-xl cursor-pointer transition-all border ${
                   skillsView === 'orbit'
                     ? 'bg-white dark:bg-slate-950 text-indigo-650 dark:text-indigo-400 font-bold shadow-2xs border-slate-200 dark:border-slate-850'
                     : 'bg-transparent text-slate-500 border-transparent hover:text-slate-800 hover:bg-slate-200/40'
                 }`}
                 data-cursor-text="3D CLOUD"
               >
+                <AstronautDog />
                 3D ORBIT CLOUD
               </button>
               <button
                 onClick={() => setSkillsView('physics')}
-                className={`px-3 py-1.5 rounded-xl cursor-pointer transition-all border ${
+                className={`group relative overflow-visible px-3 py-1.5 rounded-xl cursor-pointer transition-all border ${
                   skillsView === 'physics'
                     ? 'bg-white dark:bg-slate-950 text-indigo-650 dark:text-indigo-400 font-bold shadow-2xs border-slate-200 dark:border-slate-850'
                     : 'bg-transparent text-slate-500 border-transparent hover:text-slate-800 hover:bg-slate-200/40'
                 }`}
                 data-cursor-text="PLAY GRAVITY"
               >
+                <AstronautDog />
                 GRAVITY SANDBOX
               </button>
             </div>

@@ -166,7 +166,7 @@ export default function About() {
             </span>
             <h2 
               onMouseEnter={triggerScrambleTitle}
-              className="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white sm:text-4xl font-serif select-none"
+              className="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white sm:text-4xl font-mono select-none cursor-default"
             >
               {scrambleTitle}
             </h2>

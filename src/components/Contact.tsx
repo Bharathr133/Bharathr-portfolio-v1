@@ -6,6 +6,8 @@ import { MapPin, Mail, Loader2, Send, Terminal, MessageSquare } from 'lucide-rea
 import { personalInfo } from '../data/portfolio';
 import TiltCard from './TiltCard';
 import Magnetic from './Magnetic';
+import AstronautDog from './AstronautDog';
+import useTextScramble from '../hooks/useTextScramble';
 
 const offensiveWords = [
   'loude', 'chut', 'fuck', 'chutt', 'ddhdhdghs', 'louda', 'lorem', 'ipsum',
@@ -44,6 +46,8 @@ export default function Contact() {
     message: string;
     action?: () => void;
   } | null>(null);
+
+  const { text: scrambleTitle, scramble: triggerScrambleTitle } = useTextScramble('Get In Touch');
 
   useEffect(() => {
     emailjs.init("VdMoWyii0_W4uT7mJ");
@@ -167,8 +171,11 @@ export default function Contact() {
               <MessageSquare className="h-4 w-4" />
               <span>Contact Console</span>
             </span>
-            <h2 className="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white sm:text-4xl font-serif">
-              Get In Touch
+            <h2
+              onMouseEnter={triggerScrambleTitle}
+              className="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white sm:text-4xl font-mono select-none cursor-default"
+            >
+              {scrambleTitle}
             </h2>
           </div>
           <p className="text-slate-500 dark:text-slate-400 text-sm max-w-md leading-relaxed font-medium">
@@ -347,8 +354,9 @@ export default function Contact() {
                       <button
                         type="submit"
                         disabled={isSubmitting}
-                        className="flex items-center justify-center gap-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 px-6 text-xs transition-all duration-300 shadow-[0_8px_20px_-6px_rgba(79,70,229,0.4)] disabled:opacity-50 disabled:pointer-events-none cursor-pointer"
+                        className="group relative overflow-visible flex items-center justify-center gap-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 px-6 text-xs transition-all duration-300 shadow-[0_8px_20px_-6px_rgba(79,70,229,0.4)] disabled:opacity-50 disabled:pointer-events-none cursor-pointer"
                       >
+                        <AstronautDog />
                         {isSubmitting ? (
                           <>
                             <Loader2 className="h-4 w-4 animate-spin" />

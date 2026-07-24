@@ -7,6 +7,7 @@ import { ExternalLink, Terminal, Shield, Lock, File, Database, GitFork, Cpu, Che
 import { GithubIcon } from './SocialIcons';
 import { motion, AnimatePresence } from 'framer-motion';
 import SystemDesign from './SystemDesign';
+import useTextScramble from '../hooks/useTextScramble';
 
 export interface MetricItem {
   label: string;
@@ -263,6 +264,7 @@ export function ProjectVisualizer({ id }: { id: string }) {
 
 export default function Projects() {
   const [activeIndex, setActiveIndex] = useState(0);
+  const { text: scrambleTitle, scramble: triggerScrambleTitle } = useTextScramble('Featured Projects');
 
   const featuredProjects = projects.filter((p) => p.caseStudy !== undefined);
   const otherProjects = projects.filter((p) => p.caseStudy === undefined);
@@ -285,12 +287,11 @@ export default function Projects() {
     
     const isActive = diff === 0;
     
-    // Position properties
-    const scale = isActive ? 1 : 0.85;
+    // Tighter offsets — cards don't fly from far away
+    const scale = isActive ? 1 : 0.87;
     const zIndex = isActive ? 30 : 20 - Math.abs(diff);
-    // Side translations based on position offset
-    const x = diff * 180; 
-    const rotate = diff * 6; 
+    const x = diff * 110; 
+    const rotate = diff * 5; 
     const opacity = Math.abs(diff) > 1 ? 0 : 1;
 
     return { scale, zIndex, x, rotate, opacity, isActive };
@@ -309,8 +310,11 @@ export default function Projects() {
               <GitFork className="h-4 w-4" />
               <span>Project Case Studies</span>
             </span>
-            <h2 className="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white sm:text-4xl font-serif">
-              Featured Projects
+            <h2 
+              onMouseEnter={triggerScrambleTitle}
+              className="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white sm:text-4xl font-mono select-none cursor-default"
+            >
+              {scrambleTitle}
             </h2>
           </div>
           <p className="text-slate-500 dark:text-slate-400 text-sm max-w-md leading-relaxed font-medium">
@@ -344,7 +348,7 @@ export default function Projects() {
                     opacity,
                     zIndex,
                   }}
-                  transition={{ type: 'spring', stiffness: 300, damping: 28 }}
+                  transition={{ type: 'tween', duration: 0.35, ease: 'easeInOut' }}
                   drag={isActive ? 'x' : false}
                   dragConstraints={{ left: 0, right: 0 }}
                   onDragEnd={(_, info) => {
@@ -355,7 +359,7 @@ export default function Projects() {
                     if (!isActive) setActiveIndex(idx);
                   }}
                   data-cursor-text={isActive ? 'DRAG DECK' : 'SELECT'}
-                  className={`absolute w-full h-full rounded-[32px_12px_32px_12px] overflow-hidden border border-slate-200/50 dark:border-slate-850 bg-white/60 dark:bg-slate-900/40 backdrop-blur-md shadow-xl flex flex-col p-6 justify-between transition-all duration-300 ${
+                  className={`absolute w-full h-full rounded-[32px_12px_32px_12px] overflow-hidden border border-slate-200/50 dark:border-slate-850 bg-white dark:bg-slate-900 shadow-xl flex flex-col p-6 justify-between ${
                     isActive ? 'cursor-grab active:cursor-grabbing border-indigo-500/30' : 'cursor-pointer'
                   }`}
                   style={{
@@ -402,13 +406,13 @@ export default function Projects() {
                       onClick={(e) => {
                         if (!isActive) e.preventDefault();
                       }}
-                      className={`w-full py-3 rounded-xl font-mono text-[9px] font-bold uppercase tracking-wider border transition-all cursor-pointer text-center block ${
+                      className={`w-full py-3 rounded-xl font-mono text-[9px] font-bold uppercase tracking-wider border transition-all cursor-pointer text-center flex items-center justify-center gap-1.5 ${
                         isActive
                           ? 'bg-indigo-600 border-indigo-600 text-white shadow-md hover:bg-indigo-700 hover:shadow-indigo-500/10'
                           : 'bg-transparent border-slate-200 dark:border-slate-800 text-slate-400 dark:text-slate-550 pointer-events-none'
                       }`}
                     >
-                      🔬 Launch Case Study
+                      <ArrowRight className="h-3 w-3" /> Launch Case Study
                     </Link>
                   </div>
                 </motion.div>

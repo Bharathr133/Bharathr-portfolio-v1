@@ -8,6 +8,7 @@ import { motion } from 'framer-motion';
 import SpotlightCard from './SpotlightCard';
 import LiquidAvatar from './LiquidAvatar';
 import useTextScramble from '../hooks/useTextScramble';
+import AstronautDog from './AstronautDog';
 
 const marqueeSkills = [
   { name: 'Java 21', iconKey: 'java' },
@@ -82,7 +83,7 @@ export default function Hero() {
   const [activeBentoIdx, setActiveBentoIdx] = useState(0);
   const bentoScrollRef = useRef<HTMLDivElement>(null);
   
-  const { text: scrambleTitle, scramble: triggerScrambleTitle } = useTextScramble('Building scalable backend APIs and modern web applications.');
+  const { text: scrambleTitle, scramble: triggerScrambleTitle } = useTextScramble('Full-Stack Engineer');
 
   const handleBentoScroll = () => {
     if (bentoScrollRef.current) {
@@ -143,7 +144,7 @@ export default function Hero() {
             
             <h1 
               onMouseEnter={triggerScrambleTitle}
-              className="text-3xl xs:text-4xl sm:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white font-serif leading-[1.12] select-none cursor-default min-h-[96px] sm:min-h-[110px]"
+              className="text-3xl xs:text-4xl sm:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white font-mono leading-[1.12] select-none cursor-default"
             >
               {scrambleTitle}
             </h1>
@@ -164,8 +165,9 @@ export default function Hero() {
                 href="/resume.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group flex items-center justify-center gap-2 rounded-xl bg-indigo-600 px-6 py-3.5 text-xs font-bold text-white shadow-md hover:bg-indigo-500 hover:shadow-lg transition-all duration-300 hover:scale-[1.02]"
+                className="group relative overflow-visible flex items-center justify-center gap-2 rounded-xl bg-indigo-600 px-6 py-3.5 text-xs font-bold text-white shadow-md hover:bg-indigo-500 hover:shadow-lg transition-all duration-300 hover:scale-[1.02]"
               >
+                <AstronautDog />
                 <FileText className="h-4 w-4" />
                 <span>Download Resume</span>
                 <ArrowRight className="h-3.5 w-3.5 group-hover:translate-x-1 transition-transform" />
@@ -178,8 +180,9 @@ export default function Hero() {
                     contactSec.scrollIntoView({ behavior: 'smooth', block: 'start' });
                   }
                 }}
-                className="group flex items-center justify-center gap-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800/80 px-6 py-3.5 text-xs font-bold text-slate-800 dark:text-slate-200 shadow-sm hover:border-indigo-500/50 hover:bg-slate-50/50 dark:hover:bg-slate-950/40 transition-all duration-300 hover:scale-[1.02] cursor-pointer"
+                className="group relative overflow-visible flex items-center justify-center gap-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800/80 px-6 py-3.5 text-xs font-bold text-slate-800 dark:text-slate-200 shadow-sm hover:border-indigo-500/50 hover:bg-slate-50/50 dark:hover:bg-slate-950/40 transition-all duration-300 hover:scale-[1.02] cursor-pointer"
               >
+                <AstronautDog />
                 <Mail className="h-4 w-4 text-indigo-500" />
                 <span>Contact Me</span>
               </button>

@@ -6,6 +6,7 @@ import { Maximize2, X, Award, ChevronLeft, ChevronRight } from 'lucide-react';
 import TiltCard from './TiltCard';
 import useTextScramble from '../hooks/useTextScramble';
 import { motion, AnimatePresence } from 'framer-motion';
+import AstronautDog from './AstronautDog';
 
 export default function Certifications() {
   const [activeCertUrl, setActiveCertUrl] = useState<string | null>(null);
@@ -108,7 +109,7 @@ export default function Certifications() {
             </span>
             <h2 
               onMouseEnter={triggerScrambleTitle}
-              className="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white sm:text-4xl font-serif select-none"
+              className="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white sm:text-4xl font-mono select-none cursor-default"
             >
               {scrambleTitle}
             </h2>
@@ -125,13 +126,14 @@ export default function Certifications() {
               setActiveFilter('all');
               setActiveCertIdx(0);
             }}
-            className={`px-3 py-1.5 rounded-xl cursor-pointer transition-all border ${
+            className={`group relative overflow-visible px-3 py-1.5 rounded-xl cursor-pointer transition-all border ${
               activeFilter === 'all'
                 ? 'bg-white dark:bg-slate-950 text-indigo-655 dark:text-indigo-400 font-bold shadow-2xs border-slate-200 dark:border-slate-855'
                 : 'bg-transparent text-slate-500 border-transparent hover:text-slate-800 hover:bg-slate-200/40'
             }`}
             data-cursor-text="TAP FILTER"
           >
+            <AstronautDog />
             ALL CREDENTIALS ({certifications.length})
           </button>
           <button
@@ -139,13 +141,14 @@ export default function Certifications() {
               setActiveFilter('dev');
               setActiveCertIdx(0);
             }}
-            className={`px-3 py-1.5 rounded-xl cursor-pointer transition-all border ${
+            className={`group relative overflow-visible px-3 py-1.5 rounded-xl cursor-pointer transition-all border ${
               activeFilter === 'dev'
                 ? 'bg-white dark:bg-slate-950 text-indigo-655 dark:text-indigo-400 font-bold shadow-2xs border-slate-200 dark:border-slate-855'
                 : 'bg-transparent text-slate-500 border-transparent hover:text-slate-800 hover:bg-slate-200/40'
             }`}
             data-cursor-text="TAP FILTER"
           >
+            <AstronautDog />
             DEVELOPMENT & CORE
           </button>
           <button
@@ -153,13 +156,14 @@ export default function Certifications() {
               setActiveFilter('cloud');
               setActiveCertIdx(0);
             }}
-            className={`px-3 py-1.5 rounded-xl cursor-pointer transition-all border ${
+            className={`group relative overflow-visible px-3 py-1.5 rounded-xl cursor-pointer transition-all border ${
               activeFilter === 'cloud'
                 ? 'bg-white dark:bg-slate-950 text-indigo-655 dark:text-indigo-400 font-bold shadow-2xs border-slate-200 dark:border-slate-855'
                 : 'bg-transparent text-slate-555 border-transparent hover:text-slate-800 hover:bg-slate-200/40'
             }`}
             data-cursor-text="TAP FILTER"
           >
+            <AstronautDog />
             CLOUD & IBM
           </button>
           <button
@@ -167,13 +171,14 @@ export default function Certifications() {
               setActiveFilter('others');
               setActiveCertIdx(0);
             }}
-            className={`px-3 py-1.5 rounded-xl cursor-pointer transition-all border ${
+            className={`group relative overflow-visible px-3 py-1.5 rounded-xl cursor-pointer transition-all border ${
               activeFilter === 'others'
                 ? 'bg-white dark:bg-slate-950 text-indigo-655 dark:text-indigo-400 font-bold shadow-2xs border-slate-200 dark:border-slate-855'
                 : 'bg-transparent text-slate-500 border-transparent hover:text-slate-800 hover:bg-slate-200/40'
             }`}
             data-cursor-text="TAP FILTER"
           >
+            <AstronautDog />
             CORPORATE & OTHERS
           </button>
         </div>

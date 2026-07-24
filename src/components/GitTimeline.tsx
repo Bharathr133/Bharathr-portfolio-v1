@@ -4,6 +4,7 @@ import React from 'react';
 import { internships, educations } from '../data/portfolio';
 import { GitBranch, GitCommit, Calendar, GitPullRequest } from 'lucide-react';
 import { motion } from 'framer-motion';
+import useTextScramble from '../hooks/useTextScramble';
 
 interface GitLogItem {
   id: string;
@@ -19,6 +20,7 @@ interface GitLogItem {
 }
 
 export default function GitTimeline() {
+  const { text: scrambleTitle, scramble: triggerScrambleTitle } = useTextScramble('Work & Education');
   // Combine and structure the data chronologically / logically
   const gitLogs: GitLogItem[] = [
     {
@@ -82,8 +84,11 @@ export default function GitTimeline() {
               <GitPullRequest className="h-4 w-4" />
               <span>Career Graph</span>
             </span>
-            <h2 className="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white sm:text-4xl font-serif">
-              Work & Education
+            <h2
+              onMouseEnter={triggerScrambleTitle}
+              className="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white sm:text-4xl font-mono select-none cursor-default"
+            >
+              {scrambleTitle}
             </h2>
           </div>
           <p className="text-slate-500 dark:text-slate-400 text-sm max-w-md leading-relaxed font-medium">

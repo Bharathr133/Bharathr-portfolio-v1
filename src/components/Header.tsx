@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Menu, X, Code, Sun, Moon } from 'lucide-react';
+import { Menu, X, Code, Sun, Moon, ChevronDown, ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import Magnetic from './Magnetic';
@@ -213,16 +213,20 @@ export default function Header() {
                       <>
                         <button
                           onClick={() => setShowMobileProjects(!showMobileProjects)}
-                          className={`text-2xl font-black font-sans tracking-tight uppercase transition-all block cursor-pointer flex items-center justify-center gap-2 ${
+                          className={`text-2xl font-black font-sans tracking-tight uppercase transition-all cursor-pointer flex items-center justify-center gap-2 ${
                             activeSection === 'projects'
-                              ? 'text-indigo-600 dark:text-indigo-400 font-extrabold'
-                              : 'text-slate-500 dark:text-slate-400 hover:text-slate-800'
+                              ? 'text-indigo-600 dark:text-indigo-400'
+                              : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'
                           }`}
                         >
                           <span>{link.label}</span>
-                          <span className={`text-[10px] font-mono transition-transform duration-300 ${showMobileProjects ? 'rotate-90 text-indigo-500' : 'text-slate-400'}`}>▶</span>
+                          <ChevronDown
+                            className={`h-5 w-5 transition-transform duration-300 ${
+                              showMobileProjects ? 'rotate-180 text-indigo-500' : 'text-slate-400'
+                            }`}
+                          />
                         </button>
-                        
+
                         {/* Mobile Projects Submenu Drawer */}
                         <AnimatePresence>
                           {showMobileProjects && (
@@ -230,21 +234,27 @@ export default function Header() {
                               initial={{ opacity: 0, height: 0 }}
                               animate={{ opacity: 1, height: 'auto' }}
                               exit={{ opacity: 0, height: 0 }}
-                              className="overflow-hidden flex flex-col gap-2 mt-2 bg-slate-50 dark:bg-slate-900/50 p-2.5 rounded-2xl border border-slate-200/50 dark:border-slate-850/40 w-fit max-w-[280px]"
+                              transition={{ duration: 0.22 }}
+                              className="overflow-hidden w-full max-w-[240px] mt-2"
                             >
-                              {projects.map((proj) => (
-                                <Link
-                                  key={proj.id}
-                                  href={`/projects/${proj.id}`}
-                                  onClick={() => {
-                                    setIsOpen(false);
-                                    setShowMobileProjects(false);
-                                  }}
-                                  className="text-[10px] font-sans font-bold text-slate-500 hover:text-indigo-600 dark:text-slate-400 dark:hover:text-indigo-400 transition-colors uppercase tracking-wider block truncate max-w-full"
-                                >
-                                  📄 {proj.title.split(' – ')[0].split(' - ')[0]}
-                                </Link>
-                              ))}
+                              <div className="flex flex-col bg-slate-50 dark:bg-slate-900/60 border border-slate-200/60 dark:border-slate-800/60 rounded-2xl overflow-hidden">
+                                {projects.map((proj, pIdx) => (
+                                  <Link
+                                    key={proj.id}
+                                    href={`/projects/${proj.id}`}
+                                    onClick={() => {
+                                      setIsOpen(false);
+                                      setShowMobileProjects(false);
+                                    }}
+                                    className={`flex items-center gap-2 px-4 py-2.5 text-[11px] font-mono font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-950/30 transition-all ${
+                                      pIdx !== projects.length - 1 ? 'border-b border-slate-200/50 dark:border-slate-800/50' : ''
+                                    }`}
+                                  >
+                                    <ChevronRight className="h-3 w-3 shrink-0 text-indigo-400" />
+                                    <span className="truncate">{proj.title.split(' – ')[0].split(' - ')[0]}</span>
+                                  </Link>
+                                ))}
+                              </div>
                             </motion.div>
                           )}
                         </AnimatePresence>

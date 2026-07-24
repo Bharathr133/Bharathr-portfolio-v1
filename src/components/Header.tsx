@@ -27,18 +27,20 @@ export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
 
-  // Load theme preference on mount
+  // Load theme preference on mount — light is always the default
   useEffect(() => {
     const savedTheme = localStorage.getItem('theme');
-    const isDark = savedTheme === 'dark';
-    if (isDark) {
+
+    if (savedTheme === 'dark') {
+      // User explicitly chose dark previously
       document.documentElement.classList.add('dark');
+      setIsDarkMode(true);
     } else {
+      // First visit OR user chose light — always light
       document.documentElement.classList.remove('dark');
+      localStorage.setItem('theme', 'light'); // lock in light as default
+      setIsDarkMode(false);
     }
-    setTimeout(() => {
-      setIsDarkMode(isDark);
-    }, 0);
   }, []);
 
   const toggleTheme = () => {

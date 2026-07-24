@@ -4,6 +4,8 @@ import React, { useState, useRef, useEffect } from 'react';
 import { personalInfo } from '../data/portfolio';
 import { Terminal as TerminalIcon } from 'lucide-react';
 import TiltCard from './TiltCard';
+import useTextScramble from '../hooks/useTextScramble';
+import LiquidAvatar from './LiquidAvatar';
 
 interface CommandLog {
   input: string;
@@ -12,6 +14,8 @@ interface CommandLog {
 
 export default function About() {
   const [isFlipped, setIsFlipped] = useState(false);
+  const [showMatrix, setShowMatrix] = useState(false);
+  const { text: scrambleTitle, scramble: triggerScrambleTitle } = useTextScramble('About Me & Terminal Console');
   const [terminalHistory, setTerminalHistory] = useState<CommandLog[]>([
     { input: '', output: 'Welcome to Bharath\'s interactive terminal CLI! Type "help" to start.' }
   ]);
@@ -41,9 +45,25 @@ export default function About() {
       return nextHistory;
     });
     setHistoryIndex(-1); // Reset index on new submit
- 
+
     let output = '';
     const cleanCmd = command.toLowerCase().trim();
+
+    // Check for Matrix Easter Egg!
+    if (cleanCmd === 'hack' || cleanCmd === 'sudo hack' || cleanCmd === 'matrix') {
+      setShowMatrix(true);
+      setTimeout(() => {
+        setShowMatrix(false);
+        setTerminalHistory((prev) => [
+          ...prev,
+          {
+            input: cmdText,
+            output: 'DECRYPTION COMPLETE. SYSTEM UNLOCKED.\n\n[ACCESS GRANTED] Decrypted core credential keys:\n  * Position: Java Full-Stack Developer\n  * Location: Bangalore, India / Remote\n  * Core Philosophy: "Write clean code, build resilient microservices, scale without failure."\n\nHIRE_ME_PROTOCOL status: READY. Contact me below! 🚀'
+          }
+        ]);
+      }, 3000);
+      return;
+    }
     
     // Custom keywords matched with GenZ funny response styles with full respect
     if (cleanCmd.includes('gf') || cleanCmd.includes('girlfriend') || cleanCmd.includes('crush') || cleanCmd.includes('marry')) {
@@ -132,7 +152,7 @@ export default function About() {
   };
 
   return (
-    <section id="about" className="relative bg-slate-50 dark:bg-slate-950 py-24 border-b border-slate-200/80 dark:border-slate-900 transition-colors duration-300">
+    <section id="about" className="relative bg-slate-50 dark:bg-slate-950 py-16 border-b border-slate-200/80 dark:border-slate-900 transition-colors duration-300">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(99,102,241,0.03),transparent_35%)]" />
 
       <div className="relative mx-auto max-w-7xl px-6 md:px-8">
@@ -144,8 +164,11 @@ export default function About() {
               <TerminalIcon className="h-4 w-4" />
               <span>Developer Workspace</span>
             </span>
-            <h2 className="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white sm:text-4xl font-serif">
-              About Me & Terminal Console
+            <h2 
+              onMouseEnter={triggerScrambleTitle}
+              className="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white sm:text-4xl font-serif select-none"
+            >
+              {scrambleTitle}
             </h2>
           </div>
           <p className="text-slate-500 dark:text-slate-400 text-sm max-w-md leading-relaxed font-medium">
@@ -161,6 +184,7 @@ export default function About() {
             <div 
               className="relative w-64 h-64 md:w-72 md:h-72 cursor-pointer [perspective:1000px] group"
               onClick={() => setIsFlipped(!isFlipped)}
+              data-cursor-text="FLIP CARD"
             >
               <div 
                 className={`relative w-full h-full duration-700 [transform-style:preserve-3d] ${
@@ -169,12 +193,10 @@ export default function About() {
               >
                 {/* Front Side */}
                 <div className="absolute inset-0 w-full h-full rounded-[24px_8px_32px_12px] overflow-hidden border border-slate-200 dark:border-slate-800 shadow-[0_15px_30px_rgba(0,0,0,0.04)] dark:shadow-[0_20px_45px_rgba(0,0,0,0.4)] [backface-visibility:hidden]">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
+                  <LiquidAvatar
                     src="/headshot.jpg"
-                    alt="Bharath R -  Java Full Stack Developer Bangalore"
-                    className="w-full h-full object-cover select-none"
-                    draggable={false}
+                    alt="Bharath R - Java Full Stack Developer Bangalore"
+                    className="w-full h-full"
                   />
                   <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-slate-950/80 to-transparent p-4 flex justify-between items-center text-white font-mono">
                     <span className="text-xs font-bold tracking-wide">Bharath R // Full Stack</span>
@@ -246,6 +268,7 @@ export default function About() {
                     const inputEl = document.getElementById('terminal-keyboard-input');
                     if (inputEl) inputEl.focus();
                   }}
+                  data-cursor-text="TYPE HACK"
                 >
                   <style dangerouslySetInnerHTML={{ __html: `
                     @keyframes terminal-blink {
@@ -293,6 +316,75 @@ export default function About() {
           </div>
         </div>
       </div>
+      
+      {showMatrix && <MatrixRain />}
     </section>
+  );
+}
+
+function MatrixRain() {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const columns = Math.floor(canvas.width / 20);
+    const yPositions = Array(columns).fill(0);
+
+    const chars = '01';
+
+    const draw = () => {
+      ctx.fillStyle = 'rgba(2, 6, 23, 0.15)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.fillStyle = '#6366f1';
+      ctx.font = '15px monospace';
+
+      yPositions.forEach((y, index) => {
+        const char = chars[Math.floor(Math.random() * chars.length)];
+        const x = index * 20;
+        ctx.fillText(char, x, y);
+
+        if (y > 100 + Math.random() * 10000) {
+          yPositions[index] = 0;
+        } else {
+          yPositions[index] = y + 20;
+        }
+      });
+    };
+
+    const interval = setInterval(draw, 35);
+
+    const handleResize = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    };
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+  return (
+    <div className="fixed inset-0 z-[9999] bg-slate-950 flex items-center justify-center font-mono select-none">
+      <canvas ref={canvasRef} className="absolute inset-0 block w-full h-full" />
+      <div className="relative z-10 px-8 py-6 rounded-3xl bg-white/95 dark:bg-slate-900/90 border border-indigo-500/20 dark:border-indigo-500/30 text-center shadow-2xl backdrop-blur-md max-w-sm">
+        <span className="h-2 w-2 rounded-full bg-indigo-650 animate-ping inline-block mr-2" />
+        <span className="text-xs font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-widest animate-pulse">
+          Decrypting secure core keys...
+        </span>
+        <div className="w-full bg-slate-100 dark:bg-slate-950 h-1 rounded-full overflow-hidden mt-4 border border-slate-200 dark:border-slate-850">
+          <div className="h-full bg-indigo-650 dark:bg-indigo-500 rounded-full" style={{ width: '100%', transition: 'width 3s ease-in-out' }} />
+        </div>
+      </div>
+    </div>
   );
 }

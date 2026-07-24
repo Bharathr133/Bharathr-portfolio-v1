@@ -2,6 +2,10 @@ import type { Metadata } from "next";
 import { Fraunces, JetBrains_Mono, Inter } from "next/font/google";
 import "./globals.css";
 import "./design-tokens.css"; // design tokens for theming
+import CustomCursor from "@/components/CustomCursor";
+import TabTicker from "@/components/TabTicker";
+import ContextMenu from "@/components/ContextMenu";
+import TourGuide from "@/components/TourGuide";
 
 const fraunces = Fraunces({
   variable: "--font-fraunces",
@@ -139,6 +143,10 @@ export default function RootLayout({
         />
       </head>
       <body className="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 antialiased font-sans flex flex-col min-h-screen transition-colors duration-300">
+        <CustomCursor />
+        <TabTicker />
+        <ContextMenu />
+        <TourGuide />
         {children}
       </body>
     </html>

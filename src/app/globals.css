@@ -96,3 +96,36 @@ h1, h2, h3, h4 {
 .animate-shimmer {
   animation: shimmer 1s infinite;
 }
+
+/* Custom Global Selection Override */
+::selection {
+  background-color: rgba(99, 102, 241, 0.25) !important;
+  color: inherit !important;
+}
+
+/* Custom Scrollbar Styles for Chrome/Safari/Edge */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(156, 163, 175, 0.25);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(99, 102, 241, 0.6);
+}
+
+/* Custom Scrollbar Styles for Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(156, 163, 175, 0.25) transparent;
+}
+
+

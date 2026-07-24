@@ -5,12 +5,18 @@ import { skillCategories, Skill } from '../data/portfolio';
 import TechIcon from './TechIcons';
 import { Laptop, Server, Cpu, Terminal, ChevronRight, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import SpotlightCard from './SpotlightCard';
+import SkillsPhysics from './SkillsPhysics';
+import Skills3DSphere from './Skills3DSphere';
+import useTextScramble from '../hooks/useTextScramble';
 
 export default function Skills() {
   const [activeCategoryIdx, setActiveCategoryIdx] = useState(0);
   const [hoveredSkill, setHoveredSkill] = useState<Skill | null>(null);
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
+  const [skillsView, setSkillsView] = useState<'grid' | 'orbit' | 'physics'>('grid');
 
+  const { text: scrambleTitle, scramble: triggerScrambleTitle } = useTextScramble('Technical Core & Stack');
   const activeCategory = skillCategories[activeCategoryIdx];
   
   // Pick matching icon for category list
@@ -33,7 +39,7 @@ export default function Skills() {
   }, [activeCategoryIdx, activeCategory]);
 
   return (
-    <section id="skills" className="relative bg-slate-50 dark:bg-slate-950 py-24 border-b border-slate-200/85 dark:border-slate-900 transition-colors duration-300">
+    <section id="skills" className="relative bg-slate-50 dark:bg-slate-950 py-16 border-b border-slate-200/85 dark:border-slate-900 transition-colors duration-300">
       {/* Background gradients */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_80%,rgba(99,102,241,0.015),transparent_40%)]" />
 
@@ -46,8 +52,11 @@ export default function Skills() {
               <Terminal className="h-4 w-4" />
               <span>Technology Matrix</span>
             </span>
-            <h2 className="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white sm:text-4xl font-serif">
-              Technical Core &amp; Stack
+            <h2 
+              onMouseEnter={triggerScrambleTitle}
+              className="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white sm:text-4xl font-serif select-none"
+            >
+              {scrambleTitle}
             </h2>
           </div>
           <p className="text-slate-500 dark:text-slate-400 text-sm max-w-md leading-relaxed font-medium font-mono">
@@ -98,84 +107,138 @@ export default function Skills() {
             </div>
 
             {/* Category summary panel */}
-            <div className="hidden lg:flex backdrop-blur-md bg-white/60 dark:bg-slate-900/60 border border-slate-200/40 dark:border-slate-800/40 rounded-2xl p-5 flex-col justify-between flex-1 shadow-xs min-h-[160px]">
-              <div>
-                <div className="flex items-center justify-between mb-3">
-                  <span className="text-[9px] font-bold font-mono text-slate-400 dark:text-slate-500 uppercase tracking-widest">
-                    Category Overview
+            <SpotlightCard className="hidden lg:flex rounded-2xl flex-1 min-h-[160px]">
+              <div className="backdrop-blur-md bg-white/60 dark:bg-slate-900/60 border border-slate-200/40 dark:border-slate-800/40 p-5 flex flex-col justify-between w-full h-full">
+                <div>
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="text-[9px] font-bold font-mono text-slate-400 dark:text-slate-500 uppercase tracking-widest">
+                      Category Overview
+                    </span>
+                  </div>
+                  <h3 className="text-lg font-bold text-slate-900 dark:text-white font-serif mb-2">
+                    {activeCategory.title}
+                  </h3>
+                  <p className="text-xs leading-relaxed text-slate-500 dark:text-slate-400 font-medium">
+                    {activeCategoryIdx === 0 && "Building responsive single-page interfaces, optimizing performance frameworks, and designing layout variables for seamless user interactions."}
+                    {activeCategoryIdx === 1 && "Architecting secure transactional backend pipelines, microservice communication interfaces, structured data mapping, and automated reporting systems."}
+                    {activeCategoryIdx === 2 && "Containerizing application micro-networks, automating deployments, scripting environment validations, and managing branch control workflows."}
+                  </p>
+                </div>
+                <div className="border-t border-slate-200/50 dark:border-slate-800/50 pt-3 mt-4 flex items-center justify-between font-mono text-[9px] text-slate-400 dark:text-slate-500">
+                  <span>MODULE VERIFICATION</span>
+                  <span className="font-bold text-indigo-650 dark:text-indigo-400">
+                    {activeCategory.skills.length} MODULES READY
                   </span>
                 </div>
-                <h3 className="text-lg font-bold text-slate-900 dark:text-white font-serif mb-2">
-                  {activeCategory.title}
-                </h3>
-                <p className="text-xs leading-relaxed text-slate-500 dark:text-slate-400 font-medium">
-                  {activeCategoryIdx === 0 && "Building responsive single-page interfaces, optimizing performance frameworks, and designing layout variables for seamless user interactions."}
-                  {activeCategoryIdx === 1 && "Architecting secure transactional backend pipelines, microservice communication interfaces, structured data mapping, and automated reporting systems."}
-                  {activeCategoryIdx === 2 && "Containerizing application micro-networks, automating deployments, scripting environment validations, and managing branch control workflows."}
-                </p>
               </div>
-              <div className="border-t border-slate-200/50 dark:border-slate-800/50 pt-3 mt-4 flex items-center justify-between font-mono text-[9px] text-slate-400 dark:text-slate-500">
-                <span>MODULE VERIFICATION</span>
-                <span className="font-bold text-indigo-650 dark:text-indigo-400">
-                  {activeCategory.skills.length} MODULES READY
-                </span>
-              </div>
-            </div>
+            </SpotlightCard>
 
           </div>
 
           {/* Right Column: Dynamic Pills Grid & Interactive Console (approx 8 cols) */}
           <div className="lg:col-span-8 flex flex-col gap-6">
             
-            {/* Interactive Grid of Pills */}
-            <div className="backdrop-blur-md bg-white/60 dark:bg-slate-900/60 border border-slate-200/40 dark:border-slate-800/40 rounded-2xl p-6 shadow-xs flex-1 flex flex-col justify-center">
-              <span className="text-[9px] font-bold font-mono text-slate-400 uppercase tracking-widest block mb-4">
-                Active Modules Matrix (Hover to inspect credentials)
-              </span>
-              
-              <div className="flex flex-wrap gap-3">
-                <AnimatePresence mode="popLayout">
-                  {activeCategory.skills.map((skill, idx) => {
-                    const isSelected = hoveredSkill?.name === skill.name;
-                    return (
-                      <motion.button
-                        key={skill.name}
-                        initial={{ opacity: 0, scale: 0.95 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        exit={{ opacity: 0, scale: 0.95 }}
-                        transition={{ duration: 0.25, delay: idx * 0.04 }}
-                        onMouseEnter={() => setHoveredSkill(skill)}
-                        onClick={() => {
-                          setHoveredSkill(skill);
-                          setIsBottomSheetOpen(true);
-                        }}
-                        className={`flex items-center gap-2.5 px-4.5 py-3 rounded-xl border text-left cursor-pointer transition-all duration-300 hover:scale-[1.03] focus:outline-none ${
-                          isSelected 
-                            ? 'bg-slate-950 border-slate-800 text-white shadow-xs' 
-                            : 'bg-white dark:bg-slate-950/40 border-slate-200/50 dark:border-slate-900/50 text-slate-800 dark:text-slate-300'
-                        }`}
-                        style={{
-                          boxShadow: isSelected ? `0 0 15px ${skill.color}15, inset 0 0 8px ${skill.color}10` : '',
-                          borderColor: isSelected ? skill.color : ''
-                        }}
-                      >
-                        <div 
-                          className="h-6 w-6 rounded-lg bg-slate-50 dark:bg-slate-900/50 p-1 flex items-center justify-center border border-slate-200/30 dark:border-slate-800"
-                          style={{
-                            boxShadow: isSelected ? `0 0 10px ${skill.color}30` : ''
-                          }}
-                        >
-                          <TechIcon iconKey={skill.iconKey} className="h-full w-full" />
-                        </div>
-                        <span className="text-xs font-bold font-mono tracking-wide uppercase">
-                          {skill.name}
-                        </span>
-                      </motion.button>
-                    );
-                  })}
-                </AnimatePresence>
-              </div>
+            {/* View Selector Tabs */}
+            <div className="flex items-center gap-1.5 bg-slate-100 dark:bg-slate-900/60 p-1.5 rounded-2xl border border-slate-200/50 dark:border-slate-800/40 w-fit select-none font-mono text-[9px] self-start md:self-end">
+              <button
+                onClick={() => setSkillsView('grid')}
+                className={`px-3 py-1.5 rounded-xl cursor-pointer transition-all border ${
+                  skillsView === 'grid'
+                    ? 'bg-white dark:bg-slate-950 text-indigo-650 dark:text-indigo-400 font-bold shadow-2xs border-slate-200 dark:border-slate-850'
+                    : 'bg-transparent text-slate-500 border-transparent hover:text-slate-800 hover:bg-slate-200/40'
+                }`}
+              >
+                MODULE MATRIX
+              </button>
+              <button
+                onClick={() => setSkillsView('orbit')}
+                className={`px-3 py-1.5 rounded-xl cursor-pointer transition-all border ${
+                  skillsView === 'orbit'
+                    ? 'bg-white dark:bg-slate-950 text-indigo-650 dark:text-indigo-400 font-bold shadow-2xs border-slate-200 dark:border-slate-850'
+                    : 'bg-transparent text-slate-500 border-transparent hover:text-slate-800 hover:bg-slate-200/40'
+                }`}
+                data-cursor-text="3D CLOUD"
+              >
+                3D ORBIT CLOUD
+              </button>
+              <button
+                onClick={() => setSkillsView('physics')}
+                className={`px-3 py-1.5 rounded-xl cursor-pointer transition-all border ${
+                  skillsView === 'physics'
+                    ? 'bg-white dark:bg-slate-950 text-indigo-650 dark:text-indigo-400 font-bold shadow-2xs border-slate-200 dark:border-slate-850'
+                    : 'bg-transparent text-slate-500 border-transparent hover:text-slate-800 hover:bg-slate-200/40'
+                }`}
+                data-cursor-text="PLAY GRAVITY"
+              >
+                GRAVITY SANDBOX
+              </button>
             </div>
+
+            {/* Interactive Grid of Pills */}
+            {skillsView === 'grid' && (
+              <SpotlightCard className="rounded-2xl flex-1 flex flex-col justify-center animate-in fade-in duration-200">
+                <div className="backdrop-blur-md bg-white/60 dark:bg-slate-900/60 border border-slate-200/40 dark:border-slate-800/40 p-6 shadow-xs w-full h-full flex flex-col justify-center">
+                  <span className="text-[9px] font-bold font-mono text-slate-400 uppercase tracking-widest block mb-4">
+                    Active Modules Matrix (Hover to inspect credentials)
+                  </span>
+                  
+                  <div className="flex flex-wrap gap-3">
+                    <AnimatePresence mode="popLayout">
+                      {activeCategory.skills.map((skill, idx) => {
+                        const isSelected = hoveredSkill?.name === skill.name;
+                        return (
+                          <motion.button
+                            key={skill.name}
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0, scale: 0.95 }}
+                            transition={{ duration: 0.25, delay: idx * 0.04 }}
+                            onMouseEnter={() => setHoveredSkill(skill)}
+                            onClick={() => {
+                              setHoveredSkill(skill);
+                              setIsBottomSheetOpen(true);
+                            }}
+                            className={`flex items-center gap-2.5 px-4.5 py-3 rounded-xl border text-left cursor-pointer transition-all duration-300 hover:scale-[1.03] focus:outline-none ${
+                              isSelected
+                                ? 'bg-slate-100/80 dark:bg-slate-900/80 text-indigo-650 dark:text-indigo-400 font-bold border-indigo-500/35 shadow-xs'
+                                : 'bg-white/40 dark:bg-slate-950/20 text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white border-slate-200/40 dark:border-slate-855 hover:border-slate-300 dark:hover:border-slate-750'
+                            }`}
+                            style={{
+                              boxShadow: isSelected ? `0 8px 25px -10px ${skill.color}25` : undefined
+                            }}
+                          >
+                            <div 
+                              className="h-6 w-6 rounded-lg p-1 flex items-center justify-center border transition-colors shrink-0"
+                              style={{ 
+                                backgroundColor: isSelected ? `${skill.color}12` : 'transparent',
+                                borderColor: isSelected ? `${skill.color}35` : 'rgba(148, 163, 184, 0.15)'
+                              }}
+                            >
+                              <TechIcon iconKey={skill.iconKey} className="h-full w-full" />
+                            </div>
+                            <span className="text-xs font-bold font-mono tracking-wide uppercase">
+                              {skill.name}
+                            </span>
+                          </motion.button>
+                        );
+                      })}
+                    </AnimatePresence>
+                  </div>
+                </div>
+              </SpotlightCard>
+            )}
+
+            {skillsView === 'orbit' && (
+              <div className="flex-1 animate-in fade-in duration-200">
+                <Skills3DSphere />
+              </div>
+            )}
+
+            {skillsView === 'physics' && (
+              <div className="flex-1 animate-in fade-in duration-200">
+                <SkillsPhysics />
+              </div>
+            )}
 
             {/* Interactive Console Logger / Experience Previewer */}
             <div className="backdrop-blur-md bg-slate-950/95 border border-slate-900 rounded-2xl p-4 lg:p-5 shadow-xs font-mono text-xs leading-relaxed text-slate-400 select-none min-h-[110px] lg:min-h-[140px] flex flex-col">

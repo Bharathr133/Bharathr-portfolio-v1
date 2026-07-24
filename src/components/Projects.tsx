@@ -1,19 +1,20 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { projects, CaseStudyDetails } from '../data/portfolio';
-import { ExternalLink, Terminal, Shield, Lock, File, Database, GitFork, Cpu, ChevronRight } from 'lucide-react';
+import { ExternalLink, Terminal, Shield, Lock, File, Database, GitFork, Cpu, ChevronRight, ArrowLeft, ArrowRight, X, Maximize2 } from 'lucide-react';
 import { GithubIcon } from './SocialIcons';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import SystemDesign from './SystemDesign';
 
-interface MetricItem {
+export interface MetricItem {
   label: string;
   value: string;
   highlighted?: boolean;
 }
 
-const projectMetrics: Record<string, MetricItem[]> = {
+export const projectMetrics: Record<string, MetricItem[]> = {
   'dox-app': [
     { label: 'WORKFLOW DELAYS', value: '-40%', highlighted: true },
     { label: 'STORAGE CORE', value: 'OAK REPO' },
@@ -243,7 +244,7 @@ function ManufacturingSystemMockup() {
 }
 
 // Map project ID to its mockup
-function ProjectVisualizer({ id }: { id: string }) {
+export function ProjectVisualizer({ id }: { id: string }) {
   switch (id) {
     case 'dox-app':
       return <DoxAppMockup />;
@@ -261,218 +262,183 @@ function ProjectVisualizer({ id }: { id: string }) {
 }
 
 export default function Projects() {
-  const [showSysDesign, setShowSysDesign] = useState(false);
-  const [expandedProjects, setExpandedProjects] = useState<Record<string, boolean>>({});
+  const [activeIndex, setActiveIndex] = useState(0);
 
-  const toggleProjectExpand = (id: string) => {
-    setExpandedProjects(prev => ({ ...prev, [id]: !prev[id] }));
+  const featuredProjects = projects.filter((p) => p.caseStudy !== undefined);
+  const otherProjects = projects.filter((p) => p.caseStudy === undefined);
+  const count = featuredProjects.length;
+
+  const handleNext = () => {
+    setActiveIndex((prev) => (prev + 1) % count);
   };
 
-  // Filter out featured case study projects
-  const featuredProjects = projects.filter((p) => p.caseStudy !== undefined);
-  // Smaller ones go to the "Other Work" section below
-  const otherProjects = projects.filter((p) => p.caseStudy === undefined);
+  const handlePrev = () => {
+    setActiveIndex((prev) => (prev - 1 + count) % count);
+  };
+
+  const getCardPosition = (idx: number) => {
+    let diff = idx - activeIndex;
+    if (diff < 0) diff += count;
+    
+    // Shift indices so the active is in center, others left/right
+    if (diff > count / 2) diff -= count;
+    
+    const isActive = diff === 0;
+    
+    // Position properties
+    const scale = isActive ? 1 : 0.85;
+    const zIndex = isActive ? 30 : 20 - Math.abs(diff);
+    // Side translations based on position offset
+    const x = diff * 180; 
+    const rotate = diff * 6; 
+    const opacity = Math.abs(diff) > 1 ? 0 : 1;
+
+    return { scale, zIndex, x, rotate, opacity, isActive };
+  };
 
   return (
-    <section id="projects" className="relative bg-slate-50 dark:bg-slate-950 py-24 border-b border-slate-200/80 dark:border-slate-900 transition-colors duration-300">
+    <section id="projects" className="relative bg-slate-50 dark:bg-slate-950 py-16 border-b border-slate-200/80 dark:border-slate-900 transition-colors duration-300">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(99,102,241,0.01),transparent_45%)]" />
 
       <div className="relative mx-auto max-w-5xl px-6 md:px-8">
         
         {/* Asymmetrical Section Heading */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-20 border-l-4 border-indigo-650 pl-6">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16 border-l-4 border-indigo-650 pl-6">
           <div>
             <span className="text-xs font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-widest font-mono flex items-center gap-1.5 mb-2">
               <GitFork className="h-4 w-4" />
               <span>Project Case Studies</span>
             </span>
             <h2 className="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white sm:text-4xl font-serif">
-              Featured Engineering Work
+              Featured Projects
             </h2>
           </div>
           <p className="text-slate-500 dark:text-slate-400 text-sm max-w-md leading-relaxed font-medium">
-            Deep technical breakdowns showcasing core architecture problems, real engineering constraints, trade-off decisions, and measurable outcomes.
+            Browse through interactive 3D cards, drag to cycle folders, and launch live telemetry terminal monitors.
           </p>
         </div>
 
-        {/* Deep Case Studies Grid */}
-        <div className="flex flex-col gap-28">
-          {featuredProjects.map((project, index) => {
-            const isEven = index % 2 === 0;
-            const study = project.caseStudy as CaseStudyDetails;
-            const metrics = projectMetrics[project.id] || [];
+        {/* 3D Interactive Carousel Deck Wrapper */}
+        <div className="relative h-[480px] w-full flex items-center justify-center overflow-visible select-none my-10">
+          {/* Left Arrow */}
+          <button
+            onClick={handlePrev}
+            className="absolute left-2 md:left-6 z-45 p-3 rounded-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 shadow-lg hover:border-indigo-500/35 transition-all duration-300 cursor-pointer"
+            aria-label="Previous Project"
+          >
+            <ChevronRight className="h-5 w-5 rotate-180" />
+          </button>
 
-            return (
-              <div key={project.id} className="flex flex-col gap-8">
-                <div 
-                  className={`flex flex-col lg:flex-row gap-12 items-stretch ${
-                    isEven ? '' : 'lg:flex-row-reverse'
-                  }`}
-                >
-                {/* Mockup Display Pane */}
-                <motion.div 
-                  initial={{ opacity: 0, x: isEven ? -50 : 50 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true, margin: "-100px" }}
-                  transition={{ duration: 0.6, ease: "easeOut" }}
-                  className="flex-1 min-h-[260px] lg:w-1/2 rounded-[28px_8px_32px_12px] overflow-hidden border border-slate-200/60 dark:border-slate-800 bg-slate-950 flex flex-col shadow-sm dark:shadow-[0_20px_50px_rgba(0,0,0,0.45)]"
-                >
-                  {/* Simulated Browser Chrome Header */}
-                  <div className="flex items-center justify-between px-4 py-3 bg-slate-900 border-b border-slate-800 select-none shrink-0">
-                    <div className="flex items-center gap-1.5">
-                      <span className="h-2 w-2 rounded-full bg-red-500/80" />
-                      <span className="h-2 w-2 rounded-full bg-yellow-500/80" />
-                      <span className="h-2 w-2 rounded-full bg-green-500/80" />
-                    </div>
-                    <span className="text-[9px] font-mono font-bold text-slate-550 dark:text-slate-500">
-                      localhost:3000/{project.id}
-                    </span>
-                    <Terminal className="h-3.5 w-3.5 text-slate-600" />
-                  </div>
-
-                  {/* Render Visual Interface */}
-                  <div className="flex-1 min-h-0 relative">
-                    <ProjectVisualizer id={project.id} />
-                  </div>
-                </motion.div>
-
-                {/* Case Study Details Pane */}
-                <motion.div 
-                  initial={{ opacity: 0, x: isEven ? 50 : -50 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true, margin: "-100px" }}
-                  transition={{ duration: 0.6, ease: "easeOut" }}
-                  className="flex-1 lg:w-1/2 flex flex-col justify-between gap-6 font-sans"
-                >
-                  <div>
-                    {/* Tags */}
-                    <div className="flex flex-wrap gap-2 mb-3.5">
-                      {project.tags.slice(0, 4).map((tag, idx) => (
-                        <span 
-                          key={idx} 
-                          className="text-[9px] px-2.5 py-0.5 rounded-md font-bold uppercase tracking-wide bg-slate-100 dark:bg-slate-900 text-slate-600 dark:text-slate-400 border border-slate-200/30 dark:border-slate-800/80"
-                        >
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
-
-                    <h3 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white font-serif">
-                      {project.title}
-                    </h3>
-
-                    {/* Toggle Button for mobile screens */}
-                    <button
-                      onClick={() => toggleProjectExpand(project.id)}
-                      className="lg:hidden w-full flex items-center justify-between p-3 rounded-xl border border-slate-200/50 dark:border-slate-800 bg-slate-100/50 dark:bg-slate-900/30 font-mono text-[9px] font-bold text-indigo-650 dark:text-indigo-400 mt-3 cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-900 transition-all"
-                    >
-                      <span>{expandedProjects[project.id] ? 'COLLAPSE CASE STUDY DETAILS' : 'VIEW CASE STUDY DEEP DIVE'}</span>
-                      <ChevronRight className={`h-3.5 w-3.5 transition-transform duration-300 ${
-                        expandedProjects[project.id] ? 'rotate-90' : 'rotate-0'
-                      }`} />
-                    </button>
-
-                    {/* Collapsible Deep Dive container */}
-                    <div className={`lg:block ${expandedProjects[project.id] ? 'block' : 'hidden'}`}>
-                      {/* Problem / Constraint block */}
-                      <div className="mt-4 space-y-3.5 text-xs leading-relaxed text-slate-500 dark:text-slate-400 font-medium">
-                        <div>
-                          <strong className="text-slate-900 dark:text-slate-200 block mb-0.5 font-bold uppercase tracking-wider font-mono text-[9px] text-slate-400">Problem Context:</strong>
-                          <p>{study.problem}</p>
-                        </div>
-                        <div>
-                          <strong className="text-slate-900 dark:text-slate-200 block mb-0.5 font-bold uppercase tracking-wider font-mono text-[9px] text-slate-400">Key Constraints:</strong>
-                          <p>{study.constraints}</p>
-                        </div>
-                      </div>
-
-                      {/* Decisions block */}
-                      <div className="mt-4 pt-4 border-t border-slate-200/50 dark:border-slate-900/60">
-                        <strong className="text-[9px] font-bold uppercase tracking-wider font-mono text-slate-455 dark:text-slate-400 block mb-2">Technical Execution:</strong>
-                        <ul className="space-y-1.5 text-xs text-slate-500 dark:text-slate-400 pl-4 list-disc font-medium leading-relaxed">
-                          {study.decisions.map((dec, idx) => (
-                            <li key={idx}>{dec}</li>
-                          ))}
-                        </ul>
-                      </div>
-
-                      {/* Lessons / Post-mortem block */}
-                      <div className="mt-4 p-3 bg-slate-100/50 dark:bg-slate-900/40 rounded-2xl border border-slate-200/30 dark:border-slate-855 text-xs">
-                        <span className="text-[9px] font-bold text-indigo-650 dark:text-indigo-400 block mb-1.5 flex items-center gap-1.5 uppercase font-mono">
-                          <Cpu className="h-3.5 w-3.5" />
-                          <span>Retrospective &amp; Scaling lessons</span>
-                        </span>
-                        <p className="text-slate-500 dark:text-slate-400 italic leading-relaxed font-medium">
-                          &ldquo;{study.lessons}&rdquo;
-                        </p>
-                      </div>
-
-                      {/* Outcomes Metrics Dashboard Grid */}
-                      {metrics.length > 0 && (
-                        <div className="grid grid-cols-3 gap-2 sm:gap-3 mt-4">
-                          {metrics.map((m, mIdx) => (
-                            <div 
-                              key={mIdx} 
-                              className={`p-2 sm:p-2.5 rounded-xl border flex flex-col justify-between ${
-                                m.highlighted 
-                                  ? 'bg-emerald-50/50 dark:bg-emerald-950/20 border-emerald-200/40 dark:border-emerald-900/40' 
-                                  : 'bg-slate-100/50 dark:bg-slate-900/40 border-slate-200/30 dark:border-slate-850'
-                              }`}
-                            >
-                              <span className="text-[7.5px] font-bold font-mono text-slate-500 uppercase tracking-wider">{m.label}</span>
-                              <span className={`text-xs font-extrabold mt-1 font-mono ${
-                                m.highlighted ? 'text-emerald-700 dark:text-emerald-400' : 'text-slate-900 dark:text-slate-200'
-                              }`}>
-                                {m.value}
-                              </span>
-                            </div>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Actions Links */}
-                  <div className="flex flex-wrap items-center gap-6 pt-4.5 border-t border-slate-200/50 dark:border-slate-900/60 shrink-0">
-                    <a
-                      href={project.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-white transition-colors"
-                    >
-                      <GithubIcon className="h-4 w-4" />
-                      <span>Review Repository</span>
-                    </a>
-
-                    {project.id === 'manufacturing-system' && (
-                      <button
-                        onClick={() => setShowSysDesign(!showSysDesign)}
-                        className="inline-flex items-center gap-1.5 text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:text-indigo-500 transition-colors cursor-pointer"
-                      >
-                        <Cpu className="h-4 w-4" />
-                        <span>{showSysDesign ? 'Hide System Blueprint' : 'Inspect System Blueprint'}</span>
-                      </button>
-                    )}
-                  </div>
-                </motion.div>
-              </div>
-
-              {/* Collapsible System Design Drawer */}
-              {project.id === 'manufacturing-system' && showSysDesign && (
+          {/* Card Stack Deck */}
+          <div className="relative w-[280px] xs:w-[320px] md:w-[350px] h-[400px] flex items-center justify-center overflow-visible">
+            {featuredProjects.map((project, idx) => {
+              const { scale, zIndex, x, rotate, opacity, isActive } = getCardPosition(idx);
+              
+              return (
                 <motion.div
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: 'auto' }}
-                  exit={{ opacity: 0, height: 0 }}
-                  transition={{ duration: 0.4 }}
-                  className="w-full overflow-hidden"
+                  key={project.id}
+                  animate={{
+                    x,
+                    scale,
+                    rotate,
+                    opacity,
+                    zIndex,
+                  }}
+                  transition={{ type: 'spring', stiffness: 300, damping: 28 }}
+                  drag={isActive ? 'x' : false}
+                  dragConstraints={{ left: 0, right: 0 }}
+                  onDragEnd={(_, info) => {
+                    if (info.offset.x < -60) handleNext();
+                    else if (info.offset.x > 60) handlePrev();
+                  }}
+                  onClick={() => {
+                    if (!isActive) setActiveIndex(idx);
+                  }}
+                  data-cursor-text={isActive ? 'DRAG DECK' : 'SELECT'}
+                  className={`absolute w-full h-full rounded-[32px_12px_32px_12px] overflow-hidden border border-slate-200/50 dark:border-slate-850 bg-white/60 dark:bg-slate-900/40 backdrop-blur-md shadow-xl flex flex-col p-6 justify-between transition-all duration-300 ${
+                    isActive ? 'cursor-grab active:cursor-grabbing border-indigo-500/30' : 'cursor-pointer'
+                  }`}
+                  style={{
+                    transformStyle: 'preserve-3d',
+                    boxShadow: isActive ? '0 25px 50px -12px rgba(99, 102, 241, 0.15)' : undefined
+                  }}
                 >
-                  <SystemDesign />
+                  {/* Card Gloss Header */}
+                  <div className="flex items-center justify-between border-b border-slate-200/40 dark:border-slate-800/40 pb-3 shrink-0">
+                    <span className="text-[9px] font-mono font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-widest">
+                      {project.id.replace('-', ' ')} // active_node
+                    </span>
+                    <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+                  </div>
+
+                  {/* Card Mid: Image/Graphic Frame */}
+                  <div className="flex-1 my-5 relative rounded-2xl overflow-hidden border border-slate-200/30 dark:border-slate-800 bg-slate-950 group/img">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={project.image}
+                      alt={project.title}
+                      className="w-full h-full object-cover opacity-60 transition-transform duration-700 group-hover/img:scale-110"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent" />
+                    
+                    {/* Inline Content overlay */}
+                    <div className="absolute bottom-4 left-4 right-4 text-left">
+                      <span className="text-[8px] font-bold font-mono text-indigo-400 block mb-1">PROJECT TARGET</span>
+                      <h3 className="text-sm font-bold text-white font-serif tracking-tight truncate">
+                        {project.title}
+                      </h3>
+                    </div>
+                  </div>
+
+                  {/* Card Bottom: Primary Info & Trigger */}
+                  <div className="flex flex-col gap-4 shrink-0">
+                    <p className="text-[11px] text-slate-550 dark:text-slate-400 leading-relaxed font-medium line-clamp-2 text-left">
+                      {project.description}
+                    </p>
+                    
+                    <Link
+                      href={isActive ? `/projects/${project.id}` : '#'}
+                      onClick={(e) => {
+                        if (!isActive) e.preventDefault();
+                      }}
+                      className={`w-full py-3 rounded-xl font-mono text-[9px] font-bold uppercase tracking-wider border transition-all cursor-pointer text-center block ${
+                        isActive
+                          ? 'bg-indigo-600 border-indigo-600 text-white shadow-md hover:bg-indigo-700 hover:shadow-indigo-500/10'
+                          : 'bg-transparent border-slate-200 dark:border-slate-800 text-slate-400 dark:text-slate-550 pointer-events-none'
+                      }`}
+                    >
+                      🔬 Launch Case Study
+                    </Link>
+                  </div>
                 </motion.div>
-              )}
-            </div>
-            );
-          })}
+              );
+            })}
+          </div>
+
+          {/* Right Arrow */}
+          <button
+            onClick={handleNext}
+            className="absolute right-2 md:right-6 z-45 p-3 rounded-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 shadow-lg hover:border-indigo-500/35 transition-all duration-300 cursor-pointer"
+            aria-label="Next Project"
+          >
+            <ChevronRight className="h-5 w-5" />
+          </button>
         </div>
+
+        {/* Carousel Indicators */}
+        <div className="flex justify-center gap-2 mt-4 select-none">
+          {featuredProjects.map((_, idx) => (
+            <button
+              key={idx}
+              onClick={() => setActiveIndex(idx)}
+              className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${
+                idx === activeIndex ? 'w-6 bg-indigo-600' : 'w-2 bg-slate-300 dark:bg-slate-800'
+              }`}
+              aria-label={`Go to slide ${idx + 1}`}
+            />
+          ))}
+        </div>
+
 
         {/* Compact Other Work list */}
         {otherProjects.length > 0 && (

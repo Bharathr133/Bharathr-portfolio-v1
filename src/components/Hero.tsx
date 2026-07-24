@@ -5,6 +5,9 @@ import { Mail, FileText, Check, MapPin, ArrowRight, Briefcase } from 'lucide-rea
 import { personalInfo, stats } from '../data/portfolio';
 import TechIcon from './TechIcons';
 import { motion } from 'framer-motion';
+import SpotlightCard from './SpotlightCard';
+import LiquidAvatar from './LiquidAvatar';
+import useTextScramble from '../hooks/useTextScramble';
 
 const marqueeSkills = [
   { name: 'Java 21', iconKey: 'java' },
@@ -78,6 +81,8 @@ export default function Hero() {
   const [copied, setCopied] = useState(false);
   const [activeBentoIdx, setActiveBentoIdx] = useState(0);
   const bentoScrollRef = useRef<HTMLDivElement>(null);
+  
+  const { text: scrambleTitle, scramble: triggerScrambleTitle } = useTextScramble('Building scalable backend APIs and modern web applications.');
 
   const handleBentoScroll = () => {
     if (bentoScrollRef.current) {
@@ -136,8 +141,11 @@ export default function Hero() {
               Java Backend Developer
             </span>
             
-            <h1 className="text-3xl xs:text-4xl sm:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white font-serif leading-[1.12]">
-              Building scalable backend APIs<br />and modern web applications.
+            <h1 
+              onMouseEnter={triggerScrambleTitle}
+              className="text-3xl xs:text-4xl sm:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white font-serif leading-[1.12] select-none cursor-default min-h-[96px] sm:min-h-[110px]"
+            >
+              {scrambleTitle}
             </h1>
 
             <p className="text-sm md:text-base leading-relaxed text-slate-500 dark:text-slate-400 font-medium">
@@ -187,89 +195,97 @@ export default function Hero() {
             >
               
               {/* Bento Card 1: Avatar & Intro */}
-              <div className="snap-center shrink-0 w-[84vw] xs:w-[86vw] sm:w-[360px] lg:w-auto lg:shrink-1 lg:col-span-2 backdrop-blur-md bg-white/60 dark:bg-slate-900/60 border border-slate-200/40 dark:border-slate-800/40 shadow-xs rounded-2xl p-5 flex flex-col sm:flex-row items-center gap-5 hover:border-indigo-500/30 transition-all duration-300">
-                <div className="relative h-20 w-20 rounded-full border-2 border-indigo-500/60 overflow-hidden shadow-md shrink-0">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img 
-                    src="/headshot.jpg" 
-                    alt="Bharath R - Java Full Stack Developer Bangalore" 
-                    className="h-full w-full object-cover"
-                  />
-                  <span className="absolute bottom-1 right-1 h-3 w-3 rounded-full bg-emerald-500 border-2 border-white dark:border-slate-900 animate-pulse" />
-                </div>
-                <div className="text-center sm:text-left space-y-1">
-                  <div className="flex items-center justify-center sm:justify-start gap-1.5">
-                    <h2 className="text-xl font-bold text-slate-900 dark:text-white font-serif">Bharath R</h2>
+              <SpotlightCard className="snap-center shrink-0 w-[84vw] xs:w-[86vw] sm:w-[360px] lg:w-auto lg:shrink-1 lg:col-span-2 rounded-2xl" data-cursor-text="3D TILT">
+                <div className="w-full h-full backdrop-blur-md bg-white/60 dark:bg-slate-900/60 border border-slate-200/40 dark:border-slate-800/40 shadow-xs p-5 flex flex-col sm:flex-row items-center gap-5 hover:border-indigo-500/30 transition-all duration-300">
+                  <div className="relative h-20 w-20 shrink-0 select-none animate-in fade-in duration-300" data-cursor-text="RIPPLE">
+                    <LiquidAvatar 
+                      src="/headshot.jpg" 
+                      alt="Bharath R - Java Full Stack Developer Bangalore" 
+                      className="h-full w-full rounded-full border-2 border-indigo-500/60 shadow-md"
+                    />
+                    <span className="absolute bottom-1 right-1 h-3 w-3 rounded-full bg-emerald-500 border-2 border-white dark:border-slate-900 animate-pulse z-10" />
                   </div>
-                  <p className="text-xs font-mono text-indigo-600 dark:text-indigo-400 font-bold uppercase tracking-wider">
-                    Java Full-Stack Engineer
-                  </p>
-                  <div className="flex items-center justify-center sm:justify-start gap-1 text-xs text-slate-550 dark:text-slate-400 font-medium">
-                    <MapPin className="h-3.5 w-3.5 text-slate-400" />
-                    <span>Bangalore, India</span>
+                  <div className="text-center sm:text-left space-y-1">
+                    <div className="flex items-center justify-center sm:justify-start gap-1.5">
+                      <h2 className="text-xl font-bold text-slate-900 dark:text-white font-serif">Bharath R</h2>
+                    </div>
+                    <p className="text-xs font-mono text-indigo-600 dark:text-indigo-400 font-bold uppercase tracking-wider">
+                      Java Full-Stack Engineer
+                    </p>
+                    <div className="flex items-center justify-center sm:justify-start gap-1 text-xs text-slate-550 dark:text-slate-400 font-medium">
+                      <MapPin className="h-3.5 w-3.5 text-slate-400" />
+                      <span>Bangalore, India</span>
+                    </div>
                   </div>
                 </div>
-              </div>
+              </SpotlightCard>
 
               {/* Bento Card 2: Quick Email Copy Trigger */}
-              <button
-                onClick={handleCopyEmail}
-                className="snap-center shrink-0 w-[84vw] xs:w-[86vw] sm:w-[360px] lg:w-auto lg:shrink-1 group backdrop-blur-md bg-white/60 dark:bg-slate-900/60 border border-slate-200/40 dark:border-slate-800/40 shadow-xs rounded-2xl p-5 flex flex-col justify-between items-start text-left hover:border-indigo-500/50 hover:shadow-md transition-all duration-300 cursor-pointer min-h-[140px] focus:outline-none"
-              >
-                <div className="h-9 w-9 rounded-xl bg-indigo-50 dark:bg-indigo-950/50 flex items-center justify-center text-indigo-600 dark:text-indigo-400 transition-colors group-hover:bg-indigo-600 group-hover:text-white">
-                  {copied ? <Check className="h-4.5 w-4.5" /> : <Mail className="h-4.5 w-4.5" />}
-                </div>
-                <div>
-                  <span className="text-[10px] font-bold font-mono text-slate-400 uppercase tracking-widest block mb-1">
-                    Contact Recruiter Socket
-                  </span>
-                  <span className="text-xs font-bold text-slate-800 dark:text-slate-250 truncate block max-w-full">
-                    {copied ? 'SUCCESS: COPIED EMAIL' : personalInfo.email}
-                  </span>
-                </div>
-              </button>
+              <SpotlightCard className="snap-center shrink-0 w-[84vw] xs:w-[86vw] sm:w-[360px] lg:w-auto lg:shrink-1 rounded-2xl">
+                <button
+                  onClick={handleCopyEmail}
+                  data-cursor="copy"
+                  className="w-full h-full text-left backdrop-blur-md bg-white/60 dark:bg-slate-900/60 border border-slate-200/40 dark:border-slate-800/40 shadow-xs p-5 flex flex-col justify-between items-start hover:border-indigo-500/50 hover:shadow-md transition-all duration-300 cursor-pointer min-h-[140px] focus:outline-none"
+                >
+                  <div className="h-9 w-9 rounded-xl bg-indigo-50 dark:bg-indigo-950/50 flex items-center justify-center text-indigo-650 dark:text-indigo-400 transition-colors group-hover:bg-indigo-600 group-hover:text-white">
+                    {copied ? <Check className="h-4.5 w-4.5" /> : <Mail className="h-4.5 w-4.5" />}
+                  </div>
+                  <div>
+                    <span className="text-[10px] font-bold font-mono text-slate-400 uppercase tracking-widest block mb-1">
+                      Contact Recruiter Socket
+                    </span>
+                    <span className="text-xs font-bold text-slate-800 dark:text-slate-250 truncate block max-w-full">
+                      {copied ? 'SUCCESS: COPIED EMAIL' : personalInfo.email}
+                    </span>
+                  </div>
+                </button>
+              </SpotlightCard>
 
               {/* Bento Card 3: Core Architecture Stack circles */}
-              <div className="snap-center shrink-0 w-[84vw] xs:w-[86vw] sm:w-[360px] lg:w-auto lg:shrink-1 backdrop-blur-md bg-white/60 dark:bg-slate-900/60 border border-slate-200/40 dark:border-slate-800/40 shadow-xs rounded-2xl p-5 flex flex-col justify-between items-start min-h-[140px] hover:border-indigo-500/30 transition-all duration-300">
-                <div className="h-9 w-9 rounded-xl bg-indigo-50 dark:bg-indigo-950/50 flex items-center justify-center text-indigo-600 dark:text-indigo-400">
-                  <Briefcase className="h-4.5 w-4.5" />
+              <SpotlightCard className="snap-center shrink-0 w-[84vw] xs:w-[86vw] sm:w-[360px] lg:w-auto lg:shrink-1 rounded-2xl" data-cursor-text="3D TILT">
+                <div className="w-full h-full backdrop-blur-md bg-white/60 dark:bg-slate-900/60 border border-slate-200/40 dark:border-slate-800/40 shadow-xs p-5 flex flex-col justify-between items-start min-h-[140px] hover:border-indigo-500/30 transition-all duration-300">
+                  <div className="h-9 w-9 rounded-xl bg-indigo-50 dark:bg-indigo-950/50 flex items-center justify-center text-indigo-600 dark:text-indigo-400">
+                    <Briefcase className="h-4.5 w-4.5" />
+                  </div>
+                  <div className="w-full">
+                    <span className="text-[10px] font-bold font-mono text-slate-400 uppercase tracking-widest block mb-2">
+                      Primary Stack Align
+                    </span>
+                    <div className="flex items-center gap-2">
+                      {['java', 'springboot', 'react', 'postgresql', 'docker'].map((key) => (
+                        <div 
+                          key={key} 
+                          className="h-7 w-7 rounded-lg bg-slate-100 dark:bg-slate-950 border border-slate-200/50 dark:border-slate-855 p-1 flex items-center justify-center shadow-2xs hover:scale-110 transition-transform cursor-pointer"
+                          title={key.toUpperCase()}
+                        >
+                          <TechIcon iconKey={key} className="h-full w-full" />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
                 </div>
-                <div className="w-full">
-                  <span className="text-[10px] font-bold font-mono text-slate-400 uppercase tracking-widest block mb-2">
-                    Primary Stack Align
+              </SpotlightCard>
+
+              {/* Bento Card 4: Verified Vitals stats metrics */}
+              <SpotlightCard className="snap-center shrink-0 w-[84vw] xs:w-[86vw] sm:w-[360px] lg:w-auto lg:shrink-1 lg:col-span-2 rounded-2xl" data-cursor-text="3D TILT">
+                <div className="w-full h-full backdrop-blur-md bg-white/60 dark:bg-slate-900/60 border border-slate-200/40 dark:border-slate-800/40 shadow-xs p-5 hover:border-indigo-500/30 transition-all duration-300">
+                  <span className="text-[10px] font-bold font-mono text-slate-400 uppercase tracking-widest block mb-4">
+                    Verified Credentials &amp; Engineering Metrics
                   </span>
-                  <div className="flex items-center gap-2">
-                    {['java', 'springboot', 'react', 'postgresql', 'docker'].map((key) => (
-                      <div 
-                        key={key} 
-                        className="h-7 w-7 rounded-lg bg-slate-100 dark:bg-slate-950 border border-slate-200/50 dark:border-slate-855 p-1 flex items-center justify-center shadow-2xs hover:scale-110 transition-transform cursor-pointer"
-                        title={key.toUpperCase()}
-                      >
-                        <TechIcon iconKey={key} className="h-full w-full" />
+                  <div className="grid grid-cols-3 gap-2 sm:gap-4 text-center">
+                    {stats.map((stat, idx) => (
+                      <div key={idx} className="flex flex-col border-r last:border-r-0 border-slate-200/50 dark:border-slate-800/50 last:pr-0 pr-1.5 sm:pr-4">
+                        <span className="text-2xl md:text-3xl font-extrabold text-indigo-655 dark:text-indigo-400 font-mono">
+                          <AnimatedStatValue value={stat.value} />
+                        </span>
+                        <span className="text-[9px] sm:text-[10px] font-bold text-slate-550 dark:text-slate-550 uppercase tracking-wider mt-1">
+                          {stat.label}
+                        </span>
                       </div>
                     ))}
                   </div>
                 </div>
-              </div>
-
-              {/* Bento Card 4: Verified Vitals stats metrics */}
-              <div className="snap-center shrink-0 w-[84vw] xs:w-[86vw] sm:w-[360px] lg:w-auto lg:shrink-1 lg:col-span-2 backdrop-blur-md bg-white/60 dark:bg-slate-900/60 border border-slate-200/40 dark:border-slate-800/40 shadow-xs rounded-2xl p-5 hover:border-indigo-500/30 transition-all duration-300">
-                <span className="text-[10px] font-bold font-mono text-slate-400 uppercase tracking-widest block mb-4">
-                  Verified Credentials &amp; Engineering Metrics
-                </span>
-                <div className="grid grid-cols-3 gap-2 sm:gap-4 text-center">
-                  {stats.map((stat, idx) => (
-                    <div key={idx} className="flex flex-col border-r last:border-r-0 border-slate-200/50 dark:border-slate-800/50 last:pr-0 pr-1.5 sm:pr-4">
-                      <span className="text-2xl md:text-3xl font-extrabold text-indigo-655 dark:text-indigo-400 font-mono">
-                        <AnimatedStatValue value={stat.value} />
-                      </span>
-                      <span className="text-[9px] sm:text-[10px] font-bold text-slate-550 dark:text-slate-500 uppercase tracking-wider mt-1">
-                        {stat.label}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </div>
+              </SpotlightCard>
 
             </div>
 

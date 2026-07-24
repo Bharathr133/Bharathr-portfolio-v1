@@ -155,7 +155,7 @@ export default function Contact() {
   };
 
   return (
-    <section id="contact" className="relative bg-slate-50 dark:bg-slate-950 py-24 transition-colors duration-300">
+    <section id="contact" className="relative bg-slate-50 dark:bg-slate-950 py-16 transition-colors duration-300">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_80%,rgba(99,102,241,0.02),transparent_35%)]" />
 
       <div className="relative mx-auto max-w-7xl px-6 md:px-8">

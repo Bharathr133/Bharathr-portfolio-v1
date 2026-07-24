@@ -4,6 +4,9 @@ import React, { useState, useEffect } from 'react';
 import { Menu, X, Code, Sun, Moon } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import Magnetic from './Magnetic';
+import { GithubIcon, LinkedinIcon } from './SocialIcons';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const navLinks = [
   { id: 'home', path: '/', label: 'Home' },
@@ -118,92 +121,139 @@ export default function Header() {
       >
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <Link
-            href="/"
-            onClick={(e) => handleLinkClick(e, navLinks[0])}
-            className="flex items-center gap-2 text-base font-extrabold tracking-tight text-slate-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors font-serif"
-          >
-            <Code className="h-4.5 w-4.5 text-indigo-600 dark:text-indigo-500" />
-            <span className="hidden sm:inline">Bharath R</span>
-            <span className="sm:hidden">BR</span>
-          </Link>
+          <Magnetic>
+            <Link
+              href="/"
+              onClick={(e) => handleLinkClick(e, navLinks[0])}
+              className="flex items-center gap-2 text-base font-extrabold tracking-tight text-slate-900 dark:text-white hover:text-indigo-650 dark:hover:text-indigo-400 transition-colors font-serif"
+            >
+              <Code className="h-4.5 w-4.5 text-indigo-600 dark:text-indigo-500" />
+              <span className="hidden sm:inline">Bharath R</span>
+              <span className="sm:hidden">BR</span>
+            </Link>
+          </Magnetic>
 
           {/* Navigation & Controls */}
           <div className="flex items-center gap-6">
             {/* Desktop Navigation */}
             <nav className="hidden md:flex items-center gap-6 font-mono">
               {navLinks.map((link) => (
-                <Link
-                  key={link.id}
-                  href={link.path}
-                  onClick={(e) => handleLinkClick(e, link)}
-                  className={`text-[11px] font-bold uppercase tracking-wider transition-all hover:text-indigo-650 dark:hover:text-indigo-400 py-1 relative ${
-                    activeSection === link.id
-                      ? 'text-indigo-600 dark:text-indigo-400'
-                      : 'text-slate-500 dark:text-slate-400'
-                  }`}
-                >
-                  {link.label}
-                  {activeSection === link.id && (
-                    <span className="absolute bottom-0 left-0 h-[2px] w-full bg-indigo-600 dark:bg-indigo-500 rounded-full" />
-                  )}
-                </Link>
+                <Magnetic key={link.id} range={25}>
+                  <Link
+                    href={link.path}
+                    onClick={(e) => handleLinkClick(e, link)}
+                    className={`text-[11px] font-bold uppercase tracking-wider transition-all hover:text-indigo-655 dark:hover:text-indigo-400 py-1 relative block ${
+                      activeSection === link.id
+                        ? 'text-indigo-605 dark:text-indigo-400'
+                        : 'text-slate-500 dark:text-slate-400'
+                    }`}
+                  >
+                    {link.label}
+                    {activeSection === link.id && (
+                      <span className="absolute bottom-0 left-0 h-[2px] w-full bg-indigo-605 dark:bg-indigo-500 rounded-full" />
+                    )}
+                  </Link>
+                </Magnetic>
               ))}
             </nav>
 
             {/* Controls */}
             <div className="flex items-center gap-2 border-l border-slate-200/50 dark:border-slate-800/80 pl-4">
               {/* Theme Toggle */}
-              <button
-                onClick={toggleTheme}
-                className="p-2 rounded-full text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-450 hover:bg-slate-50 dark:hover:bg-slate-900/60 transition-all duration-300"
-                aria-label="Toggle light/dark theme"
-              >
-                {isDarkMode ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-              </button>
+              <Magnetic range={25}>
+                <button
+                  onClick={toggleTheme}
+                  className="p-2 rounded-full text-slate-500 dark:text-slate-400 hover:text-indigo-605 dark:hover:text-indigo-450 hover:bg-slate-50 dark:hover:bg-slate-900/60 transition-all duration-300 cursor-pointer"
+                  aria-label="Toggle light/dark theme"
+                >
+                  {isDarkMode ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+                </button>
+              </Magnetic>
 
               {/* Mobile Menu Toggle */}
-              <button
-                onClick={() => setIsOpen(!isOpen)}
-                className="md:hidden p-2 rounded-full text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-white"
-                aria-label="Toggle menu"
-              >
-                {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-              </button>
+              <Magnetic range={25}>
+                <button
+                  onClick={() => setIsOpen(!isOpen)}
+                  className="md:hidden p-2 rounded-full text-slate-500 dark:text-slate-400 hover:text-indigo-605 dark:hover:text-white cursor-pointer"
+                  aria-label="Toggle menu"
+                >
+                  {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+                </button>
+              </Magnetic>
             </div>
           </div>
         </div>
       </header>
 
-      {/* Mobile Drawer Dropdown Overlay */}
-      {isOpen && (
-        <div
-          className="fixed inset-0 z-35 bg-slate-950/10 dark:bg-slate-950/40 backdrop-blur-xs md:hidden"
-          onClick={() => setIsOpen(false)}
-        />
-      )}
+      {/* Immersive Full-Screen Blur Mobile Overlay Menu */}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.25, ease: 'easeInOut' }}
+            className="fixed inset-0 z-35 bg-white/98 dark:bg-slate-950/98 backdrop-blur-3xl md:hidden flex flex-col justify-between p-8 pt-28 font-mono select-none"
+          >
+            {/* Centered Navigation Links with Large Typography */}
+            <nav className="flex flex-col gap-6 text-center mt-8">
+              {navLinks.map((link, idx) => (
+                <motion.div
+                  key={link.id}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: idx * 0.05 + 0.1 }}
+                >
+                  <Link
+                    href={link.path}
+                    onClick={(e) => {
+                      setIsOpen(false);
+                      handleLinkClick(e, link);
+                    }}
+                    className={`text-2xl font-black font-sans tracking-tight uppercase transition-all block ${
+                      activeSection === link.id
+                        ? 'text-indigo-600 dark:text-indigo-400 font-extrabold'
+                        : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'
+                    }`}
+                  >
+                    {link.label}
+                  </Link>
+                </motion.div>
+              ))}
+            </nav>
 
-      {/* Mobile capsule dropdown */}
-      {isOpen && (
-        <div className="fixed top-20 left-4 right-4 z-40 md:hidden p-4 rounded-3xl bg-white/95 dark:bg-slate-950/95 backdrop-blur-xl border border-slate-200/50 dark:border-slate-800/80 shadow-[0_20px_50px_rgba(0,0,0,0.15)] animate-in fade-in slide-in-from-top-4 duration-300 font-mono">
-          <nav className="flex flex-col gap-3">
-            {navLinks.map((link) => (
-              <Link
-                key={link.id}
-                href={link.path}
-                onClick={(e) => handleLinkClick(e, link)}
-                className={`py-2.5 px-4 rounded-xl text-[11px] font-bold uppercase tracking-wider transition-all ${
-                  activeSection === link.id
-                    ? 'text-indigo-600 dark:text-indigo-400 bg-indigo-50/50 dark:bg-indigo-950/30 font-bold'
-                    : 'text-slate-600 dark:text-slate-450 hover:bg-slate-50 dark:hover:bg-slate-900'
-                }`}
-              >
-                {link.label}
-              </Link>
-            ))}
-          </nav>
-        </div>
-      )}
+            {/* Mobile Menu Footer Dashboard */}
+            <div className="border-t border-slate-200 dark:border-slate-850 pt-6 flex flex-col gap-4 text-center items-center shrink-0">
+              <span className="text-[9px] text-slate-400 dark:text-slate-600 uppercase tracking-widest font-bold">
+                {"// Secure Socket Connection"}
+              </span>
+              <div className="flex items-center gap-4">
+                <a
+                  href="https://github.com/Bharathr133"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-2.5 rounded-full bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-550 dark:text-slate-400 flex items-center justify-center cursor-pointer"
+                  aria-label="GitHub"
+                >
+                  <GithubIcon className="h-4.5 w-4.5" />
+                </a>
+                <a
+                  href="https://linkedin.com/in/bharath-r"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-2.5 rounded-full bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-550 dark:text-slate-400 flex items-center justify-center cursor-pointer"
+                  aria-label="LinkedIn"
+                >
+                  <LinkedinIcon className="h-4.5 w-4.5" />
+                </a>
+              </div>
+              <span className="text-[9px] text-slate-400 dark:text-slate-600 select-none">
+                Bangalore, India • Compiled v1.0
+              </span>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 }

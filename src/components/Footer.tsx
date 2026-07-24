@@ -6,6 +6,7 @@ import { GithubIcon, LinkedinIcon } from './SocialIcons';
 import { personalInfo } from '../data/portfolio';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import Magnetic from './Magnetic';
 
 const navLinks = [
   { id: 'home', path: '/', label: 'cd /home' },
@@ -134,24 +135,28 @@ export default function Footer() {
                 <div className="flex flex-col gap-1.5">
                   <span className="text-[9px] text-slate-600">secure social sockets:</span>
                   <div className="flex items-center gap-3 text-slate-500">
-                    <a
-                      href={personalInfo.github}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="hover:text-white transition-colors p-2 rounded-lg bg-slate-950/80 border border-slate-850/80 flex items-center justify-center"
-                      aria-label="GitHub"
-                    >
-                      <GithubIcon className="h-4.5 w-4.5" />
-                    </a>
-                    <a
-                      href={personalInfo.linkedin}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="hover:text-white transition-colors p-2 rounded-lg bg-slate-950/80 border border-slate-850/80 flex items-center justify-center"
-                      aria-label="LinkedIn"
-                    >
-                      <LinkedinIcon className="h-4.5 w-4.5" />
-                    </a>
+                    <Magnetic range={25}>
+                      <a
+                        href={personalInfo.github}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="hover:text-white transition-colors p-2 rounded-lg bg-slate-950/80 border border-slate-850/80 flex items-center justify-center cursor-pointer"
+                        aria-label="GitHub"
+                      >
+                        <GithubIcon className="h-4.5 w-4.5" />
+                      </a>
+                    </Magnetic>
+                    <Magnetic range={25}>
+                      <a
+                        href={personalInfo.linkedin}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="hover:text-white transition-colors p-2 rounded-lg bg-slate-950/80 border border-slate-850/80 flex items-center justify-center cursor-pointer"
+                        aria-label="LinkedIn"
+                      >
+                        <LinkedinIcon className="h-4.5 w-4.5" />
+                      </a>
+                    </Magnetic>
                   </div>
                 </div>
               </div>

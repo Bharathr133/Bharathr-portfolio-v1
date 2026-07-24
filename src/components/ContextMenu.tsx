@@ -167,7 +167,15 @@ export default function ContextMenu() {
 
             <li>
               <button
-                onClick={() => openLink('/resume.pdf')}
+                onClick={() => {
+                  setVisible(false);
+                  sessionStorage.setItem('resumeRequested', 'true');
+                  const contactSec = document.getElementById('contact');
+                  if (contactSec) {
+                    contactSec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                  }
+                  window.dispatchEvent(new CustomEvent('request-resume-download'));
+                }}
                 className="w-full flex items-center gap-2.5 px-2.5 py-2 rounded-xl text-left text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
               >
                 <FileText className="h-3.5 w-3.5 text-indigo-500 shrink-0" />

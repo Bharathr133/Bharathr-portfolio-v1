@@ -9,6 +9,7 @@ import SpotlightCard from './SpotlightCard';
 import LiquidAvatar from './LiquidAvatar';
 import useTextScramble from '../hooks/useTextScramble';
 import AstronautDog from './AstronautDog';
+import ResumeModal from './ResumeModal';
 
 const marqueeSkills = [
   { name: 'Java 21', iconKey: 'java' },
@@ -81,9 +82,19 @@ export default function Hero() {
   const marqueeItems = [...marqueeSkills, ...marqueeSkills];
   const [copied, setCopied] = useState(false);
   const [activeBentoIdx, setActiveBentoIdx] = useState(0);
+  const [isResumeModalOpen, setIsResumeModalOpen] = useState(false);
   const bentoScrollRef = useRef<HTMLDivElement>(null);
   
   const { text: scrambleTitle, scramble: triggerScrambleTitle } = useTextScramble('Full-Stack Engineer');
+
+  const handleConfirmResumeRequest = () => {
+    sessionStorage.setItem('resumeRequested', 'true');
+    const contactSec = document.getElementById('contact');
+    if (contactSec) {
+      contactSec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    window.dispatchEvent(new CustomEvent('request-resume-download'));
+  };
 
   const handleBentoScroll = () => {
     if (bentoScrollRef.current) {
@@ -161,17 +172,15 @@ export default function Hero() {
 
             {/* Action Buttons */}
             <div className="mt-2 flex flex-wrap gap-4 items-center">
-              <a
-                href="/resume.pdf"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group relative overflow-visible flex items-center justify-center gap-2 rounded-xl bg-indigo-600 px-6 py-3.5 text-xs font-bold text-white shadow-md hover:bg-indigo-500 hover:shadow-lg transition-all duration-300 hover:scale-[1.02]"
+              <button
+                onClick={() => setIsResumeModalOpen(true)}
+                className="group relative overflow-visible flex items-center justify-center gap-2 rounded-xl bg-indigo-600 px-6 py-3.5 text-xs font-bold text-white shadow-md hover:bg-indigo-500 hover:shadow-lg transition-all duration-300 hover:scale-[1.02] cursor-pointer"
               >
                 <AstronautDog />
                 <FileText className="h-4 w-4" />
                 <span>Download Resume</span>
                 <ArrowRight className="h-3.5 w-3.5 group-hover:translate-x-1 transition-transform" />
-              </a>
+              </button>
 
               <button
                 onClick={() => {
@@ -345,6 +354,13 @@ export default function Hero() {
         </motion.div>
 
       </div>
+
+      {/* Resume Request Requirement Modal */}
+      <ResumeModal
+        isOpen={isResumeModalOpen}
+        onClose={() => setIsResumeModalOpen(false)}
+        onConfirm={handleConfirmResumeRequest}
+      />
     </section>
   );
 }

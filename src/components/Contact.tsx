@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import emailjs from '@emailjs/browser';
-import { MapPin, Mail, Loader2, Send, Terminal, MessageSquare } from 'lucide-react';
+import { MapPin, Mail, Loader2, Send, Terminal, MessageSquare, FileText, Check } from 'lucide-react';
 import { personalInfo } from '../data/portfolio';
 import TiltCard from './TiltCard';
 import Magnetic from './Magnetic';
@@ -41,6 +41,8 @@ export default function Contact() {
 
   const [errors, setErrors] = useState<FormErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isResumeRequest, setIsResumeRequest] = useState(false);
+  const [showResumeDownloadModal, setShowResumeDownloadModal] = useState(false);
   const [alertConfig, setAlertConfig] = useState<{
     show: boolean;
     message: string;
@@ -51,6 +53,24 @@ export default function Contact() {
 
   useEffect(() => {
     emailjs.init("VdMoWyii0_W4uT7mJ");
+
+    // Check if user previously clicked Download Resume in this session
+    if (sessionStorage.getItem('resumeRequested') === 'true') {
+      setIsResumeRequest(true);
+    }
+
+    const handleResumeRequestEvent = () => {
+      setIsResumeRequest(true);
+      setFormData(prev => ({
+        ...prev,
+        message: prev.message || "Hi Bharath, I am interested in your profile and would like to request a copy of your resume."
+      }));
+    };
+
+    window.addEventListener('request-resume-download', handleResumeRequestEvent);
+    return () => {
+      window.removeEventListener('request-resume-download', handleResumeRequestEvent);
+    };
   }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -135,18 +155,11 @@ export default function Contact() {
         website: '',
       });
 
-      const downloadRequested = localStorage.getItem('downloadRequested') === 'true';
+      const downloadRequested = isResumeRequest || sessionStorage.getItem('resumeRequested') === 'true';
       if (downloadRequested) {
-        localStorage.setItem('allowDownload', 'true');
-        showCustomAlert(
-          'Thank you! You may now download my resume by clicking the Download CV button.',
-          () => {
-            const downloadBtn = document.getElementById('download-resume-btn');
-            if (downloadBtn) {
-              downloadBtn.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }
-          }
-        );
+        sessionStorage.removeItem('resumeRequested');
+        setIsResumeRequest(false);
+        setShowResumeDownloadModal(true);
       } else {
         showCustomAlert('Thanks for contacting me! I will get back to you ASAP!');
       }
@@ -260,6 +273,26 @@ export default function Contact() {
 
                 {/* Code Form Body */}
                 <form onSubmit={handleSubmit} className="flex-1 flex flex-col p-6 space-y-4">
+                  {/* Resume Request Mode Banner */}
+                  {isResumeRequest && (
+                    <div className="bg-indigo-600/20 border border-indigo-500/50 rounded-xl p-3.5 text-indigo-200 text-xs font-sans flex items-center justify-between gap-3 shadow-md">
+                      <div className="flex items-center gap-2.5">
+                        <FileText className="h-4 w-4 text-indigo-400 shrink-0" />
+                        <span><strong>Resume Mode:</strong> Enter your contact details below to unlock & download my resume.</span>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setIsResumeRequest(false);
+                          sessionStorage.removeItem('resumeRequested');
+                        }}
+                        className="text-slate-400 hover:text-white text-xs px-1.5 py-0.5 rounded bg-slate-800/60"
+                        title="Close resume request notice"
+                      >
+                        ✕
+                      </button>
+                    </div>
+                  )}
                   {/* Honeypot */}
                   <input
                     type="text"
@@ -408,6 +441,51 @@ export default function Contact() {
             >
               OK
             </button>
+          </div>
+        </div>
+      )}
+
+      {/* Post-Submission Resume Download Modal */}
+      {showResumeDownloadModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 p-4 backdrop-blur-md">
+          <div className="w-full max-w-md p-6 sm:p-8 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl shadow-2xl relative overflow-hidden text-left">
+            <div className="absolute -top-12 -right-12 w-40 h-40 bg-emerald-500/15 rounded-full blur-3xl pointer-events-none" />
+
+            <div className="h-12 w-12 rounded-2xl bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-100 dark:border-emerald-800/60 flex items-center justify-center text-emerald-600 dark:text-emerald-400 mb-5 shadow-xs">
+              <Check className="h-6 w-6" />
+            </div>
+
+            <h3 className="text-xl font-extrabold text-slate-900 dark:text-white font-serif mb-2">
+              Message Sent & Resume Unlocked!
+            </h3>
+            <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 leading-relaxed font-medium mb-6">
+              Your details have been submitted. Click below to download Bharath&apos;s resume PDF.
+            </p>
+
+            <div className="flex flex-col sm:flex-row gap-3">
+              <button
+                onClick={() => {
+                  const link = document.createElement('a');
+                  link.href = '/resume.pdf';
+                  link.target = '_blank';
+                  link.download = 'Bharath_R_Resume.pdf';
+                  document.body.appendChild(link);
+                  link.click();
+                  document.body.removeChild(link);
+                  setShowResumeDownloadModal(false);
+                }}
+                className="flex-1 flex items-center justify-center gap-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 px-5 text-xs shadow-md hover:shadow-lg transition-all cursor-pointer"
+              >
+                <FileText className="h-4 w-4" />
+                <span>Download Resume PDF</span>
+              </button>
+              <button
+                onClick={() => setShowResumeDownloadModal(false)}
+                className="px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 text-xs font-bold transition-all cursor-pointer"
+              >
+                Close
+              </button>
+            </div>
           </div>
         </div>
       )}
